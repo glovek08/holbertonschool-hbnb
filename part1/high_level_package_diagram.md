@@ -1,22 +1,22 @@
 [DIAGRAM SVG](https://www.mermaidchart.com/raw/87c463eb-cac4-4fea-afac-ae20de9218dc?theme=light&version=v0.1&format=svg)
 
-classDiagram
-class PresentationLayer {
-    <<Interface>>
-    +Login
-    +PublishOffer
-    +RentPlace
-    +UserManagement
-}
-class BusinessLogicLayer {
-    +Client
-    +Places
-    +Reviews
-    +Ammenities
-}
-class PersistanceLayer {
-    +ClientData
-    +PlaceData
-}
-PresentationLayer --> BusinessLogicLayer : Facade Pattern
-BusinessLogicLayer --> PersistanceLayer : Database Operation
+classDiagram <br>
+class PresentationLayer {<br>
+    \<\<Interface\>\><br>
+    +Login<br>
+    +PublishOffer<br>
+    +RentPlace<br>
+    +UserManagement<br>
+}<br>
+class BusinessLogicLayer {<br>
+    +Client<br>
+    +Places<br>
+    +Reviews<br>
+    +Ammenities<br>
+}<br>
+class PersistanceLayer {<br>
+    +ClientData<br>
+    +PlaceData<br>
+}<br>
+PresentationLayer --> BusinessLogicLayer : Facade Pattern<br>
+BusinessLogicLayer --> PersistanceLayer : Database Operation<br>
