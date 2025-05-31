@@ -1,0 +1,50 @@
+---
+config:
+  theme: default
+---
+sequenceDiagram
+  participant ClientApp as Client App
+  participant API as API
+  participant BusinessLogic as Business Logic
+  participant Database as Database
+  ClientApp ->> API: Create Listing request
+  API ->> BusinessLogic: createListing(data)
+  BusinessLogic ->> BusinessLogic: Validate Listing Data
+  alt Listing Data Valid
+    BusinessLogic ->> Database: Save Listing Data
+    Database -->> BusinessLogic: Listing Saved Confirmation
+    BusinessLogic -->> API: Listing Created Successfully
+    API -->> ClientApp: HTTP 201 Created (Listing ID)
+  else Listing Data Invalid
+    BusinessLogic -->> API: Invalid Listing Data Error
+    API -->> ClientApp: HTTP 400
+  end
+  ClientApp ->> API: Fetch Place List
+  API ->> BusinessLogic: getPlaceList()
+  BusinessLogic ->> Database: Query All Listings
+  Database -->> BusinessLogic: Return List of Listings
+  BusinessLogic -->> API: Return Place List
+  API -->> ClientApp: HTTP 200
+  ClientApp ->> API: Create User
+  API ->> BusinessLogic: createUser()
+  BusinessLogic ->> BusinessLogic: Validate User Data
+  alt User Data Valid
+    BusinessLogic ->> Database: Save User Data
+    Database ->> BusinessLogic: User Created Confirmation
+    BusinessLogic -->> API: User Created Successfully
+    API -->> ClientApp: HTTP 201
+  else User Data Invalid
+    BusinessLogic -->> API: Invalid User Data Request
+    API ->> ClientApp: HTTP 400
+  end
+  ClientApp ->> API: Review Submission
+  API ->> BusinessLogic: postReview()
+  BusinessLogic ->> BusinessLogic: Validate Review Submission
+  alt Review is not Garbage
+    BusinessLogic ->> Database: Save Review
+    Database ->> BusinessLogic: Review Stored Confirmation
+    API -->> ClientApp: HTTP 201
+  else Review is Garbage
+    BusinessLogic -->> API: Review is garbage, Bad request
+    API ->> ClientApp: HTTP 400
+  end
