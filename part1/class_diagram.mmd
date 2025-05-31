@@ -1,0 +1,48 @@
+---
+config:
+  layout: elk
+  look: neo
+  theme: default
+---
+classDiagram
+direction LR
+    class Place {
+	    - String: id_place
+	    +String: title
+	    +String: description
+	    +float: price
+	    +tuple: longitude
+	    +list: Amenity
+	    create(id_place, date)
+	    update(id_place, date)
+	    delete_place()
+    }
+    class Amenity {
+	    -String: id_amenity
+	    +String: name
+	    +String: description
+	    create(id_amenity, date)
+	    update(id_amenity, date)
+	    list()
+    }
+    class User {
+	    -String: id_user
+	    -bool: is_admin
+	    -String: first_name
+	    -String: last_name
+	    -String: email
+	    -String: password
+	    register(id_user, date)
+	    update_info(id_user, date)
+	    delete_user()
+    }
+    class Review {
+	    -String: id_entity
+	    +int: rating
+	    +String: comment
+    }
+
+    Review "1" --> "1" User : author
+    Review "1" --> "1" Place : reviews
+    Place "1" --> "*" Amenity : has
+    User "1" --> "*" Place : owns
