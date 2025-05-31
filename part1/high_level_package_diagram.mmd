@@ -1,0 +1,20 @@
+classDiagram
+class PresentationLayer {
+    <<Interface>>
+    +Login
+    +PublishOffer
+    +RentPlace
+    +UserManagement
+}
+class BusinessLogicLayer {
+    +Client
+    +Places
+    +Reviews
+    +Ammenities
+}
+class PersistanceLayer {
+    +ClientData
+    +PlaceData
+}
+PresentationLayer --> BusinessLogicLayer : Facade Pattern
+BusinessLogicLayer --> PersistanceLayer : Database Operation
