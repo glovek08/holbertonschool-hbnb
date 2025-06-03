@@ -12,7 +12,7 @@ direction LR
 	    +String: description
 	    +float: price
 	    +tuple: longitude
-	    +list: Amenity
+	    +list: Ammenities
 	    create(id_place)
 	    update(id_place)
 	    delete()
@@ -21,7 +21,6 @@ direction LR
 	    -String: id_amenity
 	    +String: name
 	    +String: description
-	    list(): Ammenities
 	    create(id_amenity)
 	    update(id_amenity)
 		delete()
@@ -42,7 +41,9 @@ direction LR
 	    +int: rating
 	    +String: comment
     }
-	class genInfo {
+	class BaseModel {
+		+datetime: creation_date*
+		+datetime: update_date*
 		create()*
 		update()*
 		delete()*
@@ -50,9 +51,9 @@ direction LR
 
     Review "1" --> "1" User : author
     Review "1" --> "1" Place : reviews
-    Place "1" ..> "*" Amenity : has
+    Place "1" <.. "*" Amenity : has
     User "1" --> "*" Place : owns
-	genInfo "1" <.. "1" User
-	genInfo "1" <.. "1" Place
-	genInfo "1" <.. "1" Amenity
-	genInfo "1" <.. "1" Review
+	BaseModel  <|--  User
+	BaseModel  <|--  Place
+	BaseModel  <|--  Amenity
+	BaseModel  <|--  Review
