@@ -1,20 +1,34 @@
-classDiagram
-class PresentationLayer {
-    <<Interface>>
-    +Login
-    +PublishOffer
-    +RentPlace
-    +UserManagement
-}
-class BusinessLogicLayer {
-    +Client
-    +Places
-    +Reviews
-    +Ammenities
-}
-class PersistanceLayer {
-    +ClientData
-    +PlaceData
-}
-PresentationLayer --> BusinessLogicLayer : Facade Pattern
-BusinessLogicLayer --> PersistanceLayer : Database Operation
+---
+config:
+  theme: default
+  layout: dagre
+---
+flowchart TD
+ subgraph Frontend["Frontend"]
+        F1["• Login<br>• User Management<br>• Publish Offers<br>• Rent Places"]
+  end
+ subgraph API["API"]
+        A1["• Requests<br>• Responses<br>• HTML Status Manage"]
+  end
+ subgraph PL["Presentation Layer"]
+        Frontend
+        API
+  end
+ subgraph Core["Core"]
+        C1["• Client<br>• Places<br>• Reviews<br>• Amenities"]
+  end
+ subgraph Rules["Rules"]
+        R1["• Validate Data<br>• Logic Operations<br>• Relations Management"]
+  end
+ subgraph BLL["Business Logic Layer"]
+        Core
+        Rules
+  end
+ subgraph Storage["Storage"]
+        S1["• Client Data<br>• Place Data<br>• JSON Processing"]
+  end
+ subgraph PersL["Persistence Layer"]
+        Storage
+  end
+    PL -- Facade Pattern --> BLL
+    BLL -- Database Operations --> PersL
