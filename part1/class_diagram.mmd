@@ -23,7 +23,7 @@ direction LR
 	    +String: description
 	    create(id_amenity)
 	    update(id_amenity)
-		delete()
+	    delete()
     }
     class User {
 	    -String: id_user
@@ -41,19 +41,19 @@ direction LR
 	    +int: rating
 	    +String: comment
     }
-	class BaseModel {
-		+datetime: creation_date*
-		+datetime: update_date*
-		create()*
-		update()*
-		delete()*
-	}
+    class BaseModel {
+	    +datetime: creation_date*
+	    +datetime: update_date*
+	    create()*
+	    update()*
+	    delete()*
+    }
 
     Review "1" --> "1" User : author
-    Review "1" --> "1" Place : reviews
-    Place "1" <.. "*" Amenity : has
-    User "1" --> "*" Place : owns
-	BaseModel  <|--  User
-	BaseModel  <|--  Place
-	BaseModel  <|--  Amenity
-	BaseModel  <|--  Review
+    Review "1" --* "1" Place : reviews
+    Place "1" o-- "*" Amenity : has
+    User "1" *-- "0..*" Place : owns
+    BaseModel --|> User
+    BaseModel --|> Place
+    BaseModel --|> Amenity
+    BaseModel --|> Review
