@@ -65,8 +65,9 @@ This approach ensures that the presentation layer doesn't need to understand the
 
 For this project, we developed a three-layer architecture implementing the Facade pattern for separation of concern and scalability. *Also because it’s the only one we know enough about.*
 ###
+
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/dc74e959-7658-4a8b-9371-7bf49ac1206c" alt="Banner">
+  <img src="https://github.com/user-attachments/assets/00f70623-1ce4-4f9f-b239-7069fd4ee644" alt="Banner">
 </p>
 
 ### 
@@ -129,7 +130,8 @@ Data storage and retrieval, data integrity maintenance.
 ###
 
 ## **Class Diagram**
-![Editor _ Mermaid Chart-2025-06-08-020322](https://github.com/user-attachments/assets/e9f74d4d-e434-4c5d-bd98-3adbd9c49ff2)
+
+![WhatsApp Image 2025-06-08 at 5 23 49 PM](https://github.com/user-attachments/assets/fb4a28c6-a76d-443e-a519-e287906f634c)
 
 ### **User:**
 
@@ -215,7 +217,9 @@ The purpose is to demonstrate the interaction flow between system layers, captur
 
 ### **User Registration sequence**
 
-![][image3]
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/89013a4f-bed7-47d5-a0db-3ecbb659c161" alt="Banner">
+</p>
 
 Process:
 
@@ -232,7 +236,10 @@ On failure:
 
 ### **Place Creation sequence**
 
-![][image4]  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bde858af-c929-4bf1-b1c3-90954769591a" alt="Banner">
+</p>
+
 Process:
 
 1. Listing creation request.  
@@ -248,7 +255,10 @@ On failure:
 
 ### **Review Submission sequence**
 
-![][image5]  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/4d4e757c-a230-45a5-9be3-a93ca30ae2df" alt="Banner">
+</p>
+
 Process:
 
 1. Client App initiates a "Review Submission" request to the API.  
@@ -267,7 +277,10 @@ On failure:
 
 ### **Fetching a List of Places**
 
-![][image6]  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/af3fad2a-d029-43fa-91ab-093553f06dad" alt="Banner">
+</p>
+
 Process:
 
 1. Available places list request.  
