@@ -87,7 +87,7 @@ User-System communication, this represents the application GUI’s and the highe
 
   * **Requests:** Manage user requests to the application.  
   * **Responses:** Parse response from the lower level layers back to the user.  
-  * **HTML Status Management:** HTML codes and error handling.
+  * **HTTP Status Management:** HTTP codes and error handling.
 
 ### **Business Logic Layer:**
 
