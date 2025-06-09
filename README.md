@@ -147,9 +147,9 @@ Represents a client using the app.
 Characteristics and relations:
 
 - One user can have none or many places listed.  
-- A user can be either regular or administrator.  
+- An user can be either regular or administrator.  
 - Can create, update and delete his account.  
-- One user can author one or more reviews for each place he rented.
+- One user can author one reviews for each place he rented.
 
 ### **Place:**
 
@@ -197,7 +197,7 @@ Characteristics and relations:
 
 - One *User* can author many reviews.  
 - One review can rate one *Place*.  
-- One *Place* can have many reviews.  
+- One *Place* can have many reviews from different users.  
 - Can be created, updated and deleted by the author.
 
 ### **BaseModel:**
