@@ -8,9 +8,14 @@ class User(BaseModel):
                  email: str = "n/a",
                  password: str = "n/a",
                  is_admin: bool = False):
-        pass # for now
+        self.__id_user = id_user
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__email = email
+        self.__password = password
+        self.__is_admin = is_admin
 
-    
+
     def create(self, id_user):
         pass
     def update(self, id_user):
