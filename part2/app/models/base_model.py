@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import datetime
+from datetime import datetime
 import uuid
 
 

@@ -1,3 +1,4 @@
+from typing import Optional
 from base_model import BaseModel
 
 
@@ -8,8 +9,8 @@ class Place(BaseModel):
         title: str = "n/a",
         description: str = "n/a",
         price: float = 0.00,
-        coordinates: tuple = (0, 0),
-        amenities: list = None,
+        coordinates: Optional[tuple] = None,
+        amenities: Optional[list] = None,
     ):
         self.__id_owner = id_owner
         self.__title = title
