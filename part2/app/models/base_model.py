@@ -9,6 +9,21 @@ class BaseModel(ABC):
         self.__creation_date = datetime.today()
         self.__update_date = datetime.today()
 
+    @staticmethod
+    def validate_string(value, field_name):
+        if not isinstance(value, str):
+            raise TypeError(f"{field_name} must be a string!")
+        value = value.strip()
+        if len(value) == 0:
+            raise ValueError(f"{field_name} cannot be empty!")
+        return value
+
+    @staticmethod
+    def validate_integer(value, field_name):
+        if type(value) is not int:
+            raise TypeError(f"{field_name} must be an integer!")
+        return float(value)  # Return float to prevent loss of shit.
+
     @property
     def id(self):
         return self.__id
