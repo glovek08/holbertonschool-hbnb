@@ -8,8 +8,39 @@ class Amenity(BaseModel):
         self.__description = description
         # self.__icon = icon
 
-    def update(self, id_amenity):
-        pass
 
-    def delete(self):
-        pass
+@property
+def id_amenity(self):
+    return self.__id_amenity
+
+
+@property
+def name(self):
+    return self.__name
+
+
+@name.setter
+def name(self, value: str):
+    if not isinstance(value, str) or None:
+        raise TypeError("Name must be a string!")
+    self.__name = value
+
+
+@property
+def description(self):
+    return self.__description
+
+
+@description.setter
+def description(self, value: str):
+    if not isinstance(value, str):
+        raise TypeError("Description must be a string!")
+    self.__description = value
+
+
+def update(self, id_amenity):
+    pass
+
+
+def delete(self):
+    pass

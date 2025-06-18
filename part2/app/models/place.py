@@ -42,7 +42,7 @@ class Place(BaseModel):
     @title.setter
     def title(self, value: str):
         if not isinstance(value, str) or None:
-            raise TypeError
+            raise TypeError("Title must be a string!")
         self.__title = value
 
     # Description
