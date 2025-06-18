@@ -19,8 +19,8 @@ class BaseModel(ABC):
         return value
 
     @staticmethod
-    def validate_integer(value, field_name):
-        if type(value) is not int:
+    def validate_number(value, field_name):
+        if type(value) is not int and type(value) is not float:
             raise TypeError(f"{field_name} must be an integer!")
         return float(value)  # Return float to prevent loss of shit.
 
