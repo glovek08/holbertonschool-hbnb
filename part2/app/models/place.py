@@ -1,23 +1,26 @@
 from typing import Optional
 from base_model import BaseModel
+from user import User
 
 
 class Place(BaseModel):
     def __init__(
         self,
-        id_owner: str,
-        title: str = "n/a",
+        owner: User,
+        title: str,
         description: str = "n/a",
-        price: float = 0.00,
-        coordinates: Optional[tuple] = None,
+        price: float,
+        latitude: float,
+        longitude: float,
         amenities: Optional[list] = None,
     ):
-        self.__id_owner = id_owner
-        self.__title = title
-        self.__description = description
-        self.__price = price
-        self.__coordinates = coordinates
-        self.__amenities = amenities if amenities is not None else []
+        self.owner = owner
+        self.title = title
+        self.description = description
+        self.price = price
+        self.latitude = latitude
+        self.longitude = longitude
+        self.amenities = amenities if amenities is not None else []
 
     # new_place.update(option, value)
     #     if hasattr(self, option):
@@ -31,8 +34,14 @@ class Place(BaseModel):
     #     self.__id_place = value
 
     @property
-    def id_owner(self):
-        return self.__id_owner
+    def owner(self):
+        return self.__owner
+    
+    @owner.setter
+    def owner(self, value):
+        # owner = fetch(vaule) ?
+        if owner == None:
+            raise 
 
     # Title
     @property
@@ -65,12 +74,12 @@ class Place(BaseModel):
 
     # Coordinates
     @property
-    def coordinates(self):
-        return self.__coordinates
+    def latitude(self):
+        return self.__latitude
 
     @coordinates.setter
     def coordinates(self, value):
-        self.__coordinates = value
+        self.__longitude = value
 
     # Amenities
     @property
@@ -79,4 +88,5 @@ class Place(BaseModel):
 
     @amenities.setter
     def amenities(self, value):
-        self.__amenities = value
+        if value not in self.__amenities:
+            self.__amenities.add(value)
