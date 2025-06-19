@@ -4,9 +4,8 @@ This project is part of the Holberton School curriculum and focuses on building 
 
 ## Features
 
-- **Data Storage:** Supports both file and database storage engines.
-- **Command Interpreter:** Allows management of objects via a command-line interface.
-- **Models:** Includes User, Place, State, City, Amenity, and Review models.
+- **Data Storage:** In-memory persistance.
+- **Models:** Includes User, Place, Amenity, and Review models. All inherit from a Base Model.
 - **RESTful API:** Provides endpoints for CRUD operations.
 - **Web Framework:** Integrates with Flask for web-based interfaces.
 
@@ -34,14 +33,9 @@ This project is part of the Holberton School curriculum and focuses on building 
 
 ## Usage
 
-- **Command Interpreter:**
-  ```bash
-  ./console.py
-  ```
-
 - **Start Web Server:**
   ```bash
-  python3 -m app.py.<module>
+  python3 <app.py>
   ```
 
 ## Project Structure
