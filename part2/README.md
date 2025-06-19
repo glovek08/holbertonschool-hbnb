@@ -18,9 +18,9 @@ This project is part of the Holberton School curriculum and focuses on building 
 
 ## Installation
 
-1. Clone the repository:
+1. Clone the repository using SSH:
     ```bash
-    git clone <https://github.com/glovek08/holbertonschool-hbnb>
+    git clone git@github.com:glovek08/holbertonschool-hbnb.git
     cd holbertonschool-hbnb/part2
     ```
 
@@ -35,7 +35,7 @@ This project is part of the Holberton School curriculum and focuses on building 
 
 - **Start Web Server:**
   ```bash
-  python3 <app.py>
+  python3 app.py
   ```
 
 ## Project Structure
