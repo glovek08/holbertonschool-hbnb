@@ -47,3 +47,13 @@ class BaseModel(ABC):
     @abstractmethod
     def delete(self):
         pass
+
+    @abstractmethod
+    def export_data(self):
+        data = {
+            "id": self.id,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
+        }
+
+        return data
