@@ -8,12 +8,13 @@ class Place(BaseModel):
         self,
         owner: User,
         title: str,
-        description: str = "n/a",
+        description: str,
         price: float,
         latitude: float,
         longitude: float,
         amenities: Optional[list] = None,
     ):
+        super().__init__()
         self.owner = owner
         self.title = title
         self.description = description
@@ -22,26 +23,25 @@ class Place(BaseModel):
         self.longitude = longitude
         self.amenities = amenities if amenities is not None else []
 
-    # new_place.update(option, value)
-    #     if hasattr(self, option):
-    #         setattr(self, option, value)
-    #     if (option == "description")
-    #         new_place.description == value
-    #     elif option == "title":
-    #         self.title = value
+    def update(self, option: str, value):
+        """Update a specific attribute of the place"""
+        if hasattr(self, option):
+            setattr(self, option, value)
+        else:
+            raise AttributeError(f"Place has no attribute '{option}'")
 
-    # def set_id(self, value):
-    #     self.__id_place = value
-
+    # Owner
     @property
     def owner(self):
         return self.__owner
-    
+
     @owner.setter
-    def owner(self, value):
-        # owner = fetch(vaule) ?
-        if owner == None:
-            raise 
+    def owner(self, value: User):
+        if not isinstance(value, User):
+            raise TypeError("Owner must be a User instance")
+        if value is None:
+            raise ValueError("Owner cannot be None")
+        self.__owner = value
 
     # Title
     @property
@@ -50,9 +50,11 @@ class Place(BaseModel):
 
     @title.setter
     def title(self, value: str):
-        if not isinstance(value, str) or None:
-            raise TypeError("Title must be a string!")
-        self.__title = value
+        if not isinstance(value, str):
+            raise TypeError("Title must be a string")
+        if not value.strip():
+            raise ValueError("Title cannot be empty")
+        self.__title = value.strip()
 
     # Description
     @property
@@ -60,8 +62,10 @@ class Place(BaseModel):
         return self.__description
 
     @description.setter
-    def description(self, value):
-        self.__description = value
+    def description(self, value: str):
+        if not isinstance(value, str):
+            raise TypeError("Description must be a string")
+        self.__description = value.strip()
 
     # Price
     @property
@@ -69,24 +73,56 @@ class Place(BaseModel):
         return self.__price
 
     @price.setter
-    def price(self, value):
-        self.__price = value
+    def price(self, value: float):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Price must be a number")
+        if value < 0:
+            raise ValueError("Price cannot be negative")
+        self.__price = float(value)
 
-    # Coordinates
+    # Latitude
     @property
     def latitude(self):
         return self.__latitude
 
-    @coordinates.setter
-    def coordinates(self, value):
-        self.__longitude = value
+    @latitude.setter
+    def latitude(self, value: float):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Latitude must be a number")
+        if not -90 <= value <= 90:
+            raise ValueError("Latitude must be between -90 and 90")
+        self.__latitude = float(value)
+
+    # Longitude
+    @property
+    def longitude(self):
+        return self.__longitude
+
+    @longitude.setter
+    def longitude(self, value: float):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Longitude must be a number")
+        if not -180 <= value <= 180:
+            raise ValueError("Longitude must be between -180 and 180")
+        self.__longitude = float(value)
 
     # Amenities
     @property
     def amenities(self):
-        return self.__amenities
+        return self.__amenities.copy()
 
     @amenities.setter
-    def amenities(self, value):
-        if value not in self.__amenities:
-            self.__amenities.add(value)
+    def amenities(self, value: list):
+        if not isinstance(value, list):
+            raise TypeError("Amenities must be a list")
+        self.__amenities = value.copy()
+
+    def add_amenity(self, amenity):
+        """Add an amenity to the place"""
+        if amenity not in self.__amenities:
+            self.__amenities.append(amenity)
+
+    def remove_amenity(self, amenity):
+        """Remove an amenity from the place"""
+        if amenity in self.__amenities:
+            self.__amenities.remove(amenity)

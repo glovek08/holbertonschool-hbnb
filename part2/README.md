@@ -11,7 +11,7 @@ This project is part of the Holberton School curriculum and focuses on building 
 
 ## Requirements
 
-- Ubuntu 24.04 LTS
+- Ubuntu 22.04
 - Python 3.8+
 - pip (for installing dependencies)
 - In-Memory Persistance (For now)
