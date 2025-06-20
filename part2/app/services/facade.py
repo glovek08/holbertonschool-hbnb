@@ -1,5 +1,6 @@
 from app.persistence.respository import InMemoryRepository
 from app.models.place import Place
+from app.models.user import User
 
 
 class HBnBFacade:
@@ -22,7 +23,7 @@ class HBnBFacade:
 
     def create_place(self, place_data):
         required_fields = [
-            "owner",
+            "owner_id",
             "title",
             "description",
             "price",
@@ -33,29 +34,29 @@ class HBnBFacade:
         for field in required_fields:
             if field not in place_data:
                 raise ValueError(f"Missing required field: {field}")
-        # No se como manejar el owner. Que llamo? Que le pongo?, llamar al user_repo con el id del user y pasarle la instancia
-        # que retorna a new_place?
-        # Como controlar que el owner exista? fijarse si la id existe en la persistence?
-        # Lo mismo para amenities.
+
+        owner = self.user_repo.get(place_data["owner_id"])
+        if not owner:
+            raise ValueError(f"Owner with ID {place_data['owner_id']} not found")
+
+        amenities = place_data.get("amenities", [])
 
         new_place = Place(
-            owner=place_data["owner"],  # Placeholder
+            owner=owner,
             title=place_data["title"],
             description=place_data["description"],
-            amenities=place_data["amenities"],  # Placeholder
+            amenities=amenities,
         )
-        # price, longitude and latitude validation handled in setters. read task_04_place.
+
         try:
             new_place.price = place_data["price"]
-            new_place.latitude = place_data["longitude"]
-            new_place.longitude = place_data["latitude"]
-        except TypeError as t_error:
-            raise t_error
-        except ValueError as v_error:
-            raise v_error
-        except Exception as error:
+            new_place.latitude = place_data["latitude"]
+            new_place.longitude = place_data["longitude"]
+        except (TypeError, ValueError) as error:
             raise error
+
         self.place_repo.add(new_place)
+        return new_place
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
