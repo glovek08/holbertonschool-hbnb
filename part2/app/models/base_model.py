@@ -37,23 +37,13 @@ class BaseModel(ABC):
         return self.__update_date
 
     @abstractmethod
-    def create(self):
-        pass
-
-    @abstractmethod
     def update(self):
         pass
 
-    @abstractmethod
-    def delete(self):
-        pass
-
-    @abstractmethod
     def export_data(self):
         data = {
             "id": self.id,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
+            "creation_date": self.creation_date.isoformat(),
+            "updated_at": self.update_date.isoformat(),
         }
-
         return data

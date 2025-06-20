@@ -1,4 +1,7 @@
 from base_model import BaseModel
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+from place import Place
 
 
 class User(BaseModel):
@@ -10,11 +13,20 @@ class User(BaseModel):
         password: str = "n/a",
         is_admin: bool = False,
     ):
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__email = email
-        self.__password = password
-        self.__is_admin = is_admin
+        super().__init__()
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.password = password
+        self.is_admin = is_admin
+
+    # max length of 50 chars.
+    def validate_string(self, value, field_name):
+        if field_name == "First Name" or field_name == "Last Name":
+            super().validate_string(value, field_name)
+            if len(value) > 50:
+                raise ValueError(f"{field_name} must not exceed 50 characters.")
+        return value
 
     # First Name
     @property
@@ -23,9 +35,7 @@ class User(BaseModel):
 
     @first_name.setter
     def first_name(self, value):
-        if not isinstance(value, str) or None:
-            raise TypeError("First Name must be a string!")
-        self.__first_name = value
+        self.__first_name = self.validate_string(value, "First Name")
 
     # Last Name
     @property
@@ -34,9 +44,7 @@ class User(BaseModel):
 
     @last_name.setter
     def last_name(self, value):
-        if not isinstance(value, str) or None:
-            raise TypeError("Last Name must be a string!")
-        self.__last_name = value
+        self.__last_name = self.validate_string(value, "Last Name")
 
     # Email
     @property
@@ -45,9 +53,7 @@ class User(BaseModel):
 
     @email.setter
     def email(self, value):
-        if not isinstance(value, str) or None:
-            raise TypeError("Email must be a string!")
-        self.__email = value
+        self.__email = self.validate_string(value, "Email")
 
     # Password
     @property
@@ -56,10 +62,12 @@ class User(BaseModel):
 
     @password.setter
     def password(self, value):
-        # use werkzug.security for password hash here??
-        if not isinstance(value, str) or None:
+        if not isinstance(value, str):
             raise TypeError("Password must be a string!")
-        self.__password = value
+        self.__password = generate_password_hash(value)
+
+    def verify_password(self, plain_password):
+        return check_password_hash(self.__password, plain_password)
 
     # Is Admin
     @property
@@ -68,8 +76,14 @@ class User(BaseModel):
 
     @is_admin.setter
     def is_admin(self, value: bool):
-        # Since is admin is either true or false, should be handled differently?
         if not isinstance(value, bool):
-            raise TypeError("Is Admin must be Bool!")
-        self.__is_admin = bool(value)
-        # Maybe wrap this ^ in try-except block
+            raise TypeError("Is Admin must be a boolean!")
+        self.__is_admin = value
+
+    def create(self):
+        # we need to implement this or remove it!
+        pass
+
+    def update(self):
+        print(f"User {self.id} updated.")
+        self._BaseModel__update_date = datetime.today()
