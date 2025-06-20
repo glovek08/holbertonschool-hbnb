@@ -10,18 +10,18 @@ class Place(BaseModel):
         owner: User,
         title: str,
         description: str,
-        price: float,
-        latitude: float,
-        longitude: float,
+        # price: float,
+        # latitude: float,
+        # longitude: float,
         amenities: Optional[List[Amenity]] = None,
     ):
         super().__init__()
         self.owner = owner
         self.title = title
         self.description = description
-        self.price = price
-        self.latitude = latitude
-        self.longitude = longitude
+        # self.price = price        ****** Commented because task_04 ask to use setters for validation.*****
+        # self.latitude = latitude
+        # self.longitude = longitude
         self.amenities = amenities if amenities is not None else []
 
     # Owner
