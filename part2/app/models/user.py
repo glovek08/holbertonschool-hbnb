@@ -8,10 +8,10 @@ from place import Place
 class User(BaseModel):
     def __init__(
         self,
-        first_name: str = "n/a",
-        last_name: str = "n/a",
-        email: str = "n/a",
-        password: str = "n/a",
+        first_name: str,
+        last_name: str,
+        email: str,
+        password: str,
         is_admin: bool = False,
     ):
         super().__init__()
