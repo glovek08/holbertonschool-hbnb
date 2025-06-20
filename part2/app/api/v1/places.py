@@ -47,6 +47,21 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         # Placeholder for the logic to register a new place
+        # place_data = api.payload
+        # existing_user = facade.get_user(place_data["owner_id"])
+        # if not existing_user:
+        #   return {"error": "User doesn't exist"}, 400
+        #
+        # new_place = facade.create_place(place_data)
+        # return {
+        #    "title": new_place.title,
+        #    "description": new_place.description,
+        #    "price": new_place.price,
+        #    "latitude": new_place.latitude,
+        #    "longitude": new_place.longitude,
+        #    "owner_id": new_place.owner_id
+        #    "amenities": new_place.amenities,
+        # }, 201
         pass
 
     @api.response(200, "List of places retrieved successfully")
