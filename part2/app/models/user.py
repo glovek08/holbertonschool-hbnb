@@ -22,8 +22,8 @@ class User(BaseModel):
 
     # max length of 50 chars.
     def validate_string(self, value, field_name):
+        super().validate_string(value, field_name)
         if field_name == "First Name" or field_name == "Last Name":
-            super().validate_string(value, field_name)
             if len(value) > 50:
                 raise ValueError(f"{field_name} must not exceed 50 characters.")
         return value
@@ -79,10 +79,6 @@ class User(BaseModel):
         if not isinstance(value, bool):
             raise TypeError("Is Admin must be a boolean!")
         self.__is_admin = value
-
-    def create(self):
-        # we need to implement this or remove it!
-        pass
 
     def update(self):
         print(f"User {self.id} updated.")
