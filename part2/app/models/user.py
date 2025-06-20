@@ -1,5 +1,6 @@
 from base_model import BaseModel
 from werkzeug.security import generate_password_hash, check_password_hash
+from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
 from place import Place
 
@@ -53,7 +54,11 @@ class User(BaseModel):
 
     @email.setter
     def email(self, value):
-        self.__email = self.validate_string(value, "Email")
+        try:
+            valid = validate_email(value, check_deliverability=True)
+            self.__email = valid.email.lower()
+        except EmailNotValidError as e:
+            raise ValueError(f"Invalid email: {e}")
 
     # Password
     @property
