@@ -22,6 +22,9 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute("email", email)
 
     def create_place(self, place_data):
+        # place = Place(**place_data)
+        # self.user_repo.add(user)
+        # return user
         required_fields = [
             "owner_id",
             "title",
