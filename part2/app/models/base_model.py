@@ -5,9 +5,9 @@ import uuid
 
 class BaseModel(ABC):
     def __init__(self):
-        self.__id = str(uuid.uuid4())
-        self.__creation_date = datetime.today()
-        self.__update_date = datetime.today()
+        self._id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     @staticmethod
     def validate_string(value, field_name):
@@ -21,29 +21,26 @@ class BaseModel(ABC):
     @staticmethod
     def validate_number(value, field_name):
         if type(value) is not int and type(value) is not float:
-            raise TypeError(f"{field_name} must be an integer!")
+            raise TypeError(f"{field_name} must be a number!")
         return float(value)  # Return float to prevent loss of shit.
 
     @property
     def id(self):
-        return self.__id
+        return self._id
 
-    @property
-    def creation_date(self) -> datetime:
-        return self.__creation_date
+    def save(self):
+        self.updated_at = datetime.now()
 
-    @property
-    def update_date(self) -> datetime:
-        return self.__update_date
-
-    @abstractmethod
-    def update(self):
-        pass
+    def update(self, data):
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        self.save()
 
     def export_data(self):
         data = {
             "id": self.id,
-            "creation_date": self.creation_date.isoformat(),
-            "updated_at": self.update_date.isoformat(),
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
         }
         return data
