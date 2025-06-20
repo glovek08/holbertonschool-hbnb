@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 from base_model import BaseModel
+from amenity import Amenity
 from user import User
 
 
@@ -12,7 +13,7 @@ class Place(BaseModel):
         price: float,
         latitude: float,
         longitude: float,
-        amenities: Optional[list] = None,
+        amenities: Optional[List[Amenity]] = None,
     ):
         super().__init__()
         self.owner = owner
@@ -23,13 +24,6 @@ class Place(BaseModel):
         self.longitude = longitude
         self.amenities = amenities if amenities is not None else []
 
-    def update(self, option: str, value):
-        """Update a specific attribute of the place"""
-        if hasattr(self, option):
-            setattr(self, option, value)
-        else:
-            raise AttributeError(f"Place has no attribute '{option}'")
-
     # Owner
     @property
     def owner(self):
@@ -39,8 +33,6 @@ class Place(BaseModel):
     def owner(self, value: User):
         if not isinstance(value, User):
             raise TypeError("Owner must be a User instance")
-        if value is None:
-            raise ValueError("Owner cannot be None")
         self.__owner = value
 
     # Title
@@ -50,11 +42,10 @@ class Place(BaseModel):
 
     @title.setter
     def title(self, value: str):
-        if not isinstance(value, str):
-            raise TypeError("Title must be a string")
-        if not value.strip():
-            raise ValueError("Title cannot be empty")
-        self.__title = value.strip()
+        value = super().validate_string(value, "Title")
+        if len(value) > 100:
+            raise ValueError(f"Title must not exceed 100 characters.")
+        self.__title = value
 
     # Description
     @property
@@ -87,11 +78,10 @@ class Place(BaseModel):
 
     @latitude.setter
     def latitude(self, value: float):
-        if not isinstance(value, (int, float)):
-            raise TypeError("Latitude must be a number")
+        value = super().validate_number(value, "Latitude")
         if not -90 <= value <= 90:
             raise ValueError("Latitude must be between -90 and 90")
-        self.__latitude = float(value)
+        self.__latitude = value
 
     # Longitude
     @property
@@ -100,11 +90,10 @@ class Place(BaseModel):
 
     @longitude.setter
     def longitude(self, value: float):
-        if not isinstance(value, (int, float)):
-            raise TypeError("Longitude must be a number")
+        value = super().validate_number(value, "Longitude")
         if not -180 <= value <= 180:
             raise ValueError("Longitude must be between -180 and 180")
-        self.__longitude = float(value)
+        self.__longitude = value
 
     # Amenities
     @property
@@ -117,8 +106,10 @@ class Place(BaseModel):
             raise TypeError("Amenities must be a list")
         self.__amenities = value.copy()
 
-    def add_amenity(self, amenity):
+    def add_amenity(self, amenity: Amenity):
         """Add an amenity to the place"""
+        if not isinstance(amenity, Amenity):
+            raise TypeError("Value must be an Amenity")
         if amenity not in self.__amenities:
             self.__amenities.append(amenity)
 
