@@ -1,8 +1,7 @@
-from base_model import BaseModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
-from place import Place
+from app.models.base_model import BaseModel
 
 
 class User(BaseModel):

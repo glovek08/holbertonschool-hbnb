@@ -1,10 +1,8 @@
-from base_model import BaseModel
+from app.models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    def __init__(
-        self, id_amenity: str, name: str = "n/a", description: str = "n/a"
-    ):
+    def __init__(self, id_amenity: str, name: str = "n/a", description: str = "n/a"):
         self.id_amenity = id_amenity
         self.name = name
         self.description = description

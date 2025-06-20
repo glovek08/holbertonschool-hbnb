@@ -1,5 +1,5 @@
 from app.persistence.respository import InMemoryRepository
-from models.place import Place
+from app.models.place import Place
 
 
 class HBnBFacade:
