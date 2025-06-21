@@ -105,9 +105,3 @@ class User(BaseModel):
             is_admin=str(self.is_admin),
         )
         return data
-
-    def update(self, data):
-        for key, value in data.items():
-            if hasattr(self, key) and key not in ["id", "created_at"]:
-                setattr(self, key, value)
-        self.save()
