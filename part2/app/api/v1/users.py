@@ -59,6 +59,7 @@ class UserList(Resource):
 
 @api.route("/<user_id>")
 class UserResource(Resource):
+    @api.doc(params={"user_id": "The unique ID of the user"})
     @api.response(200, "User details retrieved successfully")
     @api.response(404, "User not found")
     def get(self, user_id):
@@ -76,9 +77,9 @@ class UserResource(Resource):
 
     @api.expect(user_model, validate=True)
     @api.response(200, "User successfully updated")
-    @api.response(400, "Email already registered")
-    @api.response(400, "Invalid input data")
+    @api.response(400, "Invalid input data or email already registered")
     def put(self, user_id):
+        """Update user information by ID"""
         user_new_data = api.payload
 
         user = facade.get_user(user_id)
