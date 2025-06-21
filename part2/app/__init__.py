@@ -3,7 +3,10 @@ from flask_restx import Api
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
+<<<<<<< HEAD
 from app.api.v1.amenities import api as amenity_ns
+=======
+>>>>>>> 687a2f838a23067410efdb87a1d0ba66acc8646a
 from app.services import facade
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -22,7 +25,10 @@ def create_app():
 
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(places_ns, path="/api/v1/places")
+<<<<<<< HEAD
     api.add_namespace(amenity_ns, path="/api/v1/amenity")
+=======
+>>>>>>> 687a2f838a23067410efdb87a1d0ba66acc8646a
 
     # --- TEST DATA START ---
     # Add users
