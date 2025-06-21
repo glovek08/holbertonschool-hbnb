@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash, check_password_hash
+# from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
 from app.models.base_model import BaseModel
@@ -10,20 +10,22 @@ class User(BaseModel):
         first_name: str,
         last_name: str,
         email: str,
-        password: str,
+        # password: str,
         is_admin: bool = False,
     ):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = password
+        # self.password = password
         self.is_admin = is_admin
 
     # max length of 50 chars.
     def validate_string(self, value, field_name):
         value = super().validate_string(value, field_name)
         if field_name == "First Name" or field_name == "Last Name":
+            if not value.isalpha():
+                raise ValueError(f"{field_name} is not a valid name")
             if len(value) > 50:
                 raise ValueError(f"{field_name} must not exceed 50 characters.")
         return value
@@ -60,18 +62,18 @@ class User(BaseModel):
             raise ValueError(f"Invalid email: {e}")
 
     # Password
-    @property
-    def password(self):
-        return self.__password
+    # @property
+    # def password(self):
+    #     return self.__password
 
-    @password.setter
-    def password(self, value):
-        if not isinstance(value, str):
-            raise TypeError("Password must be a string!")
-        self.__password = generate_password_hash(value)
+    # @password.setter
+    # def password(self, value):
+    #     if not isinstance(value, str):
+    #         raise TypeError("Password must be a string!")
+    #     self.__password = generate_password_hash(value)
 
-    def verify_password(self, plain_password):
-        return check_password_hash(self.__password, plain_password)
+    # def verify_password(self, plain_password):
+    #     return check_password_hash(self.__password, plain_password)
 
     # Is Admin
     @property
@@ -88,10 +90,10 @@ class User(BaseModel):
     #     data = super().export_data()
     #     data.update(
     #         {
-    #             "first_name": self.first_name,
-    #             "last_name": self.last_name,
-    #             "email": self.email,
-    #             "is_admin": self.is_admin,
+    #             "first_name": self.__first_name,
+    #             "last_name": self.__last_name,
+    #             "email": self.__email,
+    #             "is_admin": self.__is_admin,
     #         }
     #     )
     #     return data
