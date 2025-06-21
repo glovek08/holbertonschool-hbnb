@@ -16,15 +16,18 @@ class HBnBFacade:
         return user
 
     def get_user(self, user_id):
-        return self.user_repo.get(user_id)
+        return User(**self.user_repo.get(user_id))
+
+    def get_all_users(self):
+        return self.user_repo.get_all()
 
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute("email", email)
 
     def create_place(self, place_data):
         # place = Place(**place_data)
-        # self.user_repo.add(user)
-        # return user
+        # self.user_repo.add(place)
+        # return place
         required_fields = [
             "owner_id",
             "title",
