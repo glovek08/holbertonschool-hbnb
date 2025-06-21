@@ -16,7 +16,10 @@ class HBnBFacade:
         return user
 
     def get_user(self, user_id):
-        return User(**self.user_repo.get(user_id))
+        user = self.user_repo.get(user_id)
+        if not user:
+            return None
+        return User(**user)
 
     def get_all_users(self):
         return self.user_repo.get_all()
