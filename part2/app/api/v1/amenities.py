@@ -70,12 +70,12 @@ class AmenityResource(Resource):
         my_amenity = facade.get_amenity(amenity_id)
         if not my_amenity:
             return {"error": "Amenity not found!"}, 404
+
         try:
-            for key, value in amenity_data.items():
-                setattr(my_amenity, key, value)
             facade.update_amenity(amenity_id, amenity_data)
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
+
         return {
             "id": my_amenity.id,
             "name": my_amenity.name,
