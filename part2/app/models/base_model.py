@@ -34,15 +34,11 @@ class BaseModel(ABC):
 
     def update(self, data: dict):
         for key, value in data.items():
-            if hasattr(self, key):
+            if hasattr(self, key) and key not in ["id", "created_at"]:
                 current_value = getattr(self, key)
                 if current_value != value:
                     setattr(self, key, value)
         self.save()
-
-    @abstractmethod
-    def update(self, data):
-        pass
 
     def export_data(self):
         data = {
