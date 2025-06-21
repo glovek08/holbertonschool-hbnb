@@ -3,14 +3,13 @@ from flask_restx import Api
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
-<<<<<<< HEAD
 from app.api.v1.amenities import api as amenity_ns
-=======
->>>>>>> 687a2f838a23067410efdb87a1d0ba66acc8646a
+from app.api.v1.reviews import api as reviews_ns
 from app.services import facade
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.user import User
+from app.models.review import Review
 
 
 def create_app():
@@ -25,10 +24,8 @@ def create_app():
 
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(places_ns, path="/api/v1/places")
-<<<<<<< HEAD
     api.add_namespace(amenity_ns, path="/api/v1/amenity")
-=======
->>>>>>> 687a2f838a23067410efdb87a1d0ba66acc8646a
+    api.add_namespace(reviews_ns, path="/api/v1/reviews")
 
     # --- TEST DATA START ---
     # Add users
@@ -64,6 +61,32 @@ def create_app():
     )
     facade.place_repo.add(place1)
     facade.place_repo.add(place2)
+
+    # Add some reviews
+    review1 = Review(
+        owner_id=user1.id,
+        place_id=place1.id,
+        rating=4.5,
+        comment="Lovely cottage, very cozy and clean!",
+    )
+    review2 = Review(
+        owner_id=user2.id,
+        place_id=place1.id,
+        rating=4.0,
+        comment="Great location, but the WiFi was a bit slow.",
+    )
+    review3 = Review(
+        owner_id=user1.id,
+        place_id=place2.id,
+        rating=5.0,
+        comment="Amazing apartment, would stay again!",
+    )
+    facade.review_repo.add(review1)
+    facade.review_repo.add(review2)
+    facade.review_repo.add(review3)
+    # [Optional] add reviews to the place objects:
+    # place1.reviews.extend([review1, review2])
+    # place2.reviews.append(review3)
     # --- TEST DATA END ---
 
     return app

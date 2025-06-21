@@ -2,14 +2,15 @@ from app.persistence.respository import InMemoryRepository
 from app.models.place import Place
 from app.models.user import User
 from app.models.amenity import Amenity
+from app.models.review import Review
 
 
 class HBnBFacade:
     def __init__(self):
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
 
     # **************** USER CRAP *****************
     def create_user(self, user_data):
@@ -58,3 +59,37 @@ class HBnBFacade:
 
     def update_amenity(self, amenity_id, amenity_data):
         self.amenity_repo.update(amenity_id, amenity_data)
+
+    # *************** REVIEW CRAP *******************
+    def create_review(self, review_data):
+        user = self.get_user(review_data.get("user_id"))
+        if not user:
+            raise ValueError("User does not exist")
+        place = self.get_place(review_data.get("place_id"))
+        if not place:
+            raise ValueError("Place does not exist")
+        # Both ID exist. Now we create the review.
+        new_review = Review(**review_data)
+        self.review_repo.add(new_review)
+        # add the review to its corresponding pleis
+        place.add_review(new_review)
+        return new_review
+
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        return self.review_repo.get_all()
+
+    def get_reviews_by_place(self, place_id):
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError("Place doesn't exist")
+        return place.reviews
+
+    def update_review(self, review_id, review_data):
+        self.review_repo.update(review_id, review_data)
+
+    def delete_review(self, review_id):
+        # Placeholder for logic to delete a review
+        pass

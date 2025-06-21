@@ -2,10 +2,32 @@ from app.models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    def __init__(self, rating: float, comment: str):
+    def __init__(self, owner_id: str, place_id: str, rating: float, comment: str):
         super().__init__()
+        self.owner_id = owner_id
+        self.place_id = place_id
         self.rating = rating
         self.comment = comment
+
+    @property
+    def owner_id(self):
+        return self.__owner_id
+
+    @owner_id.setter
+    def owner_id(self, value):
+        if not isinstance(value, str):
+            raise TypeError("owner_id must be a string!")
+        self.__owner_id = value
+
+    @property
+    def place_id(self):
+        return self.__place_id
+
+    @place_id.setter
+    def place_id(self, value):
+        if not isinstance(value, str):
+            raise TypeError("place_id must be a string!")
+        self.__place_id = value
 
     @property
     def rating(self):

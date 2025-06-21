@@ -14,6 +14,7 @@ class Place(BaseModel):
         latitude: float,
         longitude: float,
         amenities: Optional[List[Amenity]] = None,
+        reviews: Optional[list] = None,
     ):
         super().__init__()
         self.owner_id = owner_id
@@ -23,6 +24,7 @@ class Place(BaseModel):
         self.latitude = latitude
         self.longitude = longitude
         self.amenities = amenities if amenities is not None else []
+        self.reviews = reviews if reviews is not None else []
 
     # Owner ID
     @property
@@ -119,6 +121,24 @@ class Place(BaseModel):
         """Remove an amenity from the place"""
         if amenity in self.__amenities:
             self.__amenities.remove(amenity)
+
+    @property
+    def reviews(self):
+        return self.__reviews.copy()
+
+    @reviews.setter
+    def reviews(self, value: list):
+        if not isinstance(value, list):
+            raise TypeError("Reviews must be a list")
+        self.__reviews = value.copy()
+
+    def add_review(self, review):
+        if review not in self.__reviews:
+            self.__reviews.append(review)
+
+    def remove_review(self, review):
+        if review in self.__reviews:
+            self.__reviews.remove(review)
 
     def update(self, data: dict):
         """Update place attributes with new data"""
