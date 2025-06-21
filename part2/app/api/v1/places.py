@@ -9,6 +9,7 @@ amenity_model = api.model(
     {
         "id": fields.String(description="Amenity ID"),
         "name": fields.String(description="Name of the amenity"),
+        "description": fields.String(description="Short description of the amenity"),
     },
 )
 
@@ -50,7 +51,13 @@ class PlaceList(Resource):
         existing_user = facade.get_user(place_data["owner_id"])
         if not existing_user:
             return {"error": "User does not exist"}, 400
-
+        # Convert amenity IDs to Amenity objects
+        amenity_objs = []
+        for amenity_id in place_data.get("amenities", []):
+            amenity = facade.get_amenity(amenity_id)
+            if amenity:
+                amenity_objs.append(amenity)
+        place_data["amenities"] = amenity_objs
         try:
             new_place = facade.create_place(place_data)
         except (TypeError, ValueError) as error:
@@ -62,7 +69,14 @@ class PlaceList(Resource):
             "price": new_place.price,
             "latitude": new_place.latitude,
             "longitude": new_place.longitude,
-            "amenities": [amenity.id for amenity in new_place.amenities],
+            "amenities": [
+                {
+                    "id": amenity.id,
+                    "name": getattr(amenity, "name", None),
+                    "description": getattr(amenity, "description", None),
+                }
+                for amenity in new_place.amenities
+            ],
         }, 201
 
     @api.response(200, "List of places retrieved successfully")
@@ -86,7 +100,14 @@ class PlaceList(Resource):
                 "price": place.price,
                 "latitude": place.latitude,
                 "longitude": place.longitude,
-                "amenities": [amenity.id for amenity in place.amenities],
+                "amenities": [
+                    {
+                        "id": amenity.id,
+                        "name": getattr(amenity, "name", None),
+                        "description": getattr(amenity, "description", None),
+                    }
+                    for amenity in place.amenities
+                ],
             }
             for place in places
         ]
@@ -121,7 +142,14 @@ class PlaceResource(Resource):
             "price": place.price,
             "latitude": place.latitude,
             "longitude": place.longitude,
-            "amenities": [amenity.id for amenity in place.amenities],
+            "amenities": [
+                {
+                    "id": amenity.id,
+                    "name": getattr(amenity, "name", None),
+                    "description": getattr(amenity, "description", None),
+                }
+                for amenity in place.amenities
+            ],
         }
 
     @api.expect(place_model)
@@ -129,7 +157,7 @@ class PlaceResource(Resource):
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
     def put(self, place_id):
-        """Update a place's information"""
+        """Update place information by ID"""
         place_new_data = api.payload
         place = facade.get_place(place_id)
         if not place:
@@ -160,7 +188,14 @@ class PlaceResource(Resource):
                 "price": updated_place.price,
                 "latitude": updated_place.latitude,
                 "longitude": updated_place.longitude,
-                "amenities": [amenity.id for amenity in updated_place.amenities],
+                "amenities": [
+                    {
+                        "id": amenity.id,
+                        "name": getattr(amenity, "name", None),
+                        "description": getattr(amenity, "description", None),
+                    }
+                    for amenity in place.amenities
+                ],
             }, 200
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
