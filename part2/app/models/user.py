@@ -86,14 +86,18 @@ class User(BaseModel):
             raise TypeError("Is Admin must be a boolean!")
         self.__is_admin = value
 
-    # def export_data(self):
-    #     data = super().export_data()
-    #     data.update(
-    #         {
-    #             "first_name": self.__first_name,
-    #             "last_name": self.__last_name,
-    #             "email": self.__email,
-    #             "is_admin": self.__is_admin,
-    #         }
-    #     )
-    #     return data
+    def to_dict(self):
+        data = super().export_data()
+        data.update(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            email=self.email,
+            is_admin=str(self.is_admin),
+        )
+        return data
+
+    def update(self, data):
+        for key, value in data.items():
+            if hasattr(self, key) and key not in ["id", "created_at"]:
+                setattr(self, key, value)
+        self.save()

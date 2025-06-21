@@ -7,33 +7,35 @@ from app.models.user import User
 class Place(BaseModel):
     def __init__(
         self,
-        owner: User,
+        owner_id: str,
         title: str,
         description: str,
-        # price: float,
-        # latitude: float,
-        # longitude: float,
+        price: float,
+        latitude: float,
+        longitude: float,
         amenities: Optional[List[Amenity]] = None,
     ):
         super().__init__()
-        self.owner = owner
+        self.owner_id = owner_id
         self.title = title
         self.description = description
-        # self.price = price        ****** Commented because task_04 ask to use setters for validation *****
-        # self.latitude = latitude
-        # self.longitude = longitude
+        self.price = price
+        self.latitude = latitude
+        self.longitude = longitude
         self.amenities = amenities if amenities is not None else []
 
-    # Owner
+    # Owner ID
     @property
-    def owner(self):
-        return self.__owner
+    def owner_id(self):
+        return self.__owner_id
 
-    @owner.setter
-    def owner(self, value: User):
-        if not isinstance(value, User):
-            raise TypeError("Owner must be a User instance")
-        self.__owner = value
+    @owner_id.setter
+    def owner_id(self, value: str):
+        if not isinstance(value, str):
+            raise TypeError("Owner ID must be a string")
+        if not value:
+            raise ValueError("Owner ID cannot be empty")
+        self.__owner_id = value
 
     # Title
     @property

@@ -28,44 +28,9 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute("email", email)
 
     def create_place(self, place_data):
-        # place = Place(**place_data)
-        # self.user_repo.add(place)
-        # return place
-        required_fields = [
-            "owner_id",
-            "title",
-            "description",
-            "price",
-            "latitude",
-            "longitude",
-            "amenities",
-        ]
-        for field in required_fields:
-            if field not in place_data:
-                raise ValueError(f"Missing required field: {field}")
-
-        owner = self.user_repo.get(place_data["owner_id"])
-        if not owner:
-            raise ValueError(f"Owner with ID {place_data['owner_id']} not found")
-
-        amenities = place_data.get("amenities", [])
-
-        new_place = Place(
-            owner=owner,
-            title=place_data["title"],
-            description=place_data["description"],
-            amenities=amenities,
-        )
-
-        try:
-            new_place.price = place_data["price"]
-            new_place.latitude = place_data["latitude"]
-            new_place.longitude = place_data["longitude"]
-        except (TypeError, ValueError) as error:
-            raise error
-
-        self.place_repo.add(new_place)
-        return new_place
+        place = Place(**place_data)
+        self.user_repo.add(place)
+        return place
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
