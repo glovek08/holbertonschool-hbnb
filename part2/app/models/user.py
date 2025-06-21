@@ -1,5 +1,6 @@
 # from werkzeug.security import generate_password_hash, check_password_hash
-from email_validator import validate_email, EmailNotValidError
+# from email_validator import validate_email, EmailNotValidError
+import re
 from datetime import datetime
 from app.models.base_model import BaseModel
 
@@ -53,13 +54,22 @@ class User(BaseModel):
     def email(self):
         return self.__email
 
+    # @email.setter
+    # def email(self, value):
+    #     try:
+    #         valid = validate_email(value, check_deliverability=True)
+    #         self.__email = valid.email.lower()
+    #     except EmailNotValidError as e:
+    #         raise ValueError(f"Invalid email: {e}")
     @email.setter
     def email(self, value):
-        try:
-            valid = validate_email(value, check_deliverability=True)
-            self.__email = valid.email.lower()
-        except EmailNotValidError as e:
-            raise ValueError(f"Invalid email: {e}")
+        if not isinstance(value, str):
+            raise TypeError("Email must be a string")
+        email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if not re.match(email_pattern, value):
+            raise ValueError("Invalid email format")
+
+        self.__email = value.lower().strip()
 
     # Password
     # @property

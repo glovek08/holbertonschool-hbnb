@@ -69,21 +69,18 @@ class PlaceList(Resource):
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
-        for place in places:
-            owner = facade.get_user(place.owner_id)
-            owner_info = (
-                {
-                    "first_name": owner.first_name,
-                    "last_name": owner.last_name,
-                }
-                if owner
-                else None
-            )
         return [
             {
                 "id": place.id,
                 "owner_id": place.owner_id,
-                "owner": owner_info,
+                "owner": (
+                    {
+                        "first_name": owner.first_name,
+                        "last_name": owner.last_name,
+                    }
+                    if (owner := facade.get_user(place.owner_id))
+                    else None
+                ),
                 "title": place.title,
                 "description": place.description,
                 "price": place.price,
@@ -145,7 +142,7 @@ class PlaceResource(Resource):
             if not updated_place:
                 return {"error": "Place not found after update"}, 404
             owner = facade.get_user(updated_place.owner_id)
-            owner_info = (
+            owner_basic_info = (
                 {
                     "first_name": owner.first_name,
                     "last_name": owner.last_name,
@@ -156,7 +153,7 @@ class PlaceResource(Resource):
             return {
                 "id": updated_place.id,
                 "owner_id": updated_place.owner_id,
-                "owner": owner_info,
+                "owner": owner_basic_info,
                 "title": updated_place.title,
                 "description": updated_place.description,
                 "price": updated_place.price,
