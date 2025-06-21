@@ -50,10 +50,3 @@ class Review(BaseModel):
         self.__comment = self.validate_string(value, "comment")
 
     # self.__name = self.validate_string(value, "name").isalpha()
-
-    def update(self, data: dict):
-        """Update review attributes with new data"""
-        for key, value in data.items():
-            if hasattr(self, key) and key not in ["id", "created_at"]:
-                setattr(self, key, value)
-        self.save()

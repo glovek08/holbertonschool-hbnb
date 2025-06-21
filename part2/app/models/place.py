@@ -139,10 +139,3 @@ class Place(BaseModel):
     def remove_review(self, review):
         if review in self.__reviews:
             self.__reviews.remove(review)
-
-    def update(self, data: dict):
-        """Update place attributes with new data"""
-        for key, value in data.items():
-            if hasattr(self, key) and key not in ["id", "created_at"]:
-                setattr(self, key, value)
-        self.save()

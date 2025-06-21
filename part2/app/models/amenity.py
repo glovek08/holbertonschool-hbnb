@@ -27,12 +27,3 @@ class Amenity(BaseModel):
         if not isinstance(value, str):
             raise TypeError("Description must be a string!")
         self.__description = value
-
-    def update(self, data: dict):
-        """Update amenity attributes with new data"""
-        for key, value in data.items():
-            if hasattr(self, key) and key not in ["id", "created_at"]:
-                current_value = getattr(self, key)
-                if current_value != value:
-                    setattr(self, key, value)
-        self.save()
