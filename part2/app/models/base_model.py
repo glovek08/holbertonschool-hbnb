@@ -29,7 +29,16 @@ class BaseModel(ABC):
         return self._id
 
     def save(self):
+        """Update the updated_at timestamp whenever the object is modified"""
         self.updated_at = datetime.now()
+
+    def update(self, data: dict):
+        for key, value in data.items():
+            if hasattr(self, key):
+                current_value = getattr(self, key)
+                if current_value != value:
+                    setattr(self, key, value)
+        self.save()
 
     @abstractmethod
     def update(self, data):
