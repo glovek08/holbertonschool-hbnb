@@ -119,3 +119,10 @@ class Place(BaseModel):
         """Remove an amenity from the place"""
         if amenity in self.__amenities:
             self.__amenities.remove(amenity)
+
+    def update(self, data: dict):
+        """Update place attributes with new data"""
+        for key, value in data.items():
+            if hasattr(self, key) and key not in ["id", "created_at"]:
+                setattr(self, key, value)
+        self.save()

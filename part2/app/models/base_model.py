@@ -31,11 +31,9 @@ class BaseModel(ABC):
     def save(self):
         self.updated_at = datetime.now()
 
+    @abstractmethod
     def update(self, data):
-        for key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-        self.save()
+        pass
 
     def export_data(self):
         data = {

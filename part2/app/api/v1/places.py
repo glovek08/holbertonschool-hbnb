@@ -114,10 +114,9 @@ class PlaceResource(Resource):
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
-        if "owner_id" in place_new_data:
-            existing_user = facade.get_user(place_new_data["owner_id"])
-            if not existing_user:
-                return {"error": "User does not exist"}, 400
+        existing_user = facade.get_user(place_new_data["owner_id"])
+        if not existing_user:
+            return {"error": "User does not exist"}, 400
         try:
             facade.update_place(place_id, place_new_data)
             updated_place = facade.get_place(place_id)

@@ -1,4 +1,4 @@
-from base_model import BaseModel
+from app.models.base_model import BaseModel
 
 
 class Review(BaseModel):
@@ -13,12 +13,10 @@ class Review(BaseModel):
 
     @rating.setter
     def rating(self, value):
-        if not isinstance(value, float):
-            raise TypeError
-
+        if not isinstance(value, (int, float)):
+            raise TypeError("Rating must be a number!")
         if not (0 <= value <= 5):
             raise ValueError("Incorrect Rating value")
-
         self.__rating = value
 
     @property
@@ -30,3 +28,10 @@ class Review(BaseModel):
         self.__comment = self.validate_string(value, "comment")
 
     # self.__name = self.validate_string(value, "name").isalpha()
+
+    def update(self, data: dict):
+        """Update review attributes with new data"""
+        for key, value in data.items():
+            if hasattr(self, key) and key not in ["id", "created_at"]:
+                setattr(self, key, value)
+        self.save()
