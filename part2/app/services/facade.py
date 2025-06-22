@@ -69,12 +69,18 @@ class HBnBFacade:
 
     # ************** AMENITY CRAP ******************
     def create_amenity(self, amenity_data):
+        existing_amenity = self.amenity_repo.get_by_attribute(amenity_data["name"])
+        if existing_amenity:
+            raise ValueError("Amenity already exist")
         new_amenity = Amenity(**amenity_data)
         self.amenity_repo.add(new_amenity)
         return new_amenity
 
     def get_amenity(self, amenity_id):
-        return self.amenity_repo.get(amenity_id)
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            raise ValueError("Amenity does not exist")
+        return amenity
 
     def get_all_amenities(self):
         return self.amenity_repo.get_all()
@@ -84,13 +90,8 @@ class HBnBFacade:
 
     # *************** REVIEW CRAP *******************
     def create_review(self, review_data):
-        user = self.get_user(review_data.get("user_id"))
-        if not user:
-            raise ValueError("User does not exist")
-
-        place = self.get_place(review_data.get("place_id"))
-        if not place:
-            raise ValueError("Place does not exist")
+        self.get_user(review_data.get("user_id"))
+        self.get_place(review_data.get("place_id"))
         # Both ID exist. Now we create the review.
         new_review = Review(**review_data)
         self.review_repo.add(new_review)
