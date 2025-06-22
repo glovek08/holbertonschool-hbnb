@@ -55,7 +55,7 @@ class HBnBFacade:
         return place
 
     def get_place(self, place_id):
-        place = self.user_repo.get(user_id)
+        place = self.place_repo.get(place_id)
         if not place:
             raise ValueError("Place does not exist")
         return place
