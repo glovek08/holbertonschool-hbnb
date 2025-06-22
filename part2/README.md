@@ -128,7 +128,7 @@ Each model provides methods for creating, updating, deleting, and serializing in
 
 # Testing the Business Logic Layer
 
-The file `app/models/test_models.py` contains unit tests for the core entities. These tests verify that:
+The file `tests/test_models.py` contains unit tests for the core entities. These tests verify that:
 
 - Users are created with valid data and validation is enforced.
 - Places are created with correct attributes, and amenities and reviews can be added.
@@ -140,7 +140,7 @@ The file `app/models/test_models.py` contains unit tests for the core entities. 
 From the `part2` directory, run:
 
 ```bash
-python3 -m unittest app/models/test_models.py
+python3 -m unittest discover -s tests -p "test_models.py"
 ```
 
 ## Example Test (from `test_models.py`)
@@ -189,8 +189,6 @@ Continue reading below for API endpoint documentation and endpoint testing.
 
 The project provides a RESTful API for managing users, places, amenities, and reviews. All endpoints are documented and accessible via Swagger UI at `/api/v1/` when the server is running.
 
-- `app/api/v1/test_endpoints.py`
-
 ### Example Endpoints
 
 - `POST /api/v1/users/` — Create a new user
@@ -219,14 +217,14 @@ The project provides a RESTful API for managing users, places, amenities, and re
 
 Unit and integration tests are provided to ensure the correctness of the API endpoints and business logic. The main test file for endpoint testing is:
 
-- `app/api/v1/test_endpoints.py`
+- `tests/test_endpoints.py`
 
 ## Running the Tests
 
 From the `part2` directory, run:
 
 ```bash
-python3 -m unittest app/api/v1/test_endpoints.py
+python3 -m unittest discover -s tests -p "test_review_endpoint.py"
 ```
 
 ## What is Tested
