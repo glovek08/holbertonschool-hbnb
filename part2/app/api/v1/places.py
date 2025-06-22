@@ -98,7 +98,7 @@ class PlaceResource(Resource):
                 "first_name": owner.first_name,
                 "last_name": owner.last_name,
             }
-        except ValueError as e:
+        except ValueError as error:
             return {"error": str(error)}, 400
 
         return {
