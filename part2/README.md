@@ -53,6 +53,8 @@ This project is part of the Holberton School curriculum and focuses on building 
 * `config.py` will be used for configuring environment variables and application settings.
 * `requirements.txt` will list all the Python packages needed for the project.
 
+---
+
 # Business Logic Layer
 
 The Business Logic Layer is responsible for implementing the core rules and workflows of the application. It defines the main entities and their interactions, ensuring data integrity and encapsulating the application's functionality.
@@ -64,6 +66,7 @@ The Business Logic Layer is responsible for implementing the core rules and work
 - **Amenity:** Represents features or services available at a place (e.g., Wi-Fi, pool). Handles amenity-specific data and validation.
 - **Review:** Represents user feedback for a place, including ratings and comments. Ensures ratings are within valid bounds and links reviews to both users and places.
 - **BaseModel:** Abstract base class providing common attributes (e.g., `id`, `created_at`, `updated_at`) and methods for serialization and updating.
+
 
 ## Example Usage
 
@@ -123,9 +126,70 @@ place.save()
 
 Each model provides methods for creating, updating, deleting, and serializing instances, ensuring a clean separation between business logic and data storage.
 
-## Endpoints!
+# Testing the Business Logic Layer
+
+The file `app/models/test_models.py` contains unit tests for the core entities. These tests verify that:
+
+- Users are created with valid data and validation is enforced.
+- Places are created with correct attributes, and amenities and reviews can be added.
+- Amenities are created and validated.
+- Reviews are created, validated, and linked to users and places.
+
+## Running the Entity Tests
+
+From the `part2` directory, run:
+
+```bash
+python3 -m unittest app/models/test_models.py
+```
+
+## Example Test (from `test_models.py`)
+
+```python
+def test_place_creation(self):
+    owner = User(
+        first_name="Alice", last_name="Smith", email="alice.smith@example.com"
+    )
+    place = Place(
+        owner_id=owner.id,
+        title="Cozy Apartment",
+        description="A nice place to stay",
+        price=100,
+        latitude=37.7749,
+        longitude=-122.4194,
+        amenities=[],
+        reviews=[],
+    )
+
+    # Create a review and add to place
+    review = Review(
+        owner_id=owner.id, place_id=place.id, rating=5, comment="Great stay!"
+    )
+    place.add_review(review)
+
+    self.assertEqual(place.title, "Cozy Apartment")
+    self.assertEqual(place.price, 100)
+    self.assertEqual(len(place.reviews), 1)
+    self.assertEqual(place.reviews[0].comment, "Great stay!")
+```
+
+## Extending the Tests
+
+You can add more tests for each entity by following the structure in `test_models.py`. Each test should:
+
+- Instantiate the model with valid and invalid data.
+- Assert that validation and business logic are enforced.
+- Test relationships between entities (e.g., adding reviews to places).
+
+Continue reading below for API endpoint documentation and endpoint testing.
+
+---
+
+# Endpoints
 
 The project provides a RESTful API for managing users, places, amenities, and reviews. All endpoints are documented and accessible via Swagger UI at `/api/v1/` when the server is running.
+
+- `app/api/v1/test_endpoints.py`
 
 ### Example Endpoints
 
