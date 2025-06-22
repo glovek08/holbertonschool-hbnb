@@ -42,10 +42,10 @@ class HBnBFacade:
 
     # ************* PLACE CRAP ********************
     def create_place(self, place_data):
-        existing_user = facade.get_user(place_data["owner_id"])
+        existing_user = self.get_user(place_data["owner_id"])
         amenity_objs = []
         for amenity_id in place_data.get("amenities", []):
-            amenity = facade.get_amenity(amenity_id)
+            amenity = self.get_amenity(amenity_id)
             if amenity:
                 amenity_objs.append(amenity)
         place_data["amenities"] = amenity_objs
