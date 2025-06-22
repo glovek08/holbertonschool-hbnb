@@ -90,6 +90,7 @@ class ReviewResource(Resource):
         }, 200
 
     @api.expect(review_model)
+    @api.doc(params={"review_id": "The unique ID of the review"})
     @api.response(200, "Review updated successfully", response_review_model)
     @api.response(404, "Review not found")
     @api.response(400, "Invalid input data")
@@ -115,6 +116,7 @@ class ReviewResource(Resource):
             "comment": review.comment,
         }, 200
 
+    @api.doc(params={"review_id": "The unique ID of the review"})
     @api.response(200, "Review deleted successfully")
     @api.response(404, "Review not found")
     def delete(self, review_id):

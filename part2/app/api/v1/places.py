@@ -121,6 +121,7 @@ class PlaceResource(Resource):
         }
 
     @api.expect(place_model)
+    @api.doc(params={"place_id": "The unique ID of the place"})
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
