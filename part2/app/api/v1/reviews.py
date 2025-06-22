@@ -133,7 +133,7 @@ class PlaceReviewList(Resource):
     @api.response(
         200,
         "List of reviews for the place retrieved successfully",
-        [response_user_model],
+        [response_review_model],
     )
     @api.response(404, "Place not found")
     def get(self, place_id):
