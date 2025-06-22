@@ -23,7 +23,7 @@ class TestPlacesAPI(unittest.TestCase):
             data=json.dumps(self.test_user_data),
             content_type="application/json",
         )
-
+        self.assertEqual(user_response.status_code, 201)
         if user_response.status_code == 201:
             user_data = json.loads(user_response.data)
             self.test_user_id = user_data.get("id")
@@ -42,7 +42,7 @@ class TestPlacesAPI(unittest.TestCase):
             data=json.dumps(self.test_amenity_data),
             content_type="application/json",
         )
-
+        self.assertEqual(amenity_response.status_code, 201)
         if amenity_response.status_code == 201:
             amenity_data = json.loads(amenity_response.data)
             self.test_amenity_id = amenity_data.get("id")
