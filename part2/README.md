@@ -54,10 +54,6 @@ This project is part of the Holberton School curriculum and focuses on building 
 - [Gabriel Barnada](https://github.com/glovek08/)
 - [Federico Paganin Vanoli](https://github.com/federico-paganini)
 
-## License
-
-This project is licensed under the MIT License.
-
 # Business Logic Layer
 
 The Business Logic Layer is responsible for implementing the core rules and workflows of the application. It defines the main entities and their interactions, ensuring data integrity and encapsulating the application's functionality.
@@ -127,3 +123,85 @@ place.save()
 - `BaseModel`: Provides unique ID, timestamps, and update/serialization helpers.
 
 Each model provides methods for creating, updating, deleting, and serializing instances, ensuring a clean separation between business logic and data storage.
+
+## Endpoints!
+
+The project provides a RESTful API for managing users, places, amenities, and reviews. All endpoints are documented and accessible via Swagger UI at `/api/v1/` when the server is running.
+
+### Example Endpoints
+
+- `POST /api/v1/users/` — Create a new user
+- `GET /api/v1/users/` — List all users
+- `GET /api/v1/users/<user_id>` — Retrieve a user by ID
+- `PUT /api/v1/users/<user_id>` — Update a user
+
+- `POST /api/v1/places/` — Create a new place
+- `GET /api/v1/places/` — List all places
+- `GET /api/v1/places/<place_id>` — Retrieve a place by ID
+- `PUT /api/v1/places/<place_id>` — Update a place
+
+- `POST /api/v1/amenity/` — Create a new amenity
+- `GET /api/v1/amenity/` — List all amenities
+- `GET /api/v1/amenity/<amenity_id>` — Retrieve an amenity by ID
+- `PUT /api/v1/amenity/<amenity_id>` — Update an amenity
+
+- `POST /api/v1/reviews/` — Create a new review
+- `GET /api/v1/reviews/` — List all reviews
+- `GET /api/v1/reviews/<review_id>` — Retrieve a review by ID
+- `PUT /api/v1/reviews/<review_id>` — Update a review
+
+---
+
+# Testing the API
+
+Unit and integration tests are provided to ensure the correctness of the API endpoints and business logic. The main test file for endpoint testing is:
+
+- `app/api/v1/test_endpoints.py`
+
+## Running the Tests
+
+From the `part2` directory, run:
+
+```bash
+python3 -m unittest app/api/v1/test_endpoints.py
+```
+
+## What is Tested
+
+- **User endpoints:** Creation, validation, retrieval, and update of users.
+- **Place endpoints:** (Extendable) Creation, retrieval, and update of places.
+- **Error handling:** Ensures proper error messages and status codes are returned for invalid input.
+
+## Example Test (from `test_endpoints.py`)
+
+```python
+def test_create_user(self):
+    response = self.client.post(
+        "/api/v1/users/",
+        json={
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane.doe@example.com",
+        },
+    )
+    self.assertEqual(response.status_code, 201)
+    data = response.get_json()
+    self.assertIn("id", data)
+    self.assertEqual(data["first_name"], "Jane")
+    self.assertEqual(data["last_name"], "Doe")
+    self.assertEqual(data["email"], "jane.doe@example.com")
+```
+
+## Extending the Tests
+
+You can add more tests for places, amenities, and reviews by following the structure in `test_endpoints.py`. Each test should:
+
+- Use the Flask test client to make requests to the API.
+- Assert the expected status code and response data.
+- Optionally, chain requests (e.g., create a user, then create a place for that user).
+
+---
+
+## License
+
+This project is licensed under the MIT License.
