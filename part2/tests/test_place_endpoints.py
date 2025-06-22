@@ -57,7 +57,7 @@ class TestPlacesAPI(unittest.TestCase):
             "price": 150.0,
             "latitude": 40.7128,
             "longitude": -74.0060,
-            "owner_id": self.test_user_id,
+            "owner_id": self.test_user_id,g
             "amenities": [self.test_amenity_id],
         }
 
@@ -267,15 +267,6 @@ class TestPlacesAPI(unittest.TestCase):
 
     def test_get_place_by_id_success(self):
         """Test successful retrieval of a place by ID."""
-        # First create a place
-        create_response = self.client.post(
-            "/api/v1/places/",
-            data=json.dumps(self.valid_place_data),
-            content_type="application/json",
-        )
-
-        self.assertEqual(create_response.status_code, 201)
-        created_place = json.loads(create_response.data)
 
         # Get all places to find the created place ID
         all_places_response = self.client.get("/api/v1/places/")
@@ -311,15 +302,6 @@ class TestPlacesAPI(unittest.TestCase):
 
     def test_update_place_success(self):
         """Test successful place update."""
-        # First create a place
-        create_response = self.client.post(
-            "/api/v1/places/",
-            data=json.dumps(self.valid_place_data),
-            content_type="application/json",
-        )
-
-        self.assertEqual(create_response.status_code, 201)
-
         # Get all places to find the created place ID
         all_places_response = self.client.get("/api/v1/places/")
         all_places = json.loads(all_places_response.data)
