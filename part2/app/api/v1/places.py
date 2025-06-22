@@ -48,16 +48,7 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         place_data = api.payload
-        existing_user = facade.get_user(place_data["owner_id"])
-        if not existing_user:
-            return {"error": "User does not exist"}, 400
-        # Convert amenity IDs to Amenity objects
-        amenity_objs = []
-        for amenity_id in place_data.get("amenities", []):
-            amenity = facade.get_amenity(amenity_id)
-            if amenity:
-                amenity_objs.append(amenity)
-        place_data["amenities"] = amenity_objs
+
         try:
             new_place = facade.create_place(place_data)
         except (TypeError, ValueError) as error:
@@ -120,19 +111,16 @@ class PlaceResource(Resource):
     @api.response(404, "Place not found")
     def get(self, place_id):
         """Get place details by ID"""
-        place = facade.get_place(place_id)
-        if not place:
-            return {"error": "Place not found"}, 404
-        # Getting owner information.
-        owner = facade.get_user(place.owner_id)
-        owner_basic_info = (
-            {
+        try:
+            place = facade.get_place(place_id)
+            owner = facade.get_user(place.owner_id)
+            owner_basic_info = {
                 "first_name": owner.first_name,
                 "last_name": owner.last_name,
             }
-            if owner
-            else None
-        )
+        except ValueError as e:
+            return {"error": str(error)}, 400
+
         return {
             "id": place.id,
             "owner_id": place.owner_id,
@@ -159,43 +147,36 @@ class PlaceResource(Resource):
     def put(self, place_id):
         """Update place information by ID"""
         place_new_data = api.payload
-        place = facade.get_place(place_id)
-        if not place:
-            return {"error": "Place not found"}, 404
-        existing_user = facade.get_user(place_new_data["owner_id"])
-        if not existing_user:
-            return {"error": "User does not exist"}, 400
+        try:
+            place = facade.get_place(place_id)
+        except ValueError as error:
+            return {"error": str(error)}, 404
+
         try:
             facade.update_place(place_id, place_new_data)
-            updated_place = facade.get_place(place_id)
-            if not updated_place:
-                return {"error": "Place not found after update"}, 404
             owner = facade.get_user(updated_place.owner_id)
-            owner_basic_info = (
-                {
-                    "first_name": owner.first_name,
-                    "last_name": owner.last_name,
-                }
-                if owner
-                else None
-            )
-            return {
-                "id": updated_place.id,
-                "owner_id": updated_place.owner_id,
-                "owner": owner_basic_info,
-                "title": updated_place.title,
-                "description": updated_place.description,
-                "price": updated_place.price,
-                "latitude": updated_place.latitude,
-                "longitude": updated_place.longitude,
-                "amenities": [
-                    {
-                        "id": amenity.id,
-                        "name": getattr(amenity, "name", None),
-                        "description": getattr(amenity, "description", None),
-                    }
-                    for amenity in place.amenities
-                ],
-            }, 200
+            owner_basic_info = {
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
+            }
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
+
+        return {
+            "id": place.id,
+            "owner_id": place.owner_id,
+            "owner": owner_basic_info,
+            "title": place.title,
+            "description": place.description,
+            "price": place.price,
+            "latitude": place.latitude,
+            "longitude": place.longitude,
+            "amenities": [
+                {
+                    "id": amenity.id,
+                    "name": getattr(amenity, "name", None),
+                    "description": getattr(amenity, "description", None),
+                }
+                for amenity in place.amenities
+            ],
+        }, 200
