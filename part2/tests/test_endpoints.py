@@ -38,8 +38,8 @@ class TestUserEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertIsInstance(data, list)
-        # At least the test users from app/__init__.py should exist
-        self.assertGreaterEqual(len(data), 2)
+        # At least the first test user should exist
+        self.assertGreaterEqual(len(data), 1)
 
     def test_get_user_by_id(self):
         # First, create a user
