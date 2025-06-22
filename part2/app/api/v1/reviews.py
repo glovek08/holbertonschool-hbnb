@@ -33,9 +33,8 @@ response_review_model = api.model(
 @api.route("/")
 class ReviewList(Resource):
     @api.expect(review_model)
-    @api.response(201, "Review successfully created")
+    @api.response(201, "Review successfully created", response_review_model)
     @api.response(400, "Invalid input data")
-    @api.marshal_with(response_review_model, code=201)
     def post(self):
         """Create a new review"""
         review_data = api.payload
@@ -73,9 +72,8 @@ class ReviewList(Resource):
 @api.route("/<review_id>")
 class ReviewResource(Resource):
     @api.doc(params={"review_id": "The unique ID of the review"})
-    @api.response(200, "Review details retrieved successfully")
+    @api.response(200, "Review details retrieved successfully", response_review_model)
     @api.response(404, "Review not found")
-    @api.marshal_with(response_review_model, code=200)
     def get(self, review_id):
         """Get review details by ID"""
         try:
@@ -92,10 +90,9 @@ class ReviewResource(Resource):
         }, 200
 
     @api.expect(review_model)
-    @api.response(200, "Review updated successfully")
+    @api.response(200, "Review updated successfully", response_review_model)
     @api.response(404, "Review not found")
     @api.response(400, "Invalid input data")
-    @api.marshal_with(response_review_model, code=200)
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
@@ -133,9 +130,12 @@ class ReviewResource(Resource):
 @api.route("/places/<place_id>/reviews")
 class PlaceReviewList(Resource):
     @api.doc(params={"place_id": "The unique ID of the place to retrieve reviews"})
-    @api.response(200, "List of reviews for the place retrieved successfully")
+    @api.response(
+        200,
+        "List of reviews for the place retrieved successfully",
+        [response_user_model],
+    )
     @api.response(404, "Place not found")
-    @api.marshal_with(response_review_model, as_list=True, code=200)
     def get(self, place_id):
         """Get all reviews for a specific place"""
         try:
