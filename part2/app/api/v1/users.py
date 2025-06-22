@@ -5,7 +5,7 @@ api = Namespace("users", description="User operations")
 
 # Define the user model for input validation and documentation
 user_model = api.model(
-    "UserInput",
+    "User",
     {
         "first_name": fields.String(
             required=True, description="First name of the user"
@@ -16,7 +16,7 @@ user_model = api.model(
 )
 
 response_user_model = api.model(
-    "UserResponse",
+    "User",
     {
         "id": fields.String(required=True, description="Id of the user"),
         "first_name": fields.String(
@@ -31,10 +31,9 @@ response_user_model = api.model(
 @api.route("/")
 class UserList(Resource):
     @api.expect(user_model, validate=True)
-    @api.response(201, "User successfully created")
+    @api.response(201, "User successfully created", response_user_model)
     @api.response(400, "Email already registered")
     @api.response(400, "Invalid input data")
-    @api.marshal_with(response_user_model, code=201)
     def post(self):
         """Register a new user"""
         user_data = api.payload
@@ -52,6 +51,7 @@ class UserList(Resource):
         }, 201
 
     @api.marshal_with(response_user_model, as_list=True, code=200)
+    @api.response(200, "List of users retrieved successfully")
     def get(self):
         """Get all users"""
         users = facade.get_all_users()
@@ -69,9 +69,8 @@ class UserList(Resource):
 @api.route("/<user_id>")
 class UserResource(Resource):
     @api.doc(params={"user_id": "The unique ID of the user"})
-    @api.response(200, "User details retrieved successfully")
+    @api.response(200, "User details retrieved successfully", response_user_model)
     @api.response(404, "User not found")
-    @api.marshal_with(response_user_model, code=200)
     def get(self, user_id):
         """Get user details by ID"""
         try:
@@ -86,10 +85,10 @@ class UserResource(Resource):
             "email": user.email,
         }, 200
 
+    @api.doc(params={"user_id": "The unique ID of the user"})
     @api.expect(user_model, validate=True)
-    @api.response(200, "User successfully updated")
+    @api.response(200, "User successfully updated", response_user_model)
     @api.response(400, "Invalid input data or email already registered")
-    @api.marshal_with(response_user_model, code=200)
     def put(self, user_id):
         """Update user information by ID"""
         user_new_data = api.payload
