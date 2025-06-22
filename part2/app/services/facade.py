@@ -14,18 +14,31 @@ class HBnBFacade:
 
     # **************** USER CRAP *****************
     def create_user(self, user_data):
+        existing_user = self.get_user_by_email(user_data["email"])
+        if existing_user:
+            raise ValueError("Email already registered")
+
         user = User(**user_data)
         self.user_repo.add(user)
         return user
 
     def get_user(self, user_id):
-        return self.user_repo.get(user_id)
+        user = self.user_repo.get(user_id)
+        if not user:
+            raise ValueError("User not found")
+        return user
 
     def get_all_users(self):
         return self.user_repo.get_all()
 
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute("email", email)
+
+    def update_user(self, user_id, user_data):
+        existing_user = self.get_user(user_data["email"])
+        if existing_user and existing_user.id != user_id:
+            raise ValueError("Email already registered")
+        self.user_repo.update(user_id, user_data)
 
     # ************* PLACE CRAP ********************
     def create_place(self, place_data):
@@ -62,18 +75,22 @@ class HBnBFacade:
         user = self.get_user(review_data.get("user_id"))
         if not user:
             raise ValueError("User does not exist")
+
         place = self.get_place(review_data.get("place_id"))
         if not place:
             raise ValueError("Place does not exist")
         # Both ID exist. Now we create the review.
         new_review = Review(**review_data)
         self.review_repo.add(new_review)
-        # add the review to its corresponding pleis
+        # add the review to its corresponding places
         place.add_review(new_review)
         return new_review
 
     def get_review(self, review_id):
-        return self.review_repo.get(review_id)
+        review = self.review_repo.get(review_id)
+        if not review:
+            raise ValueError("Review does not exist")
+        return review
 
     def get_all_reviews(self):
         return self.review_repo.get_all()
@@ -88,5 +105,5 @@ class HBnBFacade:
         self.review_repo.update(review_id, review_data)
 
     def delete_review(self, review_id):
-        # Placeholder for logic to delete a review
-        pass
+        self.get_review(review_id)
+        self.review_repo.delete(review_id)
