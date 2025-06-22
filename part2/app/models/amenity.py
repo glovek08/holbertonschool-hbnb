@@ -2,7 +2,7 @@ from app.models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    def __init__(self, name: str = "n/a", description: str = "n/a"):
+    def __init__(self, name, description: str = "n/a"):
         super().__init__()
         self.name = name
         self.description = description
@@ -14,8 +14,7 @@ class Amenity(BaseModel):
 
     @name.setter
     def name(self, value: str):
-        if not isinstance(value, str):
-            raise TypeError("Name must be a string!")
+        value = validate_string(value, "Name")
         self.__name = value
 
     @property
