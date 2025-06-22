@@ -14,7 +14,7 @@ class Amenity(BaseModel):
 
     @name.setter
     def name(self, value: str):
-        value = validate_string(value, "Name")
+        value = super().validate_string(value, "Name")
         self.__name = value
 
     @property
