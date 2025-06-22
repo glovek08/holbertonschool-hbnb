@@ -43,6 +43,17 @@ class TestPlacesAPI(unittest.TestCase):
             # Fallback - use a known test amenity ID
             self.test_amenity_id = "test-amenity-123"
 
+        # Valid place data for testing
+        self.valid_place_data = {
+            "title": "Beautiful Test Apartment",
+            "description": "A lovely place to stay for testing",
+            "price": 150.0,
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "owner_id": self.test_user_id,
+            "amenities": [self.test_amenity_id],
+        }
+
     def test_create_place_success(self):
         """Test successful place creation."""
         response = self.client.post(
