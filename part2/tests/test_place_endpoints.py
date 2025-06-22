@@ -10,20 +10,16 @@ class TestPlacesAPI(unittest.TestCase):
         self.app.config["TESTING"] = True
         self.client = self.app.test_client()
 
-        # Create a test user first (assuming users endpoint exists)
-        self.test_user_data = {
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@test.com",
-        }
-
         # Create user and store the ID for place creation
         user_response = self.client.post(
             "/api/v1/users/",
-            data=json.dumps(self.test_user_data),
-            content_type="application/json",
+            json={
+                "first_name": "Jane",
+                "last_name": "Doe",
+                "email": "jane.doe@example.com",
+            },
         )
-        self.assertEqual(user_response.status_code, 201)
+
         if user_response.status_code == 201:
             user_data = json.loads(user_response.data)
             self.test_user_id = user_data.get("id")
@@ -31,18 +27,15 @@ class TestPlacesAPI(unittest.TestCase):
             # Fallback - assume user exists or use a known test user ID
             self.test_user_id = "test-user-123"
 
-        # Create test amenities (assuming amenities endpoint exists)
-        self.test_amenity_data = {
-            "name": "WiFi",
-            "description": "High-speed internet connection",
-        }
-
+        # Create test amenities
         amenity_response = self.client.post(
-            "/api/v1/amenity/",
-            data=json.dumps(self.test_amenity_data),
-            content_type="application/json",
+            "/api/v1/users/",
+            json={
+                "name": "WiFi",
+                "description": "High-speed internet connection",
+            },
         )
-        self.assertEqual(amenity_response.status_code, 201)
+
         if amenity_response.status_code == 201:
             amenity_data = json.loads(amenity_response.data)
             self.test_amenity_id = amenity_data.get("id")
@@ -50,23 +43,19 @@ class TestPlacesAPI(unittest.TestCase):
             # Fallback - use a known test amenity ID
             self.test_amenity_id = "test-amenity-123"
 
-        # Valid place data for testing
-        self.valid_place_data = {
-            "title": "Beautiful Test Apartment",
-            "description": "A lovely place to stay for testing",
-            "price": 150.0,
-            "latitude": 40.7128,
-            "longitude": -74.0060,
-            "owner_id": self.test_user_id,
-            "amenities": [self.test_amenity_id],
-        }
-
     def test_create_place_success(self):
         """Test successful place creation."""
         response = self.client.post(
             "/api/v1/places/",
-            data=json.dumps(self.valid_place_data),
-            content_type="application/json",
+            json={
+                "title": "Beautiful Test Apartment",
+                "description": "A lovely place to stay for testing",
+                "price": 150.0,
+                "latitude": 40.7128,
+                "longitude": -74.0060,
+                "owner_id": self.test_user_id,
+                "amenities": [self.test_amenity_id],
+            },
         )
 
         self.assertEqual(response.status_code, 201)
