@@ -17,7 +17,7 @@ amenity_model = api.model(
 response_amenity_model = api.model(
     "AmenityResponse",
     {
-        "id": fields.String(requiered=True, description="ID of the amenity")
+        "id": fields.String(requiered=True, description="ID of the amenity"),
         "name": fields.String(required=True, description="Name of the amenity"),
         "description": fields.String(
             required=False, description="Short description of the amenity"
@@ -44,7 +44,9 @@ class AmenityList(Resource):
             "description": new_amenity.description,
         }, 201
 
-    @api.response(200, "List of amenities retrieved successfully", [response_amenity_model])
+    @api.response(
+        200, "List of amenities retrieved successfully", [response_amenity_model]
+    )
     def get(self):
         """Retrieve a list of all amenities"""
         amenities = facade.get_all_amenities()
