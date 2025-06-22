@@ -22,7 +22,7 @@ place_model = api.model(
 
 @api.route("/")
 class PlaceList(Resource):
-    @api.expect(place_model, required=True)
+    @api.expect(place_model, validate=True)
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
     def post(self):
@@ -120,7 +120,7 @@ class PlaceResource(Resource):
             ],
         }
 
-    @api.expect(place_model, required=True)
+    @api.expect(place_model, validate=True)
     @api.doc(params={"place_id": "The unique ID of the place"})
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
