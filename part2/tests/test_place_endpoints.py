@@ -57,7 +57,7 @@ class TestPlacesAPI(unittest.TestCase):
             "price": 150.0,
             "latitude": 40.7128,
             "longitude": -74.0060,
-            "owner_id": self.test_user_id,g
+            "owner_id": self.test_user_id,
             "amenities": [self.test_amenity_id],
         }
 
