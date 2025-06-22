@@ -32,7 +32,7 @@ response_review_model = api.model(
 
 @api.route("/")
 class ReviewList(Resource):
-    @api.expect(review_model)
+    @api.expect(review_model, validate=True)
     @api.response(201, "Review successfully created", response_review_model)
     @api.response(400, "Invalid input data")
     def post(self):
@@ -89,7 +89,7 @@ class ReviewResource(Resource):
             "comment": review.comment,
         }, 200
 
-    @api.expect(review_model)
+    @api.expect(review_model, validate=True)
     @api.doc(params={"review_id": "The unique ID of the review"})
     @api.response(200, "Review updated successfully", response_review_model)
     @api.response(404, "Review not found")
