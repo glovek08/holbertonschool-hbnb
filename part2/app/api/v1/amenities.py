@@ -28,7 +28,7 @@ response_amenity_model = api.model(
 
 @api.route("/")
 class AmenityList(Resource):
-    @api.expect(amenity_model)
+    @api.expect(amenity_model, validate=True)
     @api.response(201, "Amenity successfully created", response_amenity_model)
     @api.response(400, "Invalid input data")
     def post(self):
@@ -74,7 +74,7 @@ class AmenityResource(Resource):
             "description": my_amenity.description,
         }, 200
 
-    @api.expect(amenity_model)
+    @api.expect(amenity_model, validate=True)
     @api.doc(params={"amenity_id": "The unique ID of the amenity"})
     @api.response(200, "Amenity updated successfully", response_amenity_model)
     @api.response(404, "Amenity not found")
