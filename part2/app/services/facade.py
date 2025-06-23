@@ -92,8 +92,8 @@ class HBnBFacade:
 
     # *************** REVIEW CRAP *******************
     def create_review(self, review_data):
-        self.get_user(review_data.get("user_id"))
-        self.get_place(review_data.get("place_id"))
+        self.get_user(review_data.get("owner_id"))
+        place = self.get_place(review_data.get("place_id"))
         # Both ID exist. Now we create the review.
         new_review = Review(**review_data)
         self.review_repo.add(new_review)

@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from http import HTTPStatus
 
 api = Namespace("reviews", description="Review operations")
 
@@ -51,9 +52,9 @@ class ReviewList(Resource):
             "rating": new_review.rating,
             "comment": new_review.comment,
         }, 201
-
+    
     @api.response(200, "List of reviews retrieved successfully")
-    @api.marshal_with(response_review_model, as_list=True, code=200)
+    @api.marshal_with(response_review_model, as_list=True)
     def get(self):
         """Retrieve a list of all reviews"""
         reviews = facade.get_all_reviews()

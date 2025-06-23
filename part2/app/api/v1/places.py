@@ -134,7 +134,7 @@ class PlaceResource(Resource):
             return {"error": str(error)}, 404
 
         try:
-            facade.update_place(place_id, place_new_data)
+            updated_place = facade.update_place(place_id, place_new_data)
             owner = facade.get_user(updated_place.owner_id)
             owner_basic_info = {
                 "first_name": owner.first_name,

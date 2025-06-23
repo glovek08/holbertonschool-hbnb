@@ -38,7 +38,7 @@ class TestReviewsAPI(unittest.TestCase):
         }
 
         amenity_response = self.client.post(
-            "/api/v1/amenity/",
+            "/api/v1/amenities/",
             data=json.dumps(self.test_amenity_data),
             content_type="application/json",
         )
@@ -95,6 +95,10 @@ class TestReviewsAPI(unittest.TestCase):
             data=json.dumps(self.valid_review_data),
             content_type="application/json",
         )
+        
+        if response.status_code != 201:
+            print("DEBUG review creation failed:", response.status_code, response.data.decode())
+            print("DEBUG review data:", self.valid_review_data)
 
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
