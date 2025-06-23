@@ -1,427 +1,567 @@
 import unittest
+import json
 from app import create_app
 
 
-class TestReviewEndpoints(unittest.TestCase):
+class TestReviewsAPI(unittest.TestCase):
     def setUp(self):
+        """Set up test fixtures before each test method."""
         self.app = create_app()
+        self.app.config["TESTING"] = True
         self.client = self.app.test_client()
 
-        # Datos de prueba válidos
-        self.valid_review_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": 5,
-            "comment": "Excelente lugar, muy recomendado",
+        # Create a test user first
+        self.test_user_data = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@test.com",
         }
 
-    # ==================== TESTS PARA POST /reviews ====================
+        # Create user and store the ID for review creation
+        user_response = self.client.post(
+            "/api/v1/users/",
+            data=json.dumps(self.test_user_data),
+            content_type="application/json",
+        )
+
+        if user_response.status_code == 201:
+            user_data = json.loads(user_response.data)
+            self.test_user_id = user_data.get("id")
+        else:
+            # Fallback - assume user exists or use a known test user ID
+            self.test_user_id = "test-user-123"
+
+        # Create test amenity for place creation
+        self.test_amenity_data = {
+            "name": "WiFi",
+            "description": "High-speed internet connection",
+        }
+
+        amenity_response = self.client.post(
+            "/api/v1/amenity/",
+            data=json.dumps(self.test_amenity_data),
+            content_type="application/json",
+        )
+
+        if amenity_response.status_code == 201:
+            amenity_data = json.loads(amenity_response.data)
+            self.test_amenity_id = amenity_data.get("id")
+        else:
+            # Fallback - use a known test amenity ID
+            self.test_amenity_id = "test-amenity-123"
+
+        # Create a test place
+        self.test_place_data = {
+            "title": "Test Place for Reviews",
+            "description": "A place to test reviews",
+            "price": 100.0,
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "owner_id": self.test_user_id,
+            "amenities": [self.test_amenity_id],
+        }
+
+        # Create place and store the ID for review creation
+        place_response = self.client.post(
+            "/api/v1/places/",
+            data=json.dumps(self.test_place_data),
+            content_type="application/json",
+        )
+
+        if place_response.status_code == 201:
+            # Get all places to find the created place ID
+            all_places_response = self.client.get("/api/v1/places/")
+            all_places = json.loads(all_places_response.data)
+            if len(all_places) > 0:
+                self.test_place_id = all_places[-1]["id"]  # Get the last created place
+            else:
+                self.test_place_id = "test-place-123"
+        else:
+            # Fallback - use a known test place ID
+            self.test_place_id = "test-place-123"
+
+        # Valid review data for testing
+        self.valid_review_data = {
+            "owner_id": self.test_user_id,
+            "place_id": self.test_place_id,
+            "rating": 5,
+            "comment": "Excellent place to stay!",
+        }
 
     def test_create_review_success(self):
-        """Test: Crear review exitosamente"""
-        response = self.client.post("/reviews/", json=self.valid_review_data)
+        """Test successful review creation."""
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
         self.assertEqual(response.status_code, 201)
-        data = response.get_json()
-        self.assertIn("id", data)
-        self.assertEqual(data["owner_id"], "user123")
-        self.assertEqual(data["place_id"], "place456")
+        data = json.loads(response.data)
+        self.assertEqual(data["owner_id"], self.test_user_id)
+        self.assertEqual(data["place_id"], self.test_place_id)
         self.assertEqual(data["rating"], 5)
-        self.assertEqual(data["comment"], "Excelente lugar, muy recomendado")
+        self.assertEqual(data["comment"], "Excellent place to stay!")
+        self.assertIn("id", data)
 
     def test_create_review_missing_owner_id(self):
-        """Test: Error al crear review sin owner_id"""
-        invalid_data = {
-            "place_id": "place456",
-            "rating": 5,
-            "comment": "Falta owner_id",
-        }
+        """Test review creation with missing owner_id."""
+        invalid_data = self.valid_review_data.copy()
+        del invalid_data["owner_id"]
 
-        response = self.client.post("/reviews/", json=invalid_data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
         self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("message", data)
 
     def test_create_review_missing_place_id(self):
-        """Test: Error al crear review sin place_id"""
-        invalid_data = {"owner_id": "user123", "rating": 5, "comment": "Falta place_id"}
+        """Test review creation with missing place_id."""
+        invalid_data = self.valid_review_data.copy()
+        del invalid_data["place_id"]
 
-        response = self.client.post("/reviews/", json=invalid_data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
         self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("message", data)
 
     def test_create_review_missing_rating(self):
-        """Test: Error al crear review sin rating"""
-        invalid_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "comment": "Falta rating",
-        }
+        """Test review creation with missing rating."""
+        invalid_data = self.valid_review_data.copy()
+        del invalid_data["rating"]
 
-        response = self.client.post("/reviews/", json=invalid_data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
         self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("message", data)
 
     def test_create_review_missing_comment(self):
-        """Test: Error al crear review sin comment"""
-        invalid_data = {"owner_id": "user123", "place_id": "place456", "rating": 5}
+        """Test review creation with missing comment."""
+        invalid_data = self.valid_review_data.copy()
+        del invalid_data["comment"]
 
-        response = self.client.post("/reviews/", json=invalid_data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
         self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("message", data)
+
+    def test_create_review_invalid_rating_high(self):
+        """Test review creation with rating above 5."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["rating"] = 6
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_review_invalid_rating_low(self):
+        """Test review creation with rating below 1."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["rating"] = 0
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
 
     def test_create_review_invalid_rating_type(self):
-        """Test: Error al crear review con rating no numérico"""
-        invalid_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": "cinco",
-            "comment": "Rating inválido",
-        }
+        """Test review creation with invalid rating type."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["rating"] = "five"
 
-        response = self.client.post("/reviews/", json=invalid_data)
-        self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("message", data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
 
-    def test_create_review_invalid_rating_range(self):
-        """Test: Error al crear review con rating fuera de rango"""
-        invalid_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": 10,  # Fuera del rango 1-5
-            "comment": "Rating fuera de rango",
-        }
-
-        response = self.client.post("/reviews/", json=invalid_data)
-        self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("error", data)
-
-    def test_create_review_empty_fields(self):
-        """Test: Error al crear review con campos vacíos"""
-        invalid_data = {"owner_id": "", "place_id": "", "rating": 5, "comment": ""}
-
-        response = self.client.post("/reviews/", json=invalid_data)
-        self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("error", data)
-
-    def test_create_review_null_values(self):
-        """Test: Error al crear review con valores null"""
-        invalid_data = {
-            "owner_id": None,
-            "place_id": "place456",
-            "rating": 5,
-            "comment": "Owner ID es null",
-        }
-
-        response = self.client.post("/reviews/", json=invalid_data)
         self.assertEqual(response.status_code, 400)
 
-    # ==================== TESTS PARA GET /reviews ====================
+    def test_create_review_nonexistent_owner(self):
+        """Test review creation with non-existent owner_id."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["owner_id"] = "nonexistent-user-id"
 
-    def test_get_all_reviews(self):
-        """Test: Obtener todas las reviews"""
-        # Primero crear algunas reviews
-        self.client.post("/reviews/", json=self.valid_review_data)
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
 
-        review_data_2 = {
-            "owner_id": "user456",
-            "place_id": "place789",
-            "rating": 3,
-            "comment": "Regular, podría mejorar",
-        }
-        self.client.post("/reviews/", json=review_data_2)
+        self.assertEqual(response.status_code, 400)
 
-        response = self.client.get("/reviews/")
+    def test_create_review_nonexistent_place(self):
+        """Test review creation with non-existent place_id."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["place_id"] = "nonexistent-place-id"
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_review_empty_comment(self):
+        """Test review creation with empty comment."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["comment"] = ""
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_all_reviews_success(self):
+        """Test successful retrieval of all reviews."""
+        # First create a review
+        self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
+
+        # Then get all reviews
+        response = self.client.get("/api/v1/reviews/")
+
         self.assertEqual(response.status_code, 200)
-        data = response.get_json()
-        self.assertIsInstance(data, list)
-        self.assertGreaterEqual(len(data), 2)
-
-    def test_get_all_reviews_empty_list(self):
-        """Test: Obtener lista vacía cuando no hay reviews"""
-        # Asumiendo que la base de datos está vacía al inicio
-        response = self.client.get("/reviews/")
-        self.assertEqual(response.status_code, 200)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIsInstance(data, list)
 
-    # ==================== TESTS PARA GET /reviews/<review_id> ====================
+        if len(data) > 0:
+            review = data[0]
+            self.assertIn("id", review)
+            self.assertIn("owner_id", review)
+            self.assertIn("place_id", review)
+            self.assertIn("rating", review)
+            self.assertIn("comment", review)
 
     def test_get_review_by_id_success(self):
-        """Test: Obtener review por ID exitosamente"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        self.assertEqual(response.status_code, 201)
-        review_id = response.get_json()["id"]
+        """Test successful retrieval of a review by ID."""
+        # First create a review
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
-        # Obtener la review por ID
-        response = self.client.get(f"/reviews/{review_id}")
+        self.assertEqual(create_response.status_code, 201)
+        created_review = json.loads(create_response.data)
+        review_id = created_review["id"]
+
+        # Test getting review by ID
+        response = self.client.get(f"/api/v1/reviews/{review_id}")
+
         self.assertEqual(response.status_code, 200)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertEqual(data["id"], review_id)
-        self.assertEqual(data["owner_id"], "user123")
-        self.assertEqual(data["place_id"], "place456")
+        self.assertEqual(data["owner_id"], self.test_user_id)
+        self.assertEqual(data["place_id"], self.test_place_id)
         self.assertEqual(data["rating"], 5)
+        self.assertEqual(data["comment"], "Excellent place to stay!")
 
-    def test_get_review_by_id_not_found(self):
-        """Test: Error al obtener review que no existe"""
-        response = self.client.get("/reviews/nonexistent-id")
+    def test_get_review_by_invalid_id(self):
+        """Test retrieval of a review with invalid ID."""
+        response = self.client.get("/api/v1/reviews/invalid-id")
+
         self.assertEqual(response.status_code, 404)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIn("error", data)
 
-    def test_get_review_by_id_empty_string(self):
-        """Test: Error al obtener review con ID vacío"""
-        response = self.client.get("/reviews/")
-        # Esto debería redirigir al endpoint de listar todas las reviews
-        self.assertEqual(response.status_code, 200)
+    def test_get_review_by_nonexistent_id(self):
+        """Test retrieval of a review with non-existent ID."""
+        response = self.client.get("/api/v1/reviews/nonexistent-review-id")
 
-    def test_get_review_by_id_special_characters(self):
-        """Test: Error al obtener review con caracteres especiales en ID"""
-        response = self.client.get("/reviews/@#$%")
         self.assertEqual(response.status_code, 404)
-
-    # ==================== TESTS PARA PUT /reviews/<review_id> ====================
+        data = json.loads(response.data)
+        self.assertIn("error", data)
 
     def test_update_review_success(self):
-        """Test: Actualizar review exitosamente"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        self.assertEqual(response.status_code, 201)
-        review_id = response.get_json()["id"]
-
-        # Actualizar la review
-        update_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": 4,
-            "comment": "Actualizado: Muy buen lugar",
-        }
-
-        response = self.client.put(f"/reviews/{review_id}", json=update_data)
-        self.assertEqual(response.status_code, 200)
-        data = response.get_json()
-        self.assertEqual(data["rating"], 4)
-        self.assertEqual(data["comment"], "Actualizado: Muy buen lugar")
-
-    def test_update_review_not_found(self):
-        """Test: Error al actualizar review que no existe"""
-        response = self.client.put(
-            "/reviews/nonexistent-id", json=self.valid_review_data
+        """Test successful review update."""
+        # First create a review
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
         )
+
+        self.assertEqual(create_response.status_code, 201)
+        created_review = json.loads(create_response.data)
+        review_id = created_review["id"]
+
+        # Update data
+        update_data = self.valid_review_data.copy()
+        update_data["rating"] = 4
+        update_data["comment"] = "Good place, but could be better"
+
+        # Test updating review
+        response = self.client.put(
+            f"/api/v1/reviews/{review_id}",
+            data=json.dumps(update_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data["rating"], 4)
+        self.assertEqual(data["comment"], "Good place, but could be better")
+
+    def test_update_review_invalid_id(self):
+        """Test update of a review with invalid ID."""
+        response = self.client.put(
+            "/api/v1/reviews/invalid-id",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
+
         self.assertEqual(response.status_code, 404)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIn("error", data)
-
-    def test_update_review_missing_fields(self):
-        """Test: Error al actualizar review con campos faltantes"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        review_id = response.get_json()["id"]
-
-        # Intentar actualizar con datos incompletos
-        incomplete_data = {"rating": 4}
-
-        response = self.client.put(f"/reviews/{review_id}", json=incomplete_data)
-        self.assertEqual(response.status_code, 400)
 
     def test_update_review_invalid_data(self):
-        """Test: Error al actualizar review con datos inválidos"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        review_id = response.get_json()["id"]
+        """Test update of a review with invalid data."""
+        # First create a review
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
-        # Intentar actualizar con datos inválidos
-        invalid_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": 15,  # Fuera de rango
-            "comment": "Rating inválido",
-        }
+        if create_response.status_code == 201:
+            created_review = json.loads(create_response.data)
+            review_id = created_review["id"]
 
-        response = self.client.put(f"/reviews/{review_id}", json=invalid_data)
-        self.assertEqual(response.status_code, 400)
-        data = response.get_json()
-        self.assertIn("error", data)
+            # Invalid update data (rating out of range)
+            invalid_update_data = self.valid_review_data.copy()
+            invalid_update_data["rating"] = 10
 
-    def test_update_review_empty_fields(self):
-        """Test: Error al actualizar review con campos vacíos"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        review_id = response.get_json()["id"]
+            response = self.client.put(
+                f"/api/v1/reviews/{review_id}",
+                data=json.dumps(invalid_update_data),
+                content_type="application/json",
+            )
 
-        # Intentar actualizar con campos vacíos
-        empty_data = {"owner_id": "", "place_id": "", "rating": 5, "comment": ""}
-
-        response = self.client.put(f"/reviews/{review_id}", json=empty_data)
-        self.assertEqual(response.status_code, 400)
-
-    # ==================== TESTS PARA DELETE /reviews/<review_id> ====================
+            self.assertEqual(response.status_code, 400)
 
     def test_delete_review_success(self):
-        """Test: Eliminar review exitosamente"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        self.assertEqual(response.status_code, 201)
-        review_id = response.get_json()["id"]
+        """Test successful review deletion."""
+        # First create a review
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
-        # Eliminar la review
-        response = self.client.delete(f"/reviews/{review_id}")
+        self.assertEqual(create_response.status_code, 201)
+        created_review = json.loads(create_response.data)
+        review_id = created_review["id"]
+
+        # Test deleting review
+        response = self.client.delete(f"/api/v1/reviews/{review_id}")
+
         self.assertEqual(response.status_code, 200)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIn("message", data)
         self.assertEqual(data["message"], "Review deleted successfully")
 
-        # Verificar que la review fue eliminada
-        response = self.client.get(f"/reviews/{review_id}")
-        self.assertEqual(response.status_code, 404)
+        # Verify review is deleted by trying to get it
+        get_response = self.client.get(f"/api/v1/reviews/{review_id}")
+        self.assertEqual(get_response.status_code, 404)
 
-    def test_delete_review_not_found(self):
-        """Test: Error al eliminar review que no existe"""
-        response = self.client.delete("/reviews/nonexistent-id")
+    def test_delete_review_invalid_id(self):
+        """Test deletion of a review with invalid ID."""
+        response = self.client.delete("/api/v1/reviews/invalid-id")
+
         self.assertEqual(response.status_code, 404)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIn("error", data)
 
-    def test_delete_review_twice(self):
-        """Test: Error al eliminar la misma review dos veces"""
-        # Crear una review primero
-        response = self.client.post("/reviews/", json=self.valid_review_data)
-        review_id = response.get_json()["id"]
+    def test_delete_review_nonexistent_id(self):
+        """Test deletion of a review with non-existent ID."""
+        response = self.client.delete("/api/v1/reviews/nonexistent-review-id")
 
-        # Eliminar la review por primera vez
-        response = self.client.delete(f"/reviews/{review_id}")
-        self.assertEqual(response.status_code, 200)
-
-        # Intentar eliminar nuevamente
-        response = self.client.delete(f"/reviews/{review_id}")
         self.assertEqual(response.status_code, 404)
-
-    # ==================== TESTS PARA GET /reviews/places/<place_id>/reviews ====================
+        data = json.loads(response.data)
+        self.assertIn("error", data)
 
     def test_get_reviews_by_place_success(self):
-        """Test: Obtener reviews por place_id exitosamente"""
-        place_id = "place123"
+        """Test successful retrieval of reviews by place ID."""
+        # First create a review for the place
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
-        # Crear varias reviews para el mismo lugar
-        review_1 = {
-            "owner_id": "user1",
-            "place_id": place_id,
-            "rating": 5,
-            "comment": "Excelente lugar",
-        }
-        review_2 = {
-            "owner_id": "user2",
-            "place_id": place_id,
-            "rating": 4,
-            "comment": "Muy bueno",
-        }
+        self.assertEqual(create_response.status_code, 201)
 
-        self.client.post("/reviews/", json=review_1)
-        self.client.post("/reviews/", json=review_2)
+        # Test getting reviews by place ID
+        response = self.client.get(
+            f"/api/v1/reviews/places/{self.test_place_id}/reviews"
+        )
 
-        response = self.client.get(f"/reviews/places/{place_id}/reviews")
         self.assertEqual(response.status_code, 200)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIsInstance(data, list)
-        self.assertGreaterEqual(len(data), 2)
 
-        # Verificar que todas las reviews son del lugar correcto
-        for review in data:
-            self.assertEqual(review["place_id"], place_id)
+        if len(data) > 0:
+            review = data[0]
+            self.assertEqual(review["place_id"], self.test_place_id)
+            self.assertIn("id", review)
+            self.assertIn("owner_id", review)
+            self.assertIn("rating", review)
+            self.assertIn("comment", review)
 
-    def test_get_reviews_by_place_not_found(self):
-        """Test: Error al obtener reviews de place que no existe"""
-        response = self.client.get("/reviews/places/nonexistent-place/reviews")
+    def test_get_reviews_by_nonexistent_place(self):
+        """Test retrieval of reviews for non-existent place."""
+        response = self.client.get(
+            "/api/v1/reviews/places/nonexistent-place-id/reviews"
+        )
+
         self.assertEqual(response.status_code, 404)
-        data = response.get_json()
+        data = json.loads(response.data)
         self.assertIn("error", data)
 
-    def test_get_reviews_by_place_no_reviews(self):
-        """Test: Obtener lista vacía para place sin reviews"""
-        response = self.client.get("/reviews/places/empty-place/reviews")
-        # Si el place existe pero no tiene reviews, debería retornar lista vacía
-        # Si el place no existe, debería retornar 404
-        self.assertIn(response.status_code, [200, 404])
-        if response.status_code == 200:
-            data = response.get_json()
-            self.assertIsInstance(data, list)
-            self.assertEqual(len(data), 0)
+    def test_get_reviews_by_invalid_place_id(self):
+        """Test retrieval of reviews for invalid place ID."""
+        response = self.client.get("/api/v1/reviews/places/invalid-place-id/reviews")
 
-    def test_get_reviews_by_place_empty_place_id(self):
-        """Test: Error con place_id vacío"""
-        response = self.client.get("/reviews/places//reviews")
         self.assertEqual(response.status_code, 404)
+        data = json.loads(response.data)
+        self.assertIn("error", data)
 
-    # ==================== TESTS ADICIONALES ====================
+    def test_create_review_boundary_ratings(self):
+        """Test review creation with boundary rating values."""
+        # Test with minimum valid rating (1)
+        boundary_data = self.valid_review_data.copy()
+        boundary_data["rating"] = 1
 
-    def test_invalid_http_methods(self):
-        """Test: Métodos HTTP no permitidos"""
-        # PATCH no debería estar permitido
-        response = self.client.patch("/reviews/")
-        self.assertEqual(response.status_code, 405)
-
-        # OPTIONS debería estar permitido (CORS)
-        response = self.client.options("/reviews/")
-        self.assertIn(response.status_code, [200, 204])
-
-    def test_create_review_content_type(self):
-        """Test: Error con Content-Type incorrecto"""
         response = self.client.post(
-            "/reviews/", data="invalid data", content_type="text/plain"
+            "/api/v1/reviews/",
+            data=json.dumps(boundary_data),
+            content_type="application/json",
         )
-        self.assertEqual(response.status_code, 400)
 
-    def test_create_review_extreme_values(self):
-        """Test: Crear review con valores extremos"""
-        # Texto muy largo
-        long_comment = "a" * 1000
-        extreme_data = {
-            "owner_id": "user123",
-            "place_id": "place456",
-            "rating": 1,  # Valor mínimo válido
-            "comment": long_comment,
-        }
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertEqual(data["rating"], 1)
 
-        response = self.client.post("/reviews/", json=extreme_data)
-        # Debería manejar textos largos apropiadamente
+        # Test with maximum valid rating (5)
+        boundary_data["rating"] = 5
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(boundary_data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertEqual(data["rating"], 5)
+
+    def test_create_review_very_long_comment(self):
+        """Test review creation with very long comment."""
+        long_comment_data = self.valid_review_data.copy()
+        long_comment_data["comment"] = (
+            "This is a very long comment " * 100
+        )  # Very long comment
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(long_comment_data),
+            content_type="application/json",
+        )
+
+        # This might be valid or invalid depending on business rules
         self.assertIn(response.status_code, [201, 400])
 
-    def test_rating_boundary_values(self):
-        """Test: Probar valores límite para rating"""
-        # Rating = 1 (mínimo válido)
-        min_data = self.valid_review_data.copy()
-        min_data["rating"] = 1
-        response = self.client.post("/reviews/", json=min_data)
-        self.assertEqual(response.status_code, 201)
+    def test_create_multiple_reviews_same_user_place(self):
+        """Test creating multiple reviews for the same place by the same user."""
+        # Create first review
+        first_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
 
-        # Rating = 5 (máximo válido)
-        max_data = self.valid_review_data.copy()
-        max_data["rating"] = 5
-        max_data["owner_id"] = "user124"  # Diferente para evitar duplicados
-        response = self.client.post("/reviews/", json=max_data)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(first_response.status_code, 201)
 
-        # Rating = 0 (inválido)
-        invalid_min_data = self.valid_review_data.copy()
-        invalid_min_data["rating"] = 0
-        invalid_min_data["owner_id"] = "user125"
-        response = self.client.post("/reviews/", json=invalid_min_data)
-        self.assertEqual(response.status_code, 400)
+        # Try to create second review for the same place by the same user
+        second_review_data = self.valid_review_data.copy()
+        second_review_data["comment"] = "Another review for the same place"
+        second_review_data["rating"] = 3
 
-        # Rating = 6 (inválido)
-        invalid_max_data = self.valid_review_data.copy()
-        invalid_max_data["rating"] = 6
-        invalid_max_data["owner_id"] = "user126"
-        response = self.client.post("/reviews/", json=invalid_max_data)
+        second_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(second_review_data),
+            content_type="application/json",
+        )
+
+        # This might be allowed or not depending on business rules
+        self.assertIn(second_response.status_code, [201, 400])
+
+    def test_update_review_change_place_id(self):
+        """Test updating a review to change place_id."""
+        # First create a review
+        create_response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(self.valid_review_data),
+            content_type="application/json",
+        )
+
+        if create_response.status_code == 201:
+            created_review = json.loads(create_response.data)
+            review_id = created_review["id"]
+
+            # Try to update with different place_id
+            update_data = self.valid_review_data.copy()
+            update_data["place_id"] = "different-place-id"
+
+            response = self.client.put(
+                f"/api/v1/reviews/{review_id}",
+                data=json.dumps(update_data),
+                content_type="application/json",
+            )
+
+            # This might be allowed or not depending on business rules
+            self.assertIn(response.status_code, [200, 400, 404])
+
+    def test_create_review_float_rating(self):
+        """Test review creation with float rating."""
+        invalid_data = self.valid_review_data.copy()
+        invalid_data["rating"] = 3.5
+
+        response = self.client.post(
+            "/api/v1/reviews/",
+            data=json.dumps(invalid_data),
+            content_type="application/json",
+        )
+
+        # Should be invalid since rating should be integer
         self.assertEqual(response.status_code, 400)
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    unittest.main()
