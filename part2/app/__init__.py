@@ -230,9 +230,9 @@ def create_app():
         '''
 
     # Custom route to serve custom Swagger UI CSS
-    @app.route('/swaggerui/<path:filename>')
-    def swagger_ui_static(filename):
-        return send_from_directory('../swaggerui', filename)
+    # @app.route('/swaggerui/<path:filename>')
+    # def swagger_ui_static(filename):
+    #     return send_from_directory('../swaggerui', filename)
 
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(places_ns, path="/api/v1/places")
