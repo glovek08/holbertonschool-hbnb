@@ -243,7 +243,7 @@ def create_app():
 
     # Add users
     user1 = User(first_name="Alice", last_name="Smith", email="alice@example.com")
-    user2 = User(first_name="Bob", last_name="Brown", email="bob@example.com")Add commentMore actions
+    user2 = User(first_name="Bob", last_name="Brown", email="bob@example.com")
     facade.user_repo.add(user1)
     facade.user_repo.add(user2)
 
