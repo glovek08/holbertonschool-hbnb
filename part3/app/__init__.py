@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory
 from flask_restx import Api
-from flask_bcrypt import Bcrypt
 from config import DevelopmentConfig
+from app.extensions import bcrypt
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
@@ -13,8 +13,6 @@ from app.models.place import Place
 from app.models.user import User
 from app.models.review import Review
 from app.custom_ui import custom_ui
-
-bcrypt = Bcrypt()
 
 
 def create_app(config_class="config.DevelopmentConfig"):
@@ -51,8 +49,12 @@ def create_app(config_class="config.DevelopmentConfig"):
     # --- TEST DATA START ---
 
     # Add users
-    user1 = User(first_name="Alice", last_name="Smith", email="alice@example.com")
-    user2 = User(first_name="Bob", last_name="Brown", email="bob@example.com")
+    user1 = User(
+        first_name="Alice", last_name="Smith", email="alice@live.com", password="23425"
+    )
+    user2 = User(
+        first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2353626"
+    )
     facade.user_repo.add(user1)
     facade.user_repo.add(user2)
 

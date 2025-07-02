@@ -1,8 +1,7 @@
-# from werkzeug.security import generate_password_hash, check_password_hash
-# from email_validator import validate_email, EmailNotValidError
-import re
+from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
 from app.models.base_model import BaseModel
+from app.extensions import bcrypt
 
 
 class User(BaseModel):
@@ -54,20 +53,13 @@ class User(BaseModel):
     def email(self):
         return self.__email
 
-    # @email.setter
-    # def email(self, value):
-    #     try:
-    #         valid = validate_email(value, check_deliverability=True)
-    #         self.__email = valid.email.lower()
-    #     except EmailNotValidError as e:
-    #         raise ValueError(f"Invalid email: {e}")
     @email.setter
     def email(self, value):
-        if not isinstance(value, str):
-            raise TypeError("Email must be a string")
-        email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(email_pattern, value):
-            raise ValueError("Invalid email format")
+        try:
+            valid = validate_email(value, check_deliverability=True)
+            self.__email = valid.email.lower()
+        except EmailNotValidError as e:
+            raise ValueError(f"Invalid email: {e}")
 
         self.__email = value.lower().strip()
 
@@ -81,10 +73,6 @@ class User(BaseModel):
         if not isinstance(value, str):
             raise TypeError("Password must be a string!")
         self.__password = bcrypt.generate_password_hash(value).decode("utf-8")
-
-    def hash_password(self, password):
-        """Hashes the password before storing it."""
-        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""
