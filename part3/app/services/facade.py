@@ -1,8 +1,4 @@
 from app.persistence.repository import InMemoryRepository
-from app.models.place import Place
-from app.models.user import User
-from app.models.amenity import Amenity
-from app.models.review import Review
 
 
 class HBnBFacade:
@@ -14,6 +10,8 @@ class HBnBFacade:
 
     # **************** USER CRAP *****************
     def create_user(self, user_data):
+        from app.models.user import User
+
         existing_user = self.get_user_by_email(user_data["email"])
         if existing_user:
             raise ValueError("Email already registered")
@@ -42,7 +40,9 @@ class HBnBFacade:
 
     # ************* PLACE CRAP ********************
     def create_place(self, place_data):
-        existing_user = self.get_user(place_data["owner_id"])
+        from app.models.place import Place
+
+        # add validation for existance of user.
         amenity_objs = []
         for amenity_id in place_data.get("amenities", []):
             amenity = self.get_amenity(amenity_id)
@@ -69,6 +69,8 @@ class HBnBFacade:
 
     # ************** AMENITY CRAP ******************
     def create_amenity(self, amenity_data):
+        from app.models.amenity import Amenity
+
         existing_amenity = self.amenity_repo.get_by_attribute(
             "name", amenity_data["name"]
         )
@@ -92,6 +94,8 @@ class HBnBFacade:
 
     # *************** REVIEW CRAP *******************
     def create_review(self, review_data):
+        from app.models.review import Review
+
         self.get_user(review_data.get("owner_id"))
         place = self.get_place(review_data.get("place_id"))
         # Both ID exist. Now we create the review.

@@ -2,8 +2,7 @@ from email_validator import validate_email, EmailNotValidError
 from datetime import datetime
 from app.models.base_model import BaseModel
 from app.extensions import bcrypt
-
-# from app.services import facade
+from app.services import facade
 
 
 class User(BaseModel):
@@ -57,8 +56,6 @@ class User(BaseModel):
 
     @email.setter
     def email(self, value):
-        from app.services import facade
-
         try:
             valid = validate_email(value, check_deliverability=True)
         except EmailNotValidError as e:

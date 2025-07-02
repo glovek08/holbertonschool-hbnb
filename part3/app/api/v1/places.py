@@ -135,7 +135,7 @@ class PlaceResource(Resource):
 
         try:
             updated_place = facade.update_place(place_id, place_new_data)
-            owner = facade.get_user(updated_place.owner_id)
+            owner = facade.get_user(updated_place.owner_id)  # type: ignore
             owner_basic_info = {
                 "first_name": owner.first_name,
                 "last_name": owner.last_name,

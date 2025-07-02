@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory
 from flask_restx import Api
 from config import DevelopmentConfig
 from app.extensions import bcrypt
+from app.extensions import jwt
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
@@ -19,6 +20,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
     bcrypt.init_app(app)
+    jwt.init_app(app)
 
     # Configure Flask-RESTX with custom Swagger UI
     api = Api(
