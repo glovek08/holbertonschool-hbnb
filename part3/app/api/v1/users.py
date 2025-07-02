@@ -5,18 +5,19 @@ api = Namespace("users", description="User operations")
 
 # Define the user model for input validation and documentation
 user_model = api.model(
-    "User",
+    "UserInput",
     {
         "first_name": fields.String(
             required=True, description="First name of the user"
         ),
         "last_name": fields.String(required=True, description="Last name of the user"),
         "email": fields.String(required=True, description="Email of the user"),
+        "password": fields.String(required=True, description="User Password"),
     },
 )
 
 response_user_model = api.model(
-    "User",
+    "UserResponse",
     {
         "id": fields.String(required=True, description="Id of the user"),
         "first_name": fields.String(
@@ -31,7 +32,7 @@ response_user_model = api.model(
 @api.route("/")
 class UserList(Resource):
     @api.expect(user_model, validate=True)
-    @api.response(201, "User successfully created", response_user_model)
+    @api.response(201, "User successfully created")
     @api.response(400, "Email already registered")
     @api.response(400, "Invalid input data")
     def post(self):
@@ -45,12 +46,12 @@ class UserList(Resource):
 
         return {
             "id": new_user.id,
-            "first_name": new_user.first_name,
-            "last_name": new_user.last_name,
-            "email": new_user.email,
+            # "first_name": new_user.first_name,
+            # "last_name": new_user.last_name,
+            # "email": new_user.email,
         }, 201
 
-    @api.marshal_with(response_user_model, as_list=True, code=200)
+    @api.marshal_with(response_user_model, as_list=True, code=200)  # type: ignore
     @api.response(200, "List of users retrieved successfully")
     def get(self):
         """Get all users"""

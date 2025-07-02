@@ -3,6 +3,8 @@ from datetime import datetime
 from app.models.base_model import BaseModel
 from app.extensions import bcrypt
 
+# from app.services import facade
+
 
 class User(BaseModel):
     def __init__(
@@ -55,13 +57,15 @@ class User(BaseModel):
 
     @email.setter
     def email(self, value):
+        from app.services import facade
+
         try:
             valid = validate_email(value, check_deliverability=True)
-            self.__email = valid.email.lower()
         except EmailNotValidError as e:
             raise ValueError(f"Invalid email: {e}")
-
-        self.__email = value.lower().strip()
+        if facade.get_user_by_email(value) is not None:
+            raise ValueError("Email already registred")
+        self.__email = valid.email.lower()
 
     # Password
     @property
