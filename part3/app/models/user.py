@@ -28,7 +28,9 @@ class User(BaseModel):
             if not value.isalpha():
                 raise ValueError(f"{field_name} is not a valid name")
             if len(value) > 50:
-                raise ValueError(f"{field_name} must not exceed 50 characters.")
+                raise ValueError(
+                    f"{field_name} must not exceed 50 characters."
+                )
         return value
 
     # First Name
@@ -60,8 +62,11 @@ class User(BaseModel):
             valid = validate_email(value, check_deliverability=True)
         except EmailNotValidError as e:
             raise ValueError(f"Invalid email: {e}")
-        if facade.get_user_by_email(value) is not None:
-            raise ValueError("Email already registred")
+
+        existing_user = facade.get_user_by_email(value)
+        if existing_user and existing_user.id != self.id:
+            raise ValueError("Email already registered")
+
         self.__email = valid.email.lower()
 
     # Password
