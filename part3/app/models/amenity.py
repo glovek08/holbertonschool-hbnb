@@ -1,4 +1,5 @@
 from app.models.base_model import BaseModel
+from app.services import facade
 
 
 class Amenity(BaseModel):
@@ -15,6 +16,8 @@ class Amenity(BaseModel):
     @name.setter
     def name(self, value: str):
         value = super().validate_string(value, "Name")
+        if facade.amenity_repo.get_by_attribute("name", value):
+            raise ValueError("Amenity already exist")
         self.__name = value
 
     @property

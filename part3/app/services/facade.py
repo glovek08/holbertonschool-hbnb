@@ -64,11 +64,6 @@ class HBnBFacade:
     def create_amenity(self, amenity_data):
         from app.models.amenity import Amenity
 
-        existing_amenity = self.amenity_repo.get_by_attribute(
-            "name", amenity_data["name"]
-        )
-        if existing_amenity:
-            raise ValueError("Amenity already exist")
         new_amenity = Amenity(**amenity_data)
         self.amenity_repo.add(new_amenity)
         return new_amenity
