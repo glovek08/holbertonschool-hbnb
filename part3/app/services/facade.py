@@ -12,10 +12,6 @@ class HBnBFacade:
     def create_user(self, user_data):
         from app.models.user import User
 
-        existing_user = self.get_user_by_email(user_data["email"])
-        if existing_user:
-            raise ValueError("Email already registered")
-
         user = User(**user_data)
         self.user_repo.add(user)
         return user
@@ -33,9 +29,6 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute("email", email)
 
     def update_user(self, user_id, user_data):
-        existing_user = self.get_user_by_email(user_data["email"])
-        if existing_user and existing_user.id != user_id:
-            raise ValueError("Email already registered")
         self.user_repo.update(user_id, user_data)
 
     # ************* PLACE CRAP ********************
