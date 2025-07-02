@@ -11,14 +11,14 @@ class User(BaseModel):
         first_name: str,
         last_name: str,
         email: str,
-        # password: str,
+        password: str,
         is_admin: bool = False,
     ):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        # self.password = password
+        self.password = password
         self.is_admin = is_admin
 
     # max length of 50 chars.
@@ -72,18 +72,23 @@ class User(BaseModel):
         self.__email = value.lower().strip()
 
     # Password
-    # @property
-    # def password(self):
-    #     return self.__password
+    @property
+    def password(self):
+        return self.__password
 
-    # @password.setter
-    # def password(self, value):
-    #     if not isinstance(value, str):
-    #         raise TypeError("Password must be a string!")
-    #     self.__password = generate_password_hash(value)
+    @password.setter
+    def password(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Password must be a string!")
+        self.__password = bcrypt.generate_password_hash(value).decode("utf-8")
 
-    # def verify_password(self, plain_password):
-    #     return check_password_hash(self.__password, plain_password)
+    def hash_password(self, password):
+        """Hashes the password before storing it."""
+        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
+
+    def verify_password(self, password):
+        """Verifies if the provided password matches the hashed password."""
+        return bcrypt.check_password_hash(self.password, password)
 
     # Is Admin
     @property
