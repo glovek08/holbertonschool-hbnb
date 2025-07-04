@@ -40,6 +40,8 @@ def create_app(config_class="config.DevelopmentConfig"):
         return custom_ui(api)
 
     # Custom route to serve custom Swagger UI CSS
+    # This will be used to apply a completely custom swagger template
+
     # @app.route('/swaggerui/<path:filename>')
     # def swagger_ui_static(filename):
     #     return send_from_directory('../swaggerui', filename)

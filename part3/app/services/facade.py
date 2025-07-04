@@ -78,18 +78,17 @@ class HBnBFacade:
         return self.amenity_repo.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
+        amenity = self.get_amenity(amenity_id)
         self.amenity_repo.update(amenity_id, amenity_data)
+        return amenity
 
     # *************** REVIEW CRAP *******************
     def create_review(self, review_data):
         from app.models.review import Review
 
-        self.get_user(review_data.get("owner_id"))
-        place = self.get_place(review_data.get("place_id"))
-        # Both ID exist. Now we create the review.
         new_review = Review(**review_data)
         self.review_repo.add(new_review)
-        # add the review to its corresponding places
+        place = self.get_place(review_data.get("place_id"))
         place.add_review(new_review)
         return new_review
 

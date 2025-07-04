@@ -1,4 +1,5 @@
 from app.models.base_model import BaseModel
+from app.services import facade
 
 
 class Review(BaseModel):
@@ -17,6 +18,12 @@ class Review(BaseModel):
     def owner_id(self, value):
         if not isinstance(value, str):
             raise TypeError("owner_id must be a string!")
+        if not value.strip():
+            raise ValueError("owner_id cannot be empty!")
+        try:
+            facade.get_user(value)
+        except ValueError:
+            raise ValueError("User does not exist!")
         self.__owner_id = value
 
     @property
