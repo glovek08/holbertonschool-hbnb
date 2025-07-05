@@ -8,6 +8,11 @@ def custom_ui(api):
             <title>HBnB API Documentation</title>
             <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.25.0/swagger-ui.css" />
             <style>
+                *, *:before, *:after {
+                    -webkit-box-sizing: border-box; 
+                    -moz-box-sizing: border-box; 
+                    box-sizing: border-box;
+                }
                 /* Custom Swagger UI Styling */
                 * {
                     color: white !important;
@@ -19,8 +24,15 @@ def custom_ui(api):
                     background-color: transparent !important;
                 }
                 body, #swagger-ui, p {
-                    background: #1a1a1a !important;
+                    # background: #1a1a1a !important;
                     color: #ffffff !important;
+                }
+                body {
+                    background-image: url("https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    padding-top: 80px;
+                    padding-bottom: 150px;
                 }
 
                 /* Header styling */
@@ -32,10 +44,18 @@ def custom_ui(api):
                 .swagger-ui .topbar .topbar-wrapper {
                     padding: 10px 0 !important;
                 }
+                .scheme-container {
+                    max-width: 1460px;
+                    margin-left: auto !important;
+                    margin-right: auto !important;
+                }
 
                 /* Main content area */
                 .swagger-ui .wrapper {
                     background: #1a1a1a !important;
+                    padding: 5px 40px;
+                    margin-bottom: 20px;
+                    margin-top: 20px;
                 }
 
                 /* Operation sections */
@@ -199,6 +219,7 @@ def custom_ui(api):
                 /* Additional dark theme improvements */
                 .swagger-ui .info {
                     color: #ffffff !important;
+                    margin: 20px;
                 }
 
                 .swagger-ui .info .title {
