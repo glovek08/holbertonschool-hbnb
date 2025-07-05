@@ -29,10 +29,9 @@ def create_app(config_class="config.DevelopmentConfig"):
             "type": "apiKey",
             "in": "header",
             "name": "Authorization",
-            "description": "Add a JWT token to the header with ** Bearer &lt;JWT&gt; ** token to authorize",
+            "description": "Add a JWT token to the header and remember to append 'Bearer' to the JWT token to authorize the current session user",
         }
     }
-    # Configure Flask-RESTX with custom Swagger UI
     api = Api(
         app,
         version="1.0",
@@ -45,14 +44,14 @@ def create_app(config_class="config.DevelopmentConfig"):
         default_label="HBnB API Operations",
     )
 
-    # Override Swagger UI template to include custom CSS
+    # This overrides Swagger UI template to include custom CSS currently it's dirty af,
+    # eventually when we know how, we'll switch to a proper swagger HTML template.
     @api.documentation
     def swagger_ui():
         return custom_ui(api)
 
     # Custom route to serve custom Swagger UI CSS
     # This will be used to apply a completely custom swagger template
-
     # @app.route('/swaggerui/<path:filename>')
     # def swagger_ui_static(filename):
     #     return send_from_directory('../swaggerui', filename)
