@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("places", description="Place operations")
 
@@ -23,14 +23,23 @@ place_model = api.model(
 
 @api.route("/")
 class PlaceList(Resource):
-    @jwt_required()
     @api.expect(place_model, validate=True)
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
+    @api.response(403, "Cannot create place for another user")
+    @api.doc(security="Bearer")
+    @jwt_required()
     def post(self):
         """Register a new place"""
+        # jwt validation, checks if the user posting this new place
+        # is the same as the owner of this place.
+        current_user = get_jwt_identity()
+        # commented till we know how to implement it. But left for future reference.
+        # claims = get_jwt()
+        # is_admin = claims.get("is_admin", False)
         place_data = api.payload
-
+        if "owner_id" in place_data and place_data["owner_id"] != current_user:
+            return {"error": "Unauthorized: cannot create place for another user"}, 403
         try:
             new_place = facade.create_place(place_data)
         except (TypeError, ValueError) as error:
@@ -53,7 +62,6 @@ class PlaceList(Resource):
         }, 201
 
     @api.response(200, "List of places retrieved successfully")
-    @jwt_required()
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
@@ -128,6 +136,8 @@ class PlaceResource(Resource):
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
+    @api.doc(security="Bearer")
+    @jwt_required()
     def put(self, place_id):
         """Update place information by ID"""
         place_new_data = api.payload

@@ -152,6 +152,46 @@ def custom_ui(api):
                     border: 1px solid #444 !important;
                 }
 
+                /* MODAL AUTHORIZE! */
+                .swagger-ui .dialog-ux .modal-ux {
+                    background: #1c1a1a !important;
+                }
+
+                .swagger-ui .auth-wrapper .authorize {
+                    background-color: #205039 !important;
+                    margin: 5px 10px;
+                }
+                .swagger-ui .auth-wrapper .authorize:hover {
+                    background-color: darkgreen !important;
+                }
+                .swagger-ui .auth-wrapper .btn.modal-btn.auth.btn-done {
+                background-color: darkred !important;
+                color: white !important;
+                border: 1px solid #666 !important;
+                }
+
+                .swagger-ui .auth-wrapper::before {
+                    content: "Include JWT token in header for maximum control 😎👉 (Append `Bearer`)";
+                    display: block;
+                    color: #ffffff !important;
+                    font-size: 14px;
+                    font-weight: bold;
+                    padding: 8px 12px;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                    border-radius: 4px;
+                    text-align: center;
+                }
+
+                .swagger-ui .auth-wrapper .btn.modal-btn.auth.btn-done:hover {
+                background-color: red !important;
+                border-color: #999 !important;
+                }
+
+                .auth-container input {
+                    color: black !important;
+                }
+
                 .swagger-ui .model .property {
                     color: #ffffff !important;
                 }

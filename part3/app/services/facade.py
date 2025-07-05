@@ -71,6 +71,7 @@ class HBnBFacade:
     def get_amenity(self, amenity_id):
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
+            # don't know how to handle outside the facade.
             raise ValueError("Amenity does not exist")
         return amenity
 

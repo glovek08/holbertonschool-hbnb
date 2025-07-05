@@ -23,13 +23,24 @@ def create_app(config_class="config.DevelopmentConfig"):
     bcrypt.init_app(app)
     jwt.init_app(app)
 
+    # JWT configuration so Swagger can send tokens
+    authorizations = {
+        "Bearer": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Add a JWT token to the header with ** Bearer &lt;JWT&gt; ** token to authorize",
+        }
+    }
     # Configure Flask-RESTX with custom Swagger UI
     api = Api(
         app,
         version="1.0",
         title="HBnB API",
         description="HBnB Application API",
-        doc="/api/v1/",
+        doc="/swag/",
+        authorizations=authorizations,
+        security="Bearer",
         default="HBnB",
         default_label="HBnB API Operations",
     )

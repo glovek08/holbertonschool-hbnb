@@ -32,11 +32,11 @@ response_user_model = api.model(
 
 @api.route("/")
 class UserList(Resource):
-    @jwt_required()
     @api.expect(user_model, validate=True)
     @api.response(201, "User successfully created")
     @api.response(400, "Email already registered")
     @api.response(400, "Invalid input data")
+    @jwt_required()
     def post(self):
         """Register a new user"""
         user_data = api.payload
@@ -55,7 +55,6 @@ class UserList(Resource):
 
     @api.marshal_with(response_user_model, as_list=True, code=200)  # type: ignore
     @api.response(200, "List of users retrieved successfully")
-    @jwt_required()
     def get(self):
         """Get all users"""
         users = facade.get_all_users()
@@ -93,6 +92,7 @@ class UserResource(Resource):
     @api.expect(user_model, validate=True)
     @api.response(200, "User successfully updated", response_user_model)
     @api.response(400, "Invalid input data or email already registered")
+    @jwt_required()
     def put(self, user_id):
         """Update user information by ID"""
         user_new_data = api.payload
