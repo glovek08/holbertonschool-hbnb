@@ -77,8 +77,8 @@ class Place(BaseModel):
     def price(self, value: float):
         if not isinstance(value, (int, float)):
             raise TypeError("Price must be a number")
-        if value < 0:
-            raise ValueError("Price cannot be negative")
+        if value <= 0:
+            raise ValueError("Price must be positive")
         self.__price = float(value)
 
     # Latitude
@@ -120,7 +120,6 @@ class Place(BaseModel):
             amenity = facade.get_amenity(amenity_id)
             if amenity:
                 amenity_objs.append(amenity)
-        place_data["amenities"] = amenity_objs
 
         self.__amenities = amenity_objs.copy()
 

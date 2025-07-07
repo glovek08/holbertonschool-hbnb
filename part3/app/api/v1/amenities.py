@@ -64,13 +64,13 @@ class AmenityResource(Resource):
     def get(self, amenity_id):
         """Get amenity details by ID"""
         my_amenity = facade.get_amenity(amenity_id)
-        if not amenity:
+        if not amenity:  # type: ignore
             return {"error": "Amenity not found"}, 404
 
         return {
-            "id": my_amenity.id,
-            "name": my_amenity.name,
-            "description": my_amenity.description,
+            "id": my_amenity.id,  # type: ignore
+            "name": my_amenity.name,  # type: ignore
+            "description": my_amenity.description,  # type: ignore
         }, 200
 
     @api.expect(amenity_model, validate=True)

@@ -69,7 +69,7 @@ class HBnBFacade:
         new_review = Review(**review_data)
         self.review_repo.add(new_review)
         place = self.get_place(review_data.get("place_id"))
-        place.add_review(new_review)
+        place.add_review(new_review)  # type: ignore
         return new_review
 
     def get_review(self, review_id):
@@ -79,7 +79,7 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        return self.place_repo.get(place_id).reviews
+        return self.place_repo.get(place_id).reviews  # type: ignore
 
     def update_review(self, review_id, review_data):
         self.review_repo.update(review_id, review_data)

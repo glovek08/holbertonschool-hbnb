@@ -109,8 +109,8 @@ class PlaceResource(Resource):
         try:
             owner = facade.get_user(place.owner_id)
             owner_basic_info = {
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
+                "first_name": owner.first_name,  # type: ignore
+                "last_name": owner.last_name,  # type: ignore
             }
         except ValueError as error:
             return {"error": str(error)}, 400
@@ -139,22 +139,25 @@ class PlaceResource(Resource):
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
+    @api.response(403, "Unauthorized action")
     @api.doc(security="Bearer")
     @jwt_required()
     def put(self, place_id):
         """Update place information by ID"""
+        current_user = get_jwt_identity()
         place_new_data = api.payload
         place = facade.get_place(place_id)
-
         if not place:
             return {"error": "Place not found"}, 404
+        if place.owner_id != current_user:
+            return {"error": "Unauthorized action"}, 403
 
         try:
-            updated_place = facade.update_place(place_id, place_new_data)
-            owner = facade.get_user(updated_place.owner_id)  # type: ignore
+            facade.update_place(place_id, place_new_data)
+            owner = facade.get_user(place_new_data["owner_id"])
             owner_basic_info = {
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
+                "first_name": owner.first_name,  # type: ignore
+                "last_name": owner.last_name,  # type: ignore
             }
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400

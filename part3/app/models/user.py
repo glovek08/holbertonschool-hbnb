@@ -28,9 +28,7 @@ class User(BaseModel):
             if not value.isalpha():
                 raise ValueError(f"{field_name} is not a valid name")
             if len(value) > 50:
-                raise ValueError(
-                    f"{field_name} must not exceed 50 characters."
-                )
+                raise ValueError(f"{field_name} must not exceed 50 characters.")
         return value
 
     # First Name
