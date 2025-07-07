@@ -76,10 +76,9 @@ class UserResource(Resource):
     @api.response(404, "User not found")
     def get(self, user_id):
         """Get user details by ID"""
-        try:
-            user = facade.get_user(user_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        user = facade.get_user(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
 
         return {
             "id": user.id,
@@ -97,10 +96,9 @@ class UserResource(Resource):
         """Update user information by ID"""
         user_new_data = api.payload
 
-        try:
-            user = facade.get_user(user_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        user = facade.get_user(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
 
         try:
             facade.update_user(user_id, user_new_data)
