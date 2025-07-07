@@ -17,10 +17,7 @@ class HBnBFacade:
         return user
 
     def get_user(self, user_id):
-        user = self.user_repo.get(user_id)
-        if not user:
-            raise ValueError("User not found")
-        return user
+        return self.user_repo.get(user_id)
 
     def get_all_users(self):
         return self.user_repo.get_all()
@@ -35,29 +32,17 @@ class HBnBFacade:
     def create_place(self, place_data):
         from app.models.place import Place
 
-        # add validation for existance of user.
-        amenity_objs = []
-        for amenity_id in place_data.get("amenities", []):
-            amenity = self.get_amenity(amenity_id)
-            if amenity:
-                amenity_objs.append(amenity)
-        place_data["amenities"] = amenity_objs
-
         place = Place(**place_data)
         self.place_repo.add(place)
         return place
 
     def get_place(self, place_id):
-        place = self.place_repo.get(place_id)
-        if not place:
-            raise ValueError("Place does not exist")
-        return place
+        return self.place_repo.get(place_id)
 
     def get_all_places(self):
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        self.get_user(place_data["owner_id"])
         self.place_repo.update(place_id, place_data)
 
     # ************** AMENITY CRAP ******************
