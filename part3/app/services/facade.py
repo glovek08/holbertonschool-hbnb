@@ -54,19 +54,13 @@ class HBnBFacade:
         return new_amenity
 
     def get_amenity(self, amenity_id):
-        amenity = self.amenity_repo.get(amenity_id)
-        if not amenity:
-            # don't know how to handle outside the facade.
-            raise ValueError("Amenity does not exist")
-        return amenity
+        return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
         return self.amenity_repo.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
-        amenity = self.get_amenity(amenity_id)
         self.amenity_repo.update(amenity_id, amenity_data)
-        return amenity
 
     # *************** REVIEW CRAP *******************
     def create_review(self, review_data):
@@ -79,23 +73,16 @@ class HBnBFacade:
         return new_review
 
     def get_review(self, review_id):
-        review = self.review_repo.get(review_id)
-        if not review:
-            raise ValueError("Review does not exist")
-        return review
+        return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        place = self.place_repo.get(place_id)
-        if not place:
-            raise ValueError("Place doesn't exist")
-        return place.reviews
+        return self.place_repo.get(place_id).reviews
 
     def update_review(self, review_id, review_data):
         self.review_repo.update(review_id, review_data)
 
     def delete_review(self, review_id):
-        self.get_review(review_id)
         self.review_repo.delete(review_id)
