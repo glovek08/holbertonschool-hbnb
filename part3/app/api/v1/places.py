@@ -38,7 +38,7 @@ class PlaceList(Resource):
         # claims = get_jwt()
         # is_admin = claims.get("is_admin", False)
         place_data = api.payload
-        if "owner_id" in place_data and place_data["owner_id"] != current_user:
+        if place_data["owner_id"] != current_user:
             return {"error": "Unauthorized: cannot create place for another user"}, 403
         try:
             new_place = facade.create_place(place_data)
@@ -102,8 +102,11 @@ class PlaceResource(Resource):
     @api.response(404, "Place not found")
     def get(self, place_id):
         """Get place details by ID"""
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
         try:
-            place = facade.get_place(place_id)
             owner = facade.get_user(place.owner_id)
             owner_basic_info = {
                 "first_name": owner.first_name,
@@ -141,10 +144,10 @@ class PlaceResource(Resource):
     def put(self, place_id):
         """Update place information by ID"""
         place_new_data = api.payload
-        try:
-            place = facade.get_place(place_id)
-        except ValueError as error:
-            return {"error": str(error)}, 404
+        place = facade.get_place(place_id)
+
+        if not place:
+            return {"error": "Place not found"}, 404
 
         try:
             updated_place = facade.update_place(place_id, place_new_data)

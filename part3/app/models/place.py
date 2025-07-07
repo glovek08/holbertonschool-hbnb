@@ -2,6 +2,7 @@ from typing import Optional, List
 from app.models.base_model import BaseModel
 from app.models.amenity import Amenity
 from app.models.user import User
+from app.services import facade
 
 
 class Place(BaseModel):
@@ -37,6 +38,11 @@ class Place(BaseModel):
             raise TypeError("Owner ID must be a string")
         if not value:
             raise ValueError("Owner ID cannot be empty")
+
+        user = facade.get_user(value)
+        if not user:
+            raise ValueError("User does not exist")
+
         self.__owner_id = value
 
     # Title
@@ -108,7 +114,15 @@ class Place(BaseModel):
     def amenities(self, value: list):
         if not isinstance(value, list):
             raise TypeError("Amenities must be a list")
-        self.__amenities = value.copy()
+
+        amenity_objs = []
+        for amenity_id in value:
+            amenity = facade.get_amenity(amenity_id)
+            if amenity:
+                amenity_objs.append(amenity)
+        place_data["amenities"] = amenity_objs
+
+        self.__amenities = amenity_objs.copy()
 
     def add_amenity(self, amenity: Amenity):
         """Add an amenity to the place"""
