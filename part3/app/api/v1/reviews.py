@@ -79,10 +79,9 @@ class ReviewResource(Resource):
     @api.response(404, "Review not found")
     def get(self, review_id):
         """Get review details by ID"""
-        try:
-            review = facade.get_review(review_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        review = facade.get_review(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
 
         return {
             "id": review.id,
@@ -101,11 +100,9 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
-
-        try:
-            review = facade.get_review(review_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        review = facade.get_review(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
 
         try:
             facade.update_review(review_id, review_new_data)
@@ -126,10 +123,10 @@ class ReviewResource(Resource):
     @jwt_required()
     def delete(self, review_id):
         """Delete a review"""
-        try:
-            facade.delete_review(review_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        if not facade.get_review(review_id):
+            return {"error": "Review not found"}, 404
+
+        facade.delete_review(review_id)
 
         return {"message": "Review deleted successfully"}, 200
 
@@ -145,10 +142,10 @@ class PlaceReviewList(Resource):
     @api.response(404, "Place not found")
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        try:
-            reviews = facade.get_reviews_by_place(place_id)
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        if not facade.get_place(place_id):
+            return {"error": "Place not found"}, 404
+
+        reviews = facade.get_reviews_by_place(place_id)
 
         return [
             {
