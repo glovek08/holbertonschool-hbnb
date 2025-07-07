@@ -63,10 +63,9 @@ class AmenityResource(Resource):
     @api.response(404, "Amenity not found")
     def get(self, amenity_id):
         """Get amenity details by ID"""
-        try:
-            my_amenity = facade.get_amenity(amenity_id)
-        except ValueError as error:
-            return {"error": str(error)}, 404
+        my_amenity = facade.get_amenity(amenity_id)
+        if not amenity:
+            return {"error": "Amenity not found"}, 404
 
         return {
             "id": my_amenity.id,
@@ -82,10 +81,9 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
         """Update an amenity's information"""
         amenity_data = api.payload
-        try:
-            my_amenity = facade.get_amenity(amenity_id)
-        except ValueError as error:
-            return {"error": str(error)}, 404
+        my_amenity = facade.get_amenity(amenity_id)
+        if not my_amenity:
+            return {"error": "Amenity not found"}, 404
 
         try:
             facade.update_amenity(amenity_id, amenity_data)
