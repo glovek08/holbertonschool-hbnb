@@ -11,7 +11,9 @@ user_model = api.model(
         "first_name": fields.String(
             required=True, description="First name of the user"
         ),
-        "last_name": fields.String(required=True, description="Last name of the user"),
+        "last_name": fields.String(
+            required=True, description="Last name of the user"
+        ),
         "email": fields.String(required=True, description="Email of the user"),
         "password": fields.String(required=True, description="User Password"),
     },
@@ -24,7 +26,9 @@ response_user_model = api.model(
         "first_name": fields.String(
             required=True, description="First name of the user"
         ),
-        "last_name": fields.String(required=True, description="Last name of the user"),
+        "last_name": fields.String(
+            required=True, description="Last name of the user"
+        ),
         "email": fields.String(required=True, description="Email of the user"),
     },
 )
@@ -72,7 +76,9 @@ class UserList(Resource):
 @api.route("/<user_id>")
 class UserResource(Resource):
     @api.doc(params={"user_id": "The unique ID of the user"})
-    @api.response(200, "User details retrieved successfully", response_user_model)
+    @api.response(
+        200, "User details retrieved successfully", response_user_model
+    )
     @api.response(404, "User not found")
     def get(self, user_id):
         """Get user details by ID"""
@@ -87,16 +93,39 @@ class UserResource(Resource):
             "email": user.email,
         }, 200
 
-    @api.doc(params={"user_id": "The unique ID of the user"})
-    @api.expect(user_model, validate=True)
+    @api.doc(
+        description="""
+    Updates user information.
+    
+    Modifiable fields by normal users:
+    - `first_name`: string
+    - `last_name`: string
+    
+    Only admin users can modify:
+    - `email`: string (With valid format)
+    - `password`: string (8 characters or more)
+    """,
+        params={"user_id": "The unique ID of the user"},
+    )
     @api.response(200, "User successfully updated", response_user_model)
     @api.response(400, "Invalid input data or email already registered")
     @jwt_required()
     def put(self, user_id):
         """Update user information by ID"""
         user_new_data = api.payload
+        current_user = get_jwt_identity()
+
+        # Hay que hacer el checkeo de lo que llega, no hay expect.
+        if not user_new_data:
+            return {
+                "error": "Invalid input data or email already registered"
+            }, 400
+
+        if user_id != current_user:
+            return {"error": "Unauthorized action."}
 
         user = facade.get_user(user_id)
+
         if not user:
             return {"error": "User not found"}, 404
 
