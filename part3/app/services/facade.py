@@ -88,5 +88,5 @@ class HBnBFacade:
     def delete_review(self, review_id):
         self.review_repo.delete(review_id)
 
-    def get_review_by_author(self, author_id):
+    def get_review_of_place_by_author(self, author_id, place_id):
         return self.review_repo.get_by_attribute("owner_id", author_id)

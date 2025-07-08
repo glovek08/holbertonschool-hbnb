@@ -10,15 +10,11 @@ review_model = api.model(
     "ReviewInput",
     {
         "owner_id": fields.String(required=True, description="ID of the user"),
-        "place_id": fields.String(
-            required=True, description="ID of the place"
-        ),
+        "place_id": fields.String(required=True, description="ID of the place"),
         "rating": fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(
-            required=True, description="Text of the review"
-        ),
+        "comment": fields.String(required=True, description="Text of the review"),
     },
 )
 
@@ -27,15 +23,11 @@ response_review_model = api.model(
     {
         "id": fields.String(required=True, description="ID of the review"),
         "owner_id": fields.String(required=True, description="ID of the user"),
-        "place_id": fields.String(
-            required=True, description="ID of the place"
-        ),
+        "place_id": fields.String(required=True, description="ID of the place"),
         "rating": fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(
-            required=True, description="Text of the review"
-        ),
+        "comment": fields.String(required=True, description="Text of the review"),
     },
 )
 
@@ -51,17 +43,20 @@ class ReviewList(Resource):
         """Create a new review"""
         current_user = get_jwt_identity()
         review_data = api.payload
+        # user is authenticated
         if review_data["owner_id"] != current_user:
             return {"error": "Not Authorized"}, 403
+        # place exists
         review_target_place = facade.get_place(review_data["place_id"])
         if not review_target_place:
-            return {"error": "Place doesn't exists"}, 400
+            return {"error": "Place doesn't exist"}, 400
+        # user is not the owner of the place
         if review_target_place.owner_id == current_user:
-            return {"error": "You cannot review your own place."}, 400
-        # "You have already reviewed this place."
+            return {"error": "You cannot review your own place"}, 400
+        # user has already review this place
         for review in review_target_place.reviews:
             if review.owner_id == current_user:
-                return {"error": "You have already reviewed this place."}
+                return {"error": "You have already reviewed this place"}, 400
 
         # TODO: VALIDAR USER ALREADY REVIEWED PLACE.
         # TODO: FIX REVIEW APPENDING TO PLACE.
@@ -100,9 +95,7 @@ class ReviewList(Resource):
 @api.route("/<review_id>")
 class ReviewResource(Resource):
     @api.doc(params={"review_id": "The unique ID of the review"})
-    @api.response(
-        200, "Review details retrieved successfully", response_review_model
-    )
+    @api.response(200, "Review details retrieved successfully", response_review_model)
     @api.response(404, "Review not found")
     def get(self, review_id):
         """Get review details by ID"""
@@ -170,9 +163,7 @@ class ReviewResource(Resource):
 
 @api.route("/places/<place_id>/reviews")
 class PlaceReviewList(Resource):
-    @api.doc(
-        params={"place_id": "The unique ID of the place to retrieve reviews"}
-    )
+    @api.doc(params={"place_id": "The unique ID of the place to retrieve reviews"})
     @api.response(
         200,
         "List of reviews for the place retrieved successfully",
