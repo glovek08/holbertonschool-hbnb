@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from http import HTTPStatus
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.utils import check_api_payload
 
 api = Namespace("reviews", description="Review operations")
 
@@ -17,7 +18,15 @@ review_model = api.model(
         "comment": fields.String(required=True, description="Text of the review"),
     },
 )
-
+update_review_model = api.model(
+    "ReviewUpdate",
+    {
+        "rating": fields.Integer(
+            required=False, description="Rating of the place (1-5)"
+        ),
+        "comment": fields.String(required=False, description="Text of the review"),
+    },
+)
 response_review_model = api.model(
     "ReviewResponse",
     {
@@ -57,10 +66,6 @@ class ReviewList(Resource):
         for review in review_target_place.reviews:
             if review.owner_id == current_user:
                 return {"error": "You have already reviewed this place"}, 400
-
-        # TODO: VALIDAR USER ALREADY REVIEWED PLACE.
-        # TODO: FIX REVIEW APPENDING TO PLACE.
-        # Memorandum
 
         try:
             new_review = facade.create_review(review_data)
@@ -111,7 +116,7 @@ class ReviewResource(Resource):
             "comment": review.comment,
         }, 200
 
-    @api.expect(review_model, validate=True)
+    @api.expect(update_review_model, validate=True)
     @api.doc(params={"review_id": "The unique ID of the review"})
     @api.response(200, "Review updated successfully", response_review_model)
     @api.response(404, "Review not found")
@@ -120,6 +125,8 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
+        if not check_api_payload(review_new_data, update_review_model):
+            return {"error": "Invalid input data"}, 400
         current_user = get_jwt_identity()
         review = facade.get_review(review_id)
 

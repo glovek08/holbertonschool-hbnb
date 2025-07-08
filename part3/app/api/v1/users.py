@@ -11,9 +11,19 @@ user_model = api.model(
         "first_name": fields.String(
             required=True, description="First name of the user"
         ),
-        "last_name": fields.String(
-            required=True, description="Last name of the user"
+        "last_name": fields.String(required=True, description="Last name of the user"),
+        "email": fields.String(required=True, description="Email of the user"),
+        "password": fields.String(required=True, description="User Password"),
+    },
+)
+
+update_admin_model = api.model(
+    "UserInput",
+    {
+        "first_name": fields.String(
+            required=True, description="First name of the user"
         ),
+        "last_name": fields.String(required=True, description="Last name of the user"),
         "email": fields.String(required=True, description="Email of the user"),
         "password": fields.String(required=True, description="User Password"),
     },
@@ -26,9 +36,7 @@ response_user_model = api.model(
         "first_name": fields.String(
             required=True, description="First name of the user"
         ),
-        "last_name": fields.String(
-            required=True, description="Last name of the user"
-        ),
+        "last_name": fields.String(required=True, description="Last name of the user"),
         "email": fields.String(required=True, description="Email of the user"),
     },
 )
@@ -76,9 +84,7 @@ class UserList(Resource):
 @api.route("/<user_id>")
 class UserResource(Resource):
     @api.doc(params={"user_id": "The unique ID of the user"})
-    @api.response(
-        200, "User details retrieved successfully", response_user_model
-    )
+    @api.response(200, "User details retrieved successfully", response_user_model)
     @api.response(404, "User not found")
     def get(self, user_id):
         """Get user details by ID"""
@@ -117,9 +123,7 @@ class UserResource(Resource):
 
         # Hay que hacer el checkeo de lo que llega, no hay expect.
         if not user_new_data:
-            return {
-                "error": "Invalid input data or email already registered"
-            }, 400
+            return {"error": "Invalid input data or email already registered"}, 400
 
         if user_id != current_user:
             return {"error": "Unauthorized action."}
