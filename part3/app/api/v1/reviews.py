@@ -10,11 +10,15 @@ review_model = api.model(
     "ReviewInput",
     {
         "owner_id": fields.String(required=True, description="ID of the user"),
-        "place_id": fields.String(required=True, description="ID of the place"),
+        "place_id": fields.String(
+            required=True, description="ID of the place"
+        ),
         "rating": fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=True, description="Text of the review"),
+        "comment": fields.String(
+            required=True, description="Text of the review"
+        ),
     },
 )
 
@@ -23,11 +27,15 @@ response_review_model = api.model(
     {
         "id": fields.String(required=True, description="ID of the review"),
         "owner_id": fields.String(required=True, description="ID of the user"),
-        "place_id": fields.String(required=True, description="ID of the place"),
+        "place_id": fields.String(
+            required=True, description="ID of the place"
+        ),
         "rating": fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=True, description="Text of the review"),
+        "comment": fields.String(
+            required=True, description="Text of the review"
+        ),
     },
 )
 
@@ -92,7 +100,9 @@ class ReviewList(Resource):
 @api.route("/<review_id>")
 class ReviewResource(Resource):
     @api.doc(params={"review_id": "The unique ID of the review"})
-    @api.response(200, "Review details retrieved successfully", response_review_model)
+    @api.response(
+        200, "Review details retrieved successfully", response_review_model
+    )
     @api.response(404, "Review not found")
     def get(self, review_id):
         """Get review details by ID"""
@@ -117,9 +127,14 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
+        current_user = get_jwt_identity()
         review = facade.get_review(review_id)
+
         if not review:
             return {"error": "Review not found"}, 404
+
+        if review.owner_id != current_user:
+            return {"error": "Unauthorized action."}, 403
 
         try:
             facade.update_review(review_id, review_new_data)
@@ -150,7 +165,9 @@ class ReviewResource(Resource):
 
 @api.route("/places/<place_id>/reviews")
 class PlaceReviewList(Resource):
-    @api.doc(params={"place_id": "The unique ID of the place to retrieve reviews"})
+    @api.doc(
+        params={"place_id": "The unique ID of the place to retrieve reviews"}
+    )
     @api.response(
         200,
         "List of reviews for the place retrieved successfully",
