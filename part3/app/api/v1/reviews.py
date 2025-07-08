@@ -37,10 +37,27 @@ class ReviewList(Resource):
     @api.expect(review_model, validate=True)
     @api.response(201, "Review successfully created", response_review_model)
     @api.response(400, "Invalid input data")
+    @api.response(403, "Not Authorized")
     @jwt_required()
     def post(self):
         """Create a new review"""
+        current_user = get_jwt_identity()
         review_data = api.payload
+        if review_data["owner_id"] != current_user:
+            return {"error": "Not Authorized"}, 403
+        review_target_place = facade.get_place(review_data["place_id"])
+        if not review_target_place:
+            return {"error": "Place doesn't exists"}, 400
+        if review_target_place.owner_id == current_user:
+            return {"error": "You cannot review your own place."}, 400
+        # "You have already reviewed this place."
+        for review in review_target_place.reviews:
+            if review.owner_id == current_user:
+                return {"error": "You have already reviewed this place."}
+
+        # TODO: VALIDAR USER ALREADY REVIEWED PLACE.
+        # TODO: FIX REVIEW APPENDING TO PLACE.
+        # Memorandum
 
         try:
             new_review = facade.create_review(review_data)

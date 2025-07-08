@@ -1,4 +1,5 @@
 from app.persistence.repository import InMemoryRepository
+from sqlalchemy import create_engine
 
 
 class HBnBFacade:
@@ -86,3 +87,6 @@ class HBnBFacade:
 
     def delete_review(self, review_id):
         self.review_repo.delete(review_id)
+
+    def get_review_by_author(self, author_id):
+        return self.review_repo.get_by_attribute("owner_id", author_id)

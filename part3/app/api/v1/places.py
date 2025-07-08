@@ -155,9 +155,11 @@ class PlaceResource(Resource):
         try:
             facade.update_place(place_id, place_new_data)
             owner = facade.get_user(place_new_data["owner_id"])
+            if not owner:
+                return {"error": "Owner doesn't exists"}, 400
             owner_basic_info = {
-                "first_name": owner.first_name,  # type: ignore
-                "last_name": owner.last_name,  # type: ignore
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
             }
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400

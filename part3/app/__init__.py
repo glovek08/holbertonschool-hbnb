@@ -102,8 +102,18 @@ def create_app(config_class="config.DevelopmentConfig"):
         longitude=-118.2437,
         amenities=[amenity1],
     )
+    place3 = Place(
+        owner_id=user2.id,
+        title="Test1",
+        description="Testest",
+        price=1520.0,
+        latitude=34.0522,
+        longitude=-118.2437,
+        amenities=[amenity1],
+    )
     facade.place_repo.add(place1)
     facade.place_repo.add(place2)
+    facade.place_repo.add(place3)
 
     # Add some reviews
 

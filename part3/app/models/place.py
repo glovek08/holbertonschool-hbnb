@@ -143,7 +143,7 @@ class Place(BaseModel):
     def reviews(self, value: list):
         if not isinstance(value, list):
             raise TypeError("Reviews must be a list")
-        self.__reviews = value.copy()
+        self.__reviews = value
 
     def add_review(self, review):
         if review not in self.__reviews:
