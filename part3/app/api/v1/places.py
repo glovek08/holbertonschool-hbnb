@@ -20,20 +20,6 @@ place_model = api.model(
     },
 )
 
-update_place_model = api.model(
-    "PlaceUpdate",
-    {
-        "title": fields.String(required=True, description="Title of the place"),
-        "description": fields.String(description="Description of the place"),
-        "price": fields.Float(required=True, description="Price per night"),
-        "latitude": fields.Float(required=True, description="Latitude of the place"),
-        "longitude": fields.Float(required=True, description="Longitude of the place"),
-        "amenities": fields.List(
-            fields.String, required=True, description="List of amenities ID's"
-        ),
-    },
-)
-
 
 @api.route("/")
 class PlaceList(Resource):
@@ -163,7 +149,7 @@ class PlaceResource(Resource):
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
 
-        if not check_api_payload(place_new_data, update_place_model):
+        if not check_api_payload(place_new_data, place_model):
             return {"error": "Invalid input data"}, 400
 
         place = facade.get_place(place_id)
@@ -172,8 +158,8 @@ class PlaceResource(Resource):
 
         if (
             not is_admin
-            or not check_api_payload(place_new_data, update_place_model)
-            or place.owner_id != current_user
+            or (place.owner_id != current_user)
+            or (place_new_data["owner_id"] != current_user)  # Potential error
         ):
             return {"error": "Unauthorized action"}, 403
 

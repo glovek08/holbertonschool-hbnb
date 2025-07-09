@@ -133,7 +133,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
 
-        if review.owner_id != current_user:
+        if not is_admin or review.owner_id != current_user:
             return {"error": "Unauthorized action."}, 403
 
         try:
