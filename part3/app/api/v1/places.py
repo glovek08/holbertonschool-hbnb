@@ -20,6 +20,20 @@ place_model = api.model(
     },
 )
 
+update_place_model = api.model(
+    "PlaceUpdate",
+    {
+        "title": fields.String(required=True, description="Title of the place"),
+        "description": fields.String(description="Description of the place"),
+        "price": fields.Float(required=True, description="Price per night"),
+        "latitude": fields.Float(required=True, description="Latitude of the place"),
+        "longitude": fields.Float(required=True, description="Longitude of the place"),
+        "amenities": fields.List(
+            fields.String, required=True, description="List of amenities ID's"
+        ),
+    },
+)
+
 
 @api.route("/")
 class PlaceList(Resource):
@@ -144,12 +158,23 @@ class PlaceResource(Resource):
     @jwt_required()
     def put(self, place_id):
         """Update place information by ID"""
-        current_user = get_jwt_identity()
         place_new_data = api.payload
+        current_user = get_jwt_identity()
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
+
+        if not check_api_payload(place_new_data, update_place_model):
+            return {"error": "Invalid input data"}, 400
+
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
-        if place.owner_id != current_user:
+
+        if (
+            not is_admin
+            or not check_api_payload(place_new_data, update_place_model)
+            or place.owner_id != current_user
+        ):
             return {"error": "Unauthorized action"}, 403
 
         try:
@@ -182,3 +207,23 @@ class PlaceResource(Resource):
                 for amenity in place.amenities
             ],
         }, 200
+
+    @api.doc(params={"place_id": "The unique ID of the place"})
+    @api.response(200, "Place deleted successfully")
+    @api.response(404, "Place not found")
+    @jwt_required()
+    def delete(self, review_id):
+        """Delete a place"""
+        current_user = get_jwt_identity()
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
+        if not is_admin:
+            return {"error": "Unauthorized action."}, 403
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        facade.delete_place(place_id)
+
+        return {"message": "Place deleted successfully"}, 200
