@@ -9,6 +9,7 @@ from app.api.v1.places import api as places_ns
 from app.api.v1.amenities import api as amenity_ns
 from app.api.v1.reviews import api as reviews_ns
 from app.api.v1.auth import api as auth_ns
+from app.api.v1.users import api as admin_ns
 from app.services import facade
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -66,7 +67,11 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Add users
     user1 = User(
-        first_name="Alice", last_name="Smith", email="alice@live.com", password="23425"
+        first_name="Alice",
+        last_name="Smith",
+        email="alice@live.com",
+        password="23425",
+        is_admin=True,
     )
     user2 = User(
         first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2353626"

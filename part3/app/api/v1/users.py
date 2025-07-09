@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("users", description="User operations")
 
@@ -42,17 +42,21 @@ response_user_model = api.model(
 )
 
 
-@api.route("/")
+@api.route("/")  # api/v1/users/
 class UserList(Resource):
     @api.expect(user_model, validate=True)
     @api.response(201, "User successfully created")
     @api.response(400, "Email already registered")
     @api.response(400, "Invalid input data")
+    @api.response(403, "Admin privileges required")
     @jwt_required()
     def post(self):
         """Register a new user"""
         user_data = api.payload
-
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
+        if not is_admin:
+            return {"error": "Admin privileges required"}, 403
         try:
             new_user = facade.create_user(user_data)
         except (TypeError, ValueError) as e:
@@ -60,9 +64,6 @@ class UserList(Resource):
 
         return {
             "id": new_user.id,
-            # "first_name": new_user.first_name,
-            # "last_name": new_user.last_name,
-            # "email": new_user.email,
         }, 201
 
     @api.marshal_with(response_user_model, as_list=True, code=200)  # type: ignore
