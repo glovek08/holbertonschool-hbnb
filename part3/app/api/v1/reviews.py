@@ -22,9 +22,9 @@ update_review_model = api.model(
     "ReviewUpdate",
     {
         "rating": fields.Integer(
-            required=False, description="Rating of the place (1-5)"
+            required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=False, description="Text of the review"),
+        "comment": fields.String(required=True, description="Text of the review"),
     },
 )
 response_review_model = api.model(

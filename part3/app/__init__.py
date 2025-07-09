@@ -74,7 +74,7 @@ def create_app(config_class="config.DevelopmentConfig"):
         is_admin=True,
     )
     user2 = User(
-        first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2353626"
+        first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2323"
     )
     facade.user_repo.add(user1)
     facade.user_repo.add(user2)
