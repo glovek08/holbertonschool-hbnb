@@ -1,7 +1,6 @@
 from email_validator import validate_email, EmailNotValidError
 from app.models.base_model import BaseModel
 from app.extensions import bcrypt
-from app.services import facade
 
 # SQLAlchemy stuff
 from app import db
@@ -9,7 +8,7 @@ from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, validates
 
 
-class User(BaseModel):
+class User(db.Model, BaseModel):
     __tablename__ = "users"
 
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
