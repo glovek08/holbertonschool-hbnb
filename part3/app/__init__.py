@@ -1,5 +1,7 @@
 from flask import Flask, send_from_directory
 from flask_restx import Api
+from flask_sqlalchemy import SQLAlchemy
+
 from config import DevelopmentConfig
 from app.extensions import bcrypt
 from app.extensions import jwt
@@ -18,11 +20,15 @@ from app.models.review import Review
 from app.custom_ui import custom_ui
 
 
+db = SQLAlchemy()
+
+
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    db.init_app(app)
 
     # JWT configuration so Swagger can send tokens
     authorizations = {
@@ -63,93 +69,96 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(reviews_ns, path="/api/v1/reviews")
     api.add_namespace(auth_ns, path="/api/v1/auth")
 
+    # region TestData
+
     # --- TEST DATA START ---
 
     # Add users
-    user1 = User(
-        first_name="Alice",
-        last_name="Smith",
-        email="alice@live.com",
-        password="23425",
-        is_admin=True,
-    )
-    user2 = User(
-        first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2323"
-    )
-    facade.user_repo.add(user1)
-    facade.user_repo.add(user2)
+    # user1 = User(
+    #     first_name="Alice",
+    #     last_name="Smith",
+    #     email="alice@live.com",
+    #     password="23425",
+    #     is_admin=True,
+    # )
+    # user2 = User(
+    #     first_name="Bob", last_name="Brown", email="bob@gmail.com", password="2323"
+    # )
+    # facade.user_repo.add(user1)
+    # facade.user_repo.add(user2)
 
-    # Add amenities
+    # # Add amenities
 
-    amenity1 = Amenity(name="WiFi", description="Wireless Internet")
-    amenity2 = Amenity(name="Pool", description="Swimming Pool")
-    facade.amenity_repo.add(amenity1)
-    facade.amenity_repo.add(amenity2)
+    # amenity1 = Amenity(name="WiFi", description="Wireless Internet")
+    # amenity2 = Amenity(name="Pool", description="Swimming Pool")
+    # facade.amenity_repo.add(amenity1)
+    # facade.amenity_repo.add(amenity2)
 
-    # Add places
+    # # Add places
 
-    place1 = Place(
-        owner_id=user1.id,
-        title="Cozy Cottage",
-        description="A small, cozy cottage.",
-        price=100.0,
-        latitude=40.7128,
-        longitude=-74.0060,
-        amenities=[amenity1, amenity2],
-    )
+    # place1 = Place(
+    #     owner_id=user1.id,
+    #     title="Cozy Cottage",
+    #     description="A small, cozy cottage.",
+    #     price=100.0,
+    #     latitude=40.7128,
+    #     longitude=-74.0060,
+    #     amenities=[amenity1, amenity2],
+    # )
 
-    place2 = Place(
-        owner_id=user2.id,
-        title="Modern Apartment",
-        description="A stylish apartment in the city.",
-        price=150.0,
-        latitude=34.0522,
-        longitude=-118.2437,
-        amenities=[amenity1],
-    )
-    place3 = Place(
-        owner_id=user2.id,
-        title="Test1",
-        description="Testest",
-        price=1520.0,
-        latitude=34.0522,
-        longitude=-118.2437,
-        amenities=[amenity1],
-    )
-    facade.place_repo.add(place1)
-    facade.place_repo.add(place2)
-    facade.place_repo.add(place3)
+    # place2 = Place(
+    #     owner_id=user2.id,
+    #     title="Modern Apartment",
+    #     description="A stylish apartment in the city.",
+    #     price=150.0,
+    #     latitude=34.0522,
+    #     longitude=-118.2437,
+    #     amenities=[amenity1],
+    # )
+    # place3 = Place(
+    #     owner_id=user2.id,
+    #     title="Test1",
+    #     description="Testest",
+    #     price=1520.0,
+    #     latitude=34.0522,
+    #     longitude=-118.2437,
+    #     amenities=[amenity1],
+    # )
+    # facade.place_repo.add(place1)
+    # facade.place_repo.add(place2)
+    # facade.place_repo.add(place3)
 
-    # Add some reviews
+    # # Add some reviews
 
-    review1 = Review(
-        owner_id=user1.id,
-        place_id=place1.id,
-        rating=4.5,
-        comment="Lovely cottage, very cozy and clean!",
-    )
+    # review1 = Review(
+    #     owner_id=user1.id,
+    #     place_id=place1.id,
+    #     rating=4.5,
+    #     comment="Lovely cottage, very cozy and clean!",
+    # )
 
-    review2 = Review(
-        owner_id=user2.id,
-        place_id=place1.id,
-        rating=4.0,
-        comment="Great location, but the WiFi was a bit slow.",
-    )
+    # review2 = Review(
+    #     owner_id=user2.id,
+    #     place_id=place1.id,
+    #     rating=4.0,
+    #     comment="Great location, but the WiFi was a bit slow.",
+    # )
 
-    review3 = Review(
-        owner_id=user1.id,
-        place_id=place2.id,
-        rating=5.0,
-        comment="Amazing apartment, would stay again!",
-    )
-    facade.review_repo.add(review1)
-    facade.review_repo.add(review2)
-    facade.review_repo.add(review3)
+    # review3 = Review(
+    #     owner_id=user1.id,
+    #     place_id=place2.id,
+    #     rating=5.0,
+    #     comment="Amazing apartment, would stay again!",
+    # )
+    # facade.review_repo.add(review1)
+    # facade.review_repo.add(review2)
+    # facade.review_repo.add(review3)
 
     # [Optional] add reviews to the place objects:
     # place1.reviews.extend([review1, review2])
     # place2.reviews.append(review3)
 
     # --- TEST DATA END ---
+    # endregion
 
     return app

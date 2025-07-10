@@ -1,17 +1,27 @@
-from app.persistence.repository import InMemoryRepository
-from sqlalchemy import create_engine
+# from app.persistence.repository import InMemoryRepository # Uncomment to use in-memory repository for testing purporses.
+from app.persitance.repository import SQLAlchemyRepository
+from app.models.user import User
+from app.models.user import Review
+from app.models.user import Place
+from app.models.user import Amenity
 
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
+        self.user_repo = SQLAlchemyRepository(User)
+        self.place_repo = SQLAlchemyRepository(Place)
+        self.amenity_repo = SQLAlchemyRepository(Amenity)
+        self.review_repo = SQLAlchemyRepository(Amenity)
 
-    # **************** USER CRAP *****************
+    # ************ IN-MEMORY REPO ******************
+    # self.user_repo = InMemoryRepository()
+    # self.place_repo = InMemoryRepository()
+    # self.amenity_repo = InMemoryRepository()
+    # self.review_repo = InMemoryRepository()
+
+    # **************** USER DATA MANAGEMENT *****************
     def create_user(self, user_data):
-        from app.models.user import User
+        # from app.models.user import User ***** IF RANDOM ERROR OCCURS, UNCOMMENT THIS AND IMPORT EACH MODEL INSIDE LOCAL SCOPE. ****
 
         user = User(**user_data)
         self.user_repo.add(user)
@@ -29,7 +39,7 @@ class HBnBFacade:
     def update_user(self, user_id, user_data):
         self.user_repo.update(user_id, user_data)
 
-    # ************* PLACE CRAP ********************
+    # ************* PLACE DATA MANAGEMENT ********************
     def create_place(self, place_data):
         from app.models.place import Place
 
@@ -49,7 +59,7 @@ class HBnBFacade:
     def delete_place(self, place_id):
         self.place_repo.delete(place_id)
 
-    # ************** AMENITY CRAP ******************
+    # ************** AMENITY DATA MANAGEMENT ******************
     def create_amenity(self, amenity_data):
         from app.models.amenity import Amenity
 
@@ -66,7 +76,7 @@ class HBnBFacade:
     def update_amenity(self, amenity_id, amenity_data):
         self.amenity_repo.update(amenity_id, amenity_data)
 
-    # *************** REVIEW CRAP *******************
+    # *************** REVIEW DATA MANAGEMENT *******************
     def create_review(self, review_data):
         from app.models.review import Review
 

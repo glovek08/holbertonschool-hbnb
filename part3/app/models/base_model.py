@@ -1,13 +1,26 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from datetime import datetime
 import uuid
 
+# SQLAlchemy stuff
+from app import db
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, DateTime
 
-class BaseModel(ABC):
-    def __init__(self):
-        self._id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+
+class BaseModel(db.Model, ABC):
+    __abstract__ = True
+
+    id: Mapped[str] = mapped_column(
+        db.String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+    # self._id = str(uuid.uuid4())
+    # self.created_at utc= etime.now()
+    # self.updated_at = datetime.now()
 
     @staticmethod
     def validate_string(value, field_name):
@@ -24,13 +37,14 @@ class BaseModel(ABC):
             raise TypeError(f"{field_name} must be a number!")
         return float(value)  # Return float to prevent loss of shit.
 
-    @property
-    def id(self):
-        return self._id
+    # @property
+    # def id(self):
+    #     return self._id
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
-        self.updated_at = datetime.now()
+        # IF CHANGES ARE NOT MADE, USE COMMIT DELETE OTHERWISE
+        self.updated_at = datetime.utcnow()
 
     def update(self, data: dict):
         for key, value in data.items():
