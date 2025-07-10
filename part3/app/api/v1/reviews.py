@@ -128,6 +128,8 @@ class ReviewResource(Resource):
         if not check_api_payload(review_new_data, update_review_model):
             return {"error": "Invalid input data"}, 400
         current_user = get_jwt_identity()
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
         review = facade.get_review(review_id)
 
         if not review:
