@@ -4,8 +4,8 @@ import uuid
 
 # SQLAlchemy stuff
 from app import db
+from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, DateTime
 
 
 class BaseModel(db.Model, ABC):
