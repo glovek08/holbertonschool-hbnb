@@ -1,20 +1,24 @@
+# fmt: off
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.utils import check_api_payload
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("places", description="Place operations")
 
-# Define the place model for input validation and documentation
+
+# potential improvement: we are returning the same shit in two responses, find way to recycle code.
+
 place_model = api.model(
     "Place",
     {
-        "title": fields.String(required=True, description="Title of the place"),
-        "description": fields.String(description="Description of the place"),
-        "price": fields.Float(required=True, description="Price per night"),
-        "latitude": fields.Float(required=True, description="Latitude of the place"),
-        "longitude": fields.Float(required=True, description="Longitude of the place"),
-        "owner_id": fields.String(required=True, description="ID of the owner"),
-        "amenities": fields.List(
+        "title":        fields.String(required=True, description="Title of the place"),
+        "description":  fields.String(description="Description of the place"),
+        "price":        fields.Float(required=True, description="Price per night"),
+        "latitude":     fields.Float(required=True, description="Latitude of the place"),
+        "longitude":    fields.Float(required=True, description="Longitude of the place"),
+        "owner_id":     fields.String(required=True, description="ID of the owner"),
+        "amenities":    fields.List(
             fields.String, required=True, description="List of amenities ID's"
         ),
     },
@@ -31,26 +35,25 @@ class PlaceList(Resource):
     @jwt_required()
     def post(self):
         """Register a new place"""
-        # jwt validation, checks if the user posting this new place
-        # is the same as the owner of this place.
-        current_user = get_jwt_identity()
-        # commented till we know how to implement it. But left for future reference.
-        # claims = get_jwt()
-        # is_admin = claims.get("is_admin", False)
         place_data = api.payload
-        if place_data["owner_id"] != current_user:
+        current_user = get_jwt_identity()
+        claims = get_jwt()
+
+        if not (claims.get("is_admin", False) or place_data["owner_id"] == current_user):
             return {"error": "Unauthorized: cannot create place for another user"}, 403
+
         try:
             new_place = facade.create_place(place_data)
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
+
         return {
-            "owner_id": new_place.owner_id,
-            "title": new_place.title,
-            "description": new_place.description,
-            "price": new_place.price,
-            "latitude": new_place.latitude,
-            "longitude": new_place.longitude,
+            "owner_id":     new_place.owner_id,
+            "title":        new_place.title,
+            "description":  new_place.description,
+            "price":        new_place.price,
+            "latitude":     new_place.latitude,
+            "longitude":    new_place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,
@@ -67,21 +70,21 @@ class PlaceList(Resource):
         places = facade.get_all_places()
         return [
             {
-                "id": place.id,
+                "id":       place.id,
                 "owner_id": place.owner_id,
                 "owner": (
                     {
                         "first_name": owner.first_name,
-                        "last_name": owner.last_name,
+                        "last_name":  owner.last_name,
                     }
                     if (owner := facade.get_user(place.owner_id))
                     else None
                 ),
-                "title": place.title,
-                "description": place.description,
-                "price": place.price,
-                "latitude": place.latitude,
-                "longitude": place.longitude,
+                "title":        place.title,
+                "description":  place.description,
+                "price":        place.price,
+                "latitude":     place.latitude,
+                "longitude":    place.longitude,
                 "amenities": [
                     {
                         "id": amenity.id,
@@ -109,21 +112,21 @@ class PlaceResource(Resource):
         try:
             owner = facade.get_user(place.owner_id)
             owner_basic_info = {
-                "first_name": owner.first_name,  # type: ignore
-                "last_name": owner.last_name,  # type: ignore
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
             }
         except ValueError as error:
             return {"error": str(error)}, 400
 
         return {
-            "id": place.id,
-            "owner_id": place.owner_id,
-            "owner": owner_basic_info,
-            "title": place.title,
-            "description": place.description,
-            "price": place.price,
-            "latitude": place.latitude,
-            "longitude": place.longitude,
+            "id":           place.id,
+            "owner_id":     place.owner_id,
+            "owner":        owner_basic_info,
+            "title":        place.title,
+            "description":  place.description,
+            "price":        place.price,
+            "latitude":     place.latitude,
+            "longitude":    place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,
@@ -176,14 +179,14 @@ class PlaceResource(Resource):
             return {"error": str(error)}, 400
 
         return {
-            "id": place.id,
-            "owner_id": place.owner_id,
-            "owner": owner_basic_info,
-            "title": place.title,
-            "description": place.description,
-            "price": place.price,
-            "latitude": place.latitude,
-            "longitude": place.longitude,
+            "id":           place.id,
+            "owner_id":     place.owner_id,
+            "owner":        owner_basic_info,
+            "title":        place.title,
+            "description":  place.description,
+            "price":        place.price,
+            "latitude":     place.latitude,
+            "longitude":    place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,
@@ -198,7 +201,7 @@ class PlaceResource(Resource):
     @api.response(200, "Place deleted successfully")
     @api.response(404, "Place not found")
     @jwt_required()
-    def delete(self, review_id):
+    def delete(self, place_id):
         """Delete a place"""
         current_user = get_jwt_identity()
         claims = get_jwt()

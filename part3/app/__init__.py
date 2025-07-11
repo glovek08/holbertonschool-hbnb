@@ -1,14 +1,8 @@
 from flask import Flask, send_from_directory
 from flask_restx import Api
 
-# from sqlalchemy.orm import DeclarativeBase # not used in flask_sqlalchemy (I think)
-
-
 from config import DevelopmentConfig
-from app.extensions import bcrypt
-from app.extensions import jwt
-
-# from app.extensions import db
+from app.extensions import bcrypt, jwt, db
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
@@ -22,9 +16,6 @@ from app.models.place import Place
 from app.models.user import User
 from app.models.review import Review
 from app.custom_ui import custom_ui
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 
 
 def create_app(config_class="config.DevelopmentConfig"):

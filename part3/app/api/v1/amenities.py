@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("amenities", description="Amenity operations")
 
-# Define the amenity model for input validation and documentation
 amenity_model = api.model(
     "AmenityInput",
     {
@@ -70,13 +69,13 @@ class AmenityResource(Resource):
     def get(self, amenity_id):
         """Get amenity details by ID"""
         my_amenity = facade.get_amenity(amenity_id)
-        if not amenity:  # type: ignore
+        if not amenity:
             return {"error": "Amenity not found"}, 404
 
         return {
-            "id": my_amenity.id,  # type: ignore
-            "name": my_amenity.name,  # type: ignore
-            "description": my_amenity.description,  # type: ignore
+            "id": my_amenity.id,
+            "name": my_amenity.name,
+            "description": my_amenity.description,
         }, 200
 
     @api.expect(amenity_model, validate=True)
@@ -88,10 +87,12 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
         """Update an amenity's information"""
         amenity_data = api.payload
+
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
         if not is_admin:
             return {"error": "Admin privileges required"}, 403
+
         my_amenity = facade.get_amenity(amenity_id)
         if not my_amenity:
             return {"error": "Amenity not found"}, 404

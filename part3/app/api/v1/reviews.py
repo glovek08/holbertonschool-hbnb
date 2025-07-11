@@ -1,3 +1,4 @@
+# fmt: off
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from http import HTTPStatus
@@ -6,37 +7,36 @@ from app.utils import check_api_payload
 
 api = Namespace("reviews", description="Review operations")
 
-# Define the review model for input validation and documentation
 review_model = api.model(
     "ReviewInput",
     {
         "owner_id": fields.String(required=True, description="ID of the user"),
         "place_id": fields.String(required=True, description="ID of the place"),
-        "rating": fields.Integer(
+        "rating":   fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=True, description="Text of the review"),
+        "comment":  fields.String(required=True, description="Text of the review"),
     },
 )
 update_review_model = api.model(
     "ReviewUpdate",
     {
-        "rating": fields.Integer(
+        "rating":   fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=True, description="Text of the review"),
+        "comment":  fields.String(required=True, description="Text of the review"),
     },
 )
 response_review_model = api.model(
     "ReviewResponse",
     {
-        "id": fields.String(required=True, description="ID of the review"),
+        "id":       fields.String(required=True, description="ID of the review"),
         "owner_id": fields.String(required=True, description="ID of the user"),
         "place_id": fields.String(required=True, description="ID of the place"),
-        "rating": fields.Integer(
+        "rating":   fields.Integer(
             required=True, description="Rating of the place (1-5)"
         ),
-        "comment": fields.String(required=True, description="Text of the review"),
+        "comment":  fields.String(required=True, description="Text of the review"),
     },
 )
 
@@ -52,32 +52,31 @@ class ReviewList(Resource):
         """Create a new review"""
         current_user = get_jwt_identity()
         review_data = api.payload
-        # user is authenticated
         if review_data["owner_id"] != current_user:
             return {"error": "Not Authorized"}, 403
-        # place exists
+
         review_target_place = facade.get_place(review_data["place_id"])
         if not review_target_place:
             return {"error": "Place doesn't exist"}, 400
-        # user is not the owner of the place
+
         if review_target_place.owner_id == current_user:
             return {"error": "You cannot review your own place"}, 400
-        # user has already review this place
+
         for review in review_target_place.reviews:
             if review.owner_id == current_user:
                 return {"error": "You have already reviewed this place"}, 400
 
         try:
             new_review = facade.create_review(review_data)
-        except (TypeError, ValueError) as e:
-            return {"error": str(e)}, 400
+        except (TypeError, ValueError) as error:
+            return {"error": str(error)}, 400
 
         return {
-            "id": new_review.id,
+            "id":       new_review.id,
             "owner_id": new_review.owner_id,
             "place_id": new_review.place_id,
-            "rating": new_review.rating,
-            "comment": new_review.comment,
+            "rating":   new_review.rating,
+            "comment":  new_review.comment,
         }, 201
 
     @api.response(200, "List of reviews retrieved successfully")
@@ -87,11 +86,11 @@ class ReviewList(Resource):
         reviews = facade.get_all_reviews()
         return [
             {
-                "id": review.id,
+                "id":       review.id,
                 "owner_id": review.owner_id,
                 "place_id": review.place_id,
-                "rating": review.rating,
-                "comment": review.comment,
+                "rating":   review.rating,
+                "comment":  review.comment,
             }
             for review in reviews
         ]
@@ -109,11 +108,11 @@ class ReviewResource(Resource):
             return {"error": "Review not found"}, 404
 
         return {
-            "id": review.id,
+            "id":       review.id,
             "owner_id": review.owner_id,
             "place_id": review.place_id,
-            "rating": review.rating,
-            "comment": review.comment,
+            "rating":   review.rating,
+            "comment":  review.comment,
         }, 200
 
     @api.expect(update_review_model, validate=True)
@@ -125,7 +124,6 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
-
         if not check_api_payload(review_new_data, update_review_model):
             return {"error": "Invalid input data"}, 400
 
@@ -146,11 +144,11 @@ class ReviewResource(Resource):
             return {"error": str(e)}, 400
 
         return {
-            "id": review.id,
+            "id":       review.id,
             "owner_id": review.owner_id,
             "place_id": review.place_id,
-            "rating": review.rating,
-            "comment": review.comment,
+            "rating":   review.rating,
+            "comment":  review.comment,
         }, 200
 
     @api.doc(params={"review_id": "The unique ID of the review"})
@@ -161,13 +159,11 @@ class ReviewResource(Resource):
         """Delete a review"""
         current_user = get_jwt_identity()
         review = facade.get_review(review_id)
-
         if not review:
             return {"error": "Review not found"}, 404
 
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
-
         if not is_admin and review.owner_id != current_user:
             return {"error": "Unauthorized action."}, 403
 
@@ -194,11 +190,11 @@ class PlaceReviewList(Resource):
 
         return [
             {
-                "id": review.id,
+                "id":       review.id,
                 "owner_id": review.owner_id,
                 "place_id": review.place_id,
-                "rating": review.rating,
-                "comment": review.comment,
+                "rating":   review.rating,
+                "comment":  review.comment,
             }
             for review in reviews
         ], 200

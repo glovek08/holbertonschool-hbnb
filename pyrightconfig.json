@@ -1,0 +1,46 @@
+{
+    "include": [
+        "part2",
+        "part3"
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__",
+        "**/.git"
+    ],
+    "extraPaths": [
+        "./part2",
+        "./part3",
+        "./part2/app",
+        "./part3/app"
+    ],
+    "pythonVersion": "3.10",
+    "pythonPlatform": "Linux",
+    "executionEnvironments": [
+        {
+            "root": "./part2",
+            "pythonVersion": "3.10",
+            "extraPaths": [
+                "./",
+                "../part2/app"
+            ]
+        },
+        {
+            "root": "./part3",
+            "pythonVersion": "3.10",
+            "extraPaths": [
+                "./",
+                "../part3/app"
+            ]
+        }
+    ],
+    "typeCheckingMode": "basic",
+    "useLibraryCodeForTypes": true,
+    "autoImportCompletions": true,
+    "autoSearchPaths": true,
+    "stubPath": "/home/gabriolo/.local/lib/python3.10/site-packages",
+    "reportMissingImports": "warning",
+    "reportUnusedImport": "information",
+    "reportUnusedClass": "information",
+    "reportUnusedFunction": "information"
+}
