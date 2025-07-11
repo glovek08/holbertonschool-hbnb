@@ -5,7 +5,7 @@ import uuid
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 from sqlalchemy.ext.declarative import DeclarativeMeta
-from app import db  # PROBLEM HERE CIRCULAR fUCKING IMPORT!
+from app.extensions import db
 
 
 class BaseModel(db.Model):

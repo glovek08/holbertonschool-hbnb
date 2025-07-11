@@ -11,6 +11,9 @@ from typing import (
 from sqlalchemy import Float, String, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
+#test_stuff
+from app.extensions import db
+
 place_amenities = Table(
     "place_amenities",
     db.metadata,

@@ -1,8 +1,14 @@
 from app.models.base_model import BaseModel
 from app.services import facade
 
+
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
+
+
+# test_stuff
+from typing import List, TYPE_CHECKING
+from app.models.place import place_amenities
 
 
 class Amenity(BaseModel):
@@ -11,8 +17,13 @@ class Amenity(BaseModel):
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
-    places = relationship(
-        secondary=place_amenities, back_populates="amenities", overlaps="places"
+    if TYPE_CHECKING:
+        from app.models.place import Place
+    places: Mapped[List["Place"]] = relationship(
+        "Place",
+        secondary=place_amenities,
+        back_populates="amenities",
+        overlaps="places",
     )
 
     @validates("name")

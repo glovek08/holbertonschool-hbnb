@@ -29,7 +29,7 @@ class User(BaseModel):
 
     # First Name
     @validates("first_name")
-    def first_name(self, key, value):
+    def validate_first_name(self, key, value):
         return self.validate_string(value, "First Name")
 
     # Last Name
