@@ -1,31 +1,27 @@
 from app.models.base_model import BaseModel
 from app.services import facade
 
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
+
 
 class Amenity(BaseModel):
-    def __init__(self, name, description: str = "n/a"):
-        super().__init__()
-        self.name = name
-        self.description = description
-        # self.__icon = icon
 
-    @property
-    def name(self):
-        return self.__name
+    __tablename__ = "amenities"
 
-    @name.setter
-    def name(self, value: str):
+    name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    description: Mapped[str] = mapped_column(String(500), nullable=True)
+    places = relationship(
+        secondary=place_amenities, back_populates="amenities", overlaps="places"
+    )
+
+    @validates("name")
+    def name(self, key: str, value: str):
         value = super().validate_string(value, "Name")
-        if facade.amenity_repo.get_by_attribute("name", value):
-            raise ValueError("Amenity already exist")
-        self.__name = value
+        return value
 
-    @property
-    def description(self):
-        return self.__description
-
-    @description.setter
-    def description(self, value: str):
+    @validates("description")
+    def description(self, key: str, value: str):
         if not isinstance(value, str):
             raise TypeError("Description must be a string!")
-        self.__description = value
+        return value

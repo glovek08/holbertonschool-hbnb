@@ -3,12 +3,11 @@ from app.models.base_model import BaseModel
 from app.extensions import bcrypt
 
 # SQLAlchemy stuff
-from app import db
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, validates
 
 
-class User(db.Model, BaseModel):
+class User(BaseModel):
     __tablename__ = "users"
 
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -18,6 +17,7 @@ class User(db.Model, BaseModel):
     is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     # max length of 50 chars.
+    @staticmethod
     def validate_string(self, value, field_name):
         value = super().validate_string(value, field_name)
         if field_name == "First Name" or field_name == "Last Name":

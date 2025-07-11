@@ -1,38 +1,70 @@
-from typing import Optional, List
+# fmt: off
 from app.models.base_model import BaseModel
-from app.models.amenity import Amenity
 from app.models.user import User
 from app.services import facade
+from typing import (
+    Optional,
+    List,
+)  # For type hints, will probably be removed after sqlalchemy
+
+# SQLAlchemy crap.
+from sqlalchemy import Float, String, ForeignKey, Table, Column
+from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
+
+place_amenities = Table(
+    "place_amenities",
+    db.metadata,
+    Column("place_id", ForeignKey("place.owner_id"), primary_key=True),
+    Column("amenity_id", ForeignKey("amenity.id"), primary_key=True)
+)
 
 
 class Place(BaseModel):
-    def __init__(
-        self,
-        owner_id: str,
-        title: str,
-        description: str,
-        price: float,
-        latitude: float,
-        longitude: float,
-        amenities: Optional[List[Amenity]] = None,
-        reviews: Optional[list] = None,
-    ):
-        super().__init__()
-        self.owner_id = owner_id
-        self.title = title
-        self.description = description
-        self.price = price
-        self.latitude = latitude
-        self.longitude = longitude
-        self.amenities = amenities if amenities is not None else []
-        self.reviews = reviews if reviews is not None else []
+    __tablename__ = "places"
 
-    # Owner ID
-    @property
-    def owner_id(self):
-        return self.__owner_id
+    owner_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("user.id"), nullable=False
+    )
+    title:       Mapped[str] = mapped_column(String(100), nullable=False)
+    description: Mapped[str] = mapped_column(String(500), nullable=True)
+    price:       Mapped[float] = mapped_column(Float, nullable=False)
+    latitude:    Mapped[float] = mapped_column(Float, nullable=False)
+    longitude:   Mapped[Float] = mapped_column(Float, nullable=False)
+    amenities = relationship(
+        secondary= place_amenities, back_populates="places", overlaps="amenities"
+    )
+    # revies:     Mapped[List["Review"]] = relationship(
+    #     secondary= place_reviews, back_populates="review"
+    # )
+    
 
-    @owner_id.setter
+    # def __init__(
+    #     self,
+    #     # owner_id: str,
+    #     title: str,
+    #     description: str,
+    #     price: float,
+    #     latitude: float,
+    #     longitude: float,
+    #     amenities: Optional[List[Amenity]] = None,
+    #     reviews: Optional[list] = None,
+    # ):
+    #     super().__init__()
+    #     self.owner_id = owner_id
+    #     self.title = title
+    #     self.description = description
+    #     self.price = price
+    #     self.latitude = latitude
+    #     self.longitude = longitude
+    #     self.amenities = amenities if amenities is not None else []
+    #     self.reviews = reviews if reviews is not None else []
+
+    # OWNER ID
+    # @property
+    # def owner_id(self):
+    #     return self.__owner_id
+
+    @validates("owner_id")
     def owner_id(self, value: str):
         if not isinstance(value, str):
             raise TypeError("Owner ID must be a string")
@@ -43,74 +75,75 @@ class Place(BaseModel):
         if not user:
             raise ValueError("User does not exist")
 
-        self.__owner_id = value
+        return value # shouldn we return the value, since owner id is handled by the ORM now.
+        # self.__owner_id = value
 
-    # Title
-    @property
-    def title(self):
-        return self.__title
+    # TITLE
+    # @property
+    # def title(self):
+    #     return self.__title
 
-    @title.setter
+    @validates("title")
     def title(self, value: str):
         value = super().validate_string(value, "Title")
         if len(value) > 100:
             raise ValueError(f"Title must not exceed 100 characters.")
-        self.__title = value
+        return value
 
-    # Description
-    @property
-    def description(self):
-        return self.__description
+    # DESCRIPTION
+    # @property
+    # def description(self):
+    #     return self.__description
 
-    @description.setter
+    @validates("description")
     def description(self, value: str):
         if not isinstance(value, str):
             raise TypeError("Description must be a string")
-        self.__description = value.strip()
+        return value.strip()
 
-    # Price
-    @property
-    def price(self):
-        return self.__price
+    # PRICE
+    # @property
+    # def price(self):
+    #     return self.__price
 
-    @price.setter
+    @validates("price")
     def price(self, value: float):
         if not isinstance(value, (int, float)):
             raise TypeError("Price must be a number")
         if value <= 0:
             raise ValueError("Price must be positive")
-        self.__price = float(value)
+        return float(value)
 
-    # Latitude
-    @property
-    def latitude(self):
-        return self.__latitude
+    # LATITUDE
+    # @property
+    # def latitude(self):
+    #     return self.__latitude
 
-    @latitude.setter
+    @validates("latitude")
     def latitude(self, value: float):
         value = super().validate_number(value, "Latitude")
         if not -90 <= value <= 90:
             raise ValueError("Latitude must be between -90 and 90")
-        self.__latitude = value
+        return value
 
-    # Longitude
-    @property
-    def longitude(self):
-        return self.__longitude
+    # LONGITUDE
+    # @property
+    # def longitude(self):
+    #     return self.__longitude
 
-    @longitude.setter
+    @validates("longitude")
     def longitude(self, value: float):
         value = super().validate_number(value, "Longitude")
         if not -180 <= value <= 180:
             raise ValueError("Longitude must be between -180 and 180")
-        self.__longitude = value
+        return value
 
-    # Amenities
-    @property
-    def amenities(self):
-        return self.__amenities.copy()
+    # AMENITIES
+    # @property
+    # def amenities(self):
+    #     return self.__amenities.copy()
 
-    @amenities.setter
+    @validates("amenities")
     def amenities(self, value: list):
         if not isinstance(value, list):
             raise TypeError("Amenities must be a list")
@@ -121,34 +154,36 @@ class Place(BaseModel):
             if amenity:
                 amenity_objs.append(amenity)
 
-        self.__amenities = amenity_objs.copy()
+        return amenity_objs
+        # self.__amenities = amenity_objs.copy()
 
-    def add_amenity(self, amenity: Amenity):
-        """Add an amenity to the place"""
-        if not isinstance(amenity, Amenity):
-            raise TypeError("Value must be an Amenity")
-        if amenity not in self.__amenities:
-            self.__amenities.append(amenity)
+    # def add_amenity(self, amenity: Amenity):
+    #     """Add an amenity to the place"""
+    #     if not isinstance(amenity, Amenity):
+    #         raise TypeError("Value must be an Amenity")
+    #     if amenity not in self.__amenities:
+    #         self.__amenities.append(amenity)
 
-    def remove_amenity(self, amenity):
-        """Remove an amenity from the place"""
-        if amenity in self.__amenities:
-            self.__amenities.remove(amenity)
+    # def remove_amenity(self, amenity):
+    #     """Remove an amenity from the place"""
+    #     if amenity in self.__amenities:
+    #         self.__amenities.remove(amenity)
 
-    @property
-    def reviews(self):
-        return self.__reviews.copy()
+    # REVIEWS
+    # @property
+    # def reviews(self):
+    #     return self.__reviews.copy()
 
-    @reviews.setter
+    @validates("reviews")
     def reviews(self, value: list):
         if not isinstance(value, list):
             raise TypeError("Reviews must be a list")
-        self.__reviews = value
+        return value
 
-    def add_review(self, review):
-        if review not in self.__reviews:
-            self.__reviews.append(review)
+    # def add_review(self, review):
+    #     if review not in self.__reviews:
+    #         self.__reviews.append(review)
 
-    def remove_review(self, review):
-        if review in self.__reviews:
-            self.__reviews.remove(review)
+    # def remove_review(self, review):
+    #     if review in self.__reviews:
+    #         self.__reviews.remove(review)

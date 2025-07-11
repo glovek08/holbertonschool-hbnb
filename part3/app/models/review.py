@@ -1,21 +1,24 @@
 from app.models.base_model import BaseModel
 from app.services import facade
 
+from sqlalchemy import Float, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
+
 
 class Review(BaseModel):
-    def __init__(self, owner_id: str, place_id: str, rating: float, comment: str):
-        super().__init__()
-        self.owner_id = owner_id
-        self.place_id = place_id
-        self.rating = rating
-        self.comment = comment
+    __tablename__ = "reviews"
 
-    @property
-    def owner_id(self):
-        return self.__owner_id
+    owner_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("user.id"), nullable=False
+    )
+    place_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("place.id"), nullable=False
+    )
+    rating: Mapped[Float] = mapped_column(Float, nullable=False)
+    comment: Mapped[str] = mapped_column(String(500), nullable=False)
 
-    @owner_id.setter
-    def owner_id(self, value):
+    @validates("owner_id")
+    def owner_id(self, key: str, value: str):
         if not isinstance(value, str):
             raise TypeError("owner_id must be a string!")
         if not value.strip():
@@ -24,36 +27,25 @@ class Review(BaseModel):
             facade.get_user(value)
         except ValueError:
             raise ValueError("User does not exist!")
-        self.__owner_id = value
+        return value
 
-    @property
-    def place_id(self):
-        return self.__place_id
-
-    @place_id.setter
-    def place_id(self, value):
+    @validates("place_id")
+    def place_id(self, key: str, value: str) -> str:
         if not isinstance(value, str):
             raise TypeError("place_id must be a string!")
-        self.__place_id = value
+        return value
 
-    @property
-    def rating(self):
-        return self.__rating
-
-    @rating.setter
-    def rating(self, value):
+    @validates("ration")
+    def rating(self, key: str, value: str):
         if not isinstance(value, (int, float)):
             raise TypeError("Rating must be a number!")
         if not (0 <= value <= 5):
             raise ValueError("Incorrect Rating value")
-        self.__rating = value
+        return value
 
-    @property
-    def comment(self):
-        return self.__comment
-
-    @comment.setter
-    def comment(self, value):
-        self.__comment = self.validate_string(value, "comment")
+    @validates("comment")
+    def comment(self, key: str, value: str):
+        if self.validate_string(value, "comment"):
+            return value
 
     # self.__name = self.validate_string(value, "name").isalpha()

@@ -125,8 +125,10 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_new_data = api.payload
+
         if not check_api_payload(review_new_data, update_review_model):
             return {"error": "Invalid input data"}, 400
+
         current_user = get_jwt_identity()
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
@@ -159,13 +161,18 @@ class ReviewResource(Resource):
         """Delete a review"""
         current_user = get_jwt_identity()
         review = facade.get_review(review_id)
+
         if not review:
             return {"error": "Review not found"}, 404
+
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
+
         if not is_admin and review.owner_id != current_user:
             return {"error": "Unauthorized action."}, 403
+
         facade.delete_review(review_id)
+
         return {"message": "Review deleted successfully"}, 200
 
 

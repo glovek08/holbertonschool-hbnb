@@ -1,14 +1,15 @@
 # from app.persistence.repository import InMemoryRepository # Uncomment to use in-memory repository for testing purporses.
-from app.persitance.repository import SQLAlchemyRepository
+from app.persistence.repository import SQLAlchemyRepository
+from app.persistence.user_repo import UserRepository
 from app.models.user import User
-from app.models.user import Review
-from app.models.user import Place
-from app.models.user import Amenity
+from app.models.review import Review
+from app.models.place import Place
+from app.models.amenity import Amenity
 
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = SQLAlchemyRepository(User)
+        self.user_repo = UserRepository(User)
         self.place_repo = SQLAlchemyRepository(Place)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
         self.review_repo = SQLAlchemyRepository(Amenity)

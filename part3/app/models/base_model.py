@@ -1,26 +1,23 @@
-from abc import ABC
 from datetime import datetime
 import uuid
 
 # SQLAlchemy stuff
-from app import db
-from sqlalchemy import DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DateTime, String
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
+from sqlalchemy.ext.declarative import DeclarativeMeta
+from app import db  # PROBLEM HERE CIRCULAR fUCKING IMPORT!
 
 
-class BaseModel(db.Model, ABC):
+class BaseModel(db.Model):
     __abstract__ = True
 
     id: Mapped[str] = mapped_column(
-        db.String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
-    # self._id = str(uuid.uuid4())
-    # self.created_at utc= etime.now()
-    # self.updated_at = datetime.now()
 
     @staticmethod
     def validate_string(value, field_name):
@@ -41,23 +38,21 @@ class BaseModel(db.Model, ABC):
     # def id(self):
     #     return self._id
 
-    def save(self):
-        """Update the updated_at timestamp whenever the object is modified"""
-        # IF CHANGES ARE NOT MADE, USE COMMIT DELETE OTHERWISE
-        self.updated_at = datetime.utcnow()
-
     def update(self, data: dict):
         for key, value in data.items():
             if hasattr(self, key) and key not in ["id", "created_at"]:
                 current_value = getattr(self, key)
                 if current_value != value:
                     setattr(self, key, value)
-        self.save()
+                    print(f"{self.to_dict} Updated")
 
-    def export_data(self):
+    def to_dict(self):
         data = {
             "id": self.id,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }
         return data
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} id={self.id}>"
