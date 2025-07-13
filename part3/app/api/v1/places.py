@@ -205,12 +205,13 @@ class PlaceResource(Resource):
         current_user = get_jwt_identity()
         claims = get_jwt()
         is_admin = claims.get("is_admin", False)
-        if not is_admin:
-            return {"error": "Unauthorized action."}, 403
 
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
+
+        if not (is_admin or place.owner_id == current_user):
+            return {"error": "Unauthorized action"}, 403
 
         facade.delete_place(place_id)
 
