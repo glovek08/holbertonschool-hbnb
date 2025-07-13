@@ -156,4 +156,24 @@ def create_app(config_class="config.DevelopmentConfig"):
     # --- TEST DATA END ---
     # endregion
 
+    # with app.app_context():
+    #     from app.services import facade
+
+    #     user_data = {
+    #         "first_name": "Alice",
+    #         "last_name": "Smith",
+    #         "email": "alice@example.com",
+    #         "password": "secure123",  # your User model hashes this automatically
+    #         "is_admin": False,
+    #     }
+
+    #     try:
+    #         new_user = facade.create_user(user_data)
+    #         print(f"User created: {new_user}")
+    #     except ValueError as error:
+    #         print(f"Error creating user: {error}")
+    #     db.session.add(new_user)
+    #     db.session.commit()
+    #     db.create_all()  # Only for development!
+
     return app

@@ -9,43 +9,46 @@ class Review(BaseModel):
     __tablename__ = "reviews"
 
     owner_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("user.id"), nullable=False
+        String(36), ForeignKey("users.id"), nullable=False
     )
     place_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("place.id"), nullable=False
+        String(36), ForeignKey("places.id"), nullable=False
     )
     rating: Mapped[Float] = mapped_column(Float, nullable=False)
     comment: Mapped[str] = mapped_column(String(500), nullable=False)
 
+    # Relationships
+    user: Mapped["User"] = relationship("User", back_populates="reviews")
+    place: Mapped["Place"] = relationship("Place", back_populates="reviews")
+
     @validates("owner_id")
-    def owner_id(self, key: str, value: str):
+    def validate_owner_id(self, key: str, value: str):
         if not isinstance(value, str):
             raise TypeError("owner_id must be a string!")
         if not value.strip():
             raise ValueError("owner_id cannot be empty!")
-        try:
-            facade.get_user(value)
-        except ValueError:
-            raise ValueError("User does not exist!")
         return value
 
+    # PLACE IDD
     @validates("place_id")
-    def place_id(self, key: str, value: str) -> str:
+    def validate_place_id(self, key: str, value: str) -> str:
         if not isinstance(value, str):
             raise TypeError("place_id must be a string!")
         return value
 
-    @validates("ration")
-    def rating(self, key: str, value: str):
+    # RATING
+    @validates("rating")
+    def validate_rating(self, key: str, value: float):
         if not isinstance(value, (int, float)):
             raise TypeError("Rating must be a number!")
         if not (0 <= value <= 5):
             raise ValueError("Incorrect Rating value")
         return value
 
+    # COMMENT
     @validates("comment")
-    def comment(self, key: str, value: str):
-        if self.validate_string(value, "comment"):
-            return value
+    def validate_comment(self, key: str, value: str):
+        return self.validate_string(value, "Comment")
 
-    # self.__name = self.validate_string(value, "name").isalpha()
+    def __repr__(self):
+        return f"<Review author_id={self.owner_id}>"

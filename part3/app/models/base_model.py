@@ -19,8 +19,7 @@ class BaseModel(db.Model):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    @staticmethod
-    def validate_string(value, field_name):
+    def validate_string(self, value, field_name):
         if not isinstance(value, str):
             raise TypeError(f"{field_name} must be a string!")
         value = value.strip()

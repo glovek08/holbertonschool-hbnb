@@ -113,7 +113,7 @@ class PlaceResource(Resource):
             owner = facade.get_user(place.owner_id)
             owner_basic_info = {
                 "first_name": owner.first_name,
-                "last_name": owner.last_name,
+                "last_name":  owner.last_name,
             }
         except ValueError as error:
             return {"error": str(error)}, 400

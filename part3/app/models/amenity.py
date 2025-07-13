@@ -17,22 +17,27 @@ class Amenity(BaseModel):
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
-    if TYPE_CHECKING:
-        from app.models.place import Place
+    # if TYPE_CHECKING:
+    #   from app.models.place import Place    If circular import put again.
     places: Mapped[List["Place"]] = relationship(
         "Place",
         secondary=place_amenities,
         back_populates="amenities",
-        overlaps="places",
+        overlaps="amenities",
     )
 
+    # NAME
     @validates("name")
     def name(self, key: str, value: str):
         value = super().validate_string(value, "Name")
         return value
 
+    # DESCRIPTION
     @validates("description")
     def description(self, key: str, value: str):
         if not isinstance(value, str):
             raise TypeError("Description must be a string!")
         return value
+
+    def __repr__(self):
+        return f"<Amenity id={self.id} name={self.name!r}>"
