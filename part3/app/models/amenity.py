@@ -2,7 +2,7 @@ from app.models.base_model import BaseModel
 from app.services import facade
 
 
-from sqlalchemy import String
+from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
 
@@ -16,7 +16,7 @@ class Amenity(BaseModel):
     __tablename__ = "amenities"
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
-    description: Mapped[str] = mapped_column(String(500), nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
     # if TYPE_CHECKING:
     #   from app.models.place import Place    If circular import put again.
     places: Mapped[List["Place"]] = relationship(

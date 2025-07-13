@@ -33,10 +33,6 @@ class BaseModel(db.Model):
             raise TypeError(f"{field_name} must be a number!")
         return float(value)  # Return float to prevent loss of shit.
 
-    # @property
-    # def id(self):
-    #     return self._id
-
     def update(self, data: dict):
         for key, value in data.items():
             if hasattr(self, key) and key not in ["id", "created_at"]:
