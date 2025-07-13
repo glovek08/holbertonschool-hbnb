@@ -28,13 +28,13 @@ class Amenity(BaseModel):
 
     # NAME
     @validates("name")
-    def name(self, key: str, value: str):
+    def validate_name(self, key: str, value: str):
         value = super().validate_string(value, "Name")
         return value
 
     # DESCRIPTION
     @validates("description")
-    def description(self, key: str, value: str):
+    def validate_description(self, key: str, value: str):
         if not isinstance(value, str):
             raise TypeError("Description must be a string!")
         return value
