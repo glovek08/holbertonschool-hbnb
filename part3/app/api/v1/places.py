@@ -159,10 +159,9 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        if (
-            not is_admin
-            or (place.owner_id != current_user)
-            or (place_new_data["owner_id"] != current_user)  # Potential error
+        if not is_admin and (
+            place.owner_id != current_user or 
+            place_new_data["owner_id"] != current_user
         ):
             return {"error": "Unauthorized action"}, 403
 
