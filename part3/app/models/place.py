@@ -4,7 +4,7 @@ from app.services import facade
 from typing import Optional, List
 
 # SQLAlchemy crap.
-from sqlalchemy import Float, String, ForeignKey, Table, Column
+from sqlalchemy import Float, String, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
 from app.extensions import db
@@ -28,7 +28,7 @@ class Place(BaseModel):
         String(36), ForeignKey("users.id"), nullable=False
     )
     title:       Mapped[str] = mapped_column(String(100), nullable=False)
-    description: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     price:       Mapped[float] = mapped_column(Float, nullable=False)
     latitude:    Mapped[float] = mapped_column(Float, nullable=False)
     longitude:   Mapped[float] = mapped_column(Float, nullable=False)
@@ -103,6 +103,29 @@ class Place(BaseModel):
         if not -180 <= value <= 180:
             raise ValueError("Longitude must be between -180 and 180")
         return value
+
+    def to_dict(self):
+        data = super().to_dict()
+        data.update(
+            owner_id=self.owner_id,
+            owner={
+                "first_name": self.owner.first_name,
+                "last_name": self.owner.last_name
+            } if self.owner else None,
+            title=self.title,
+            description=self.description,
+            price=self.price,
+            latitude=self.latitude,
+            longitude=self.longitude,
+            amenities=[
+            {
+                "id": amenity.id,
+                "name": amenity.name,
+                "description": amenity.description
+            } for amenity in self.amenities
+            ] if self.amenities else []
+        )
+        return data
 
     def __repr__(self):
         return f"<Place name={self.title!r}, id={self.id}>"
