@@ -68,7 +68,7 @@ class UserList(Resource):
 class UserResource(Resource):
     @api.doc(params={"user_id": "The unique ID of the user"})
     @api.marshal_with(response_user_model)
-    @api.response(200, "User details retrieved successfully", response_user_model)
+    @api.response(200, "User details retrieved successfully")
     @api.response(404, "User not found")
     def get(self, user_id):
         """Get user details by ID"""
