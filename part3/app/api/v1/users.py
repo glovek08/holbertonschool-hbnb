@@ -56,25 +56,18 @@ class UserList(Resource):
             "id": new_user.id,
         }, 201
 
-    @api.marshal_with(response_user_model, as_list=True, code=200)  # type: ignore
+    @api.marshal_with(response_user_model, as_list=True)  # type: ignore
     @api.response(200, "List of users retrieved successfully")
     def get(self):
         """Get all users"""
         users = facade.get_all_users()
-        return [
-            {
-                "id":         user.id,
-                "first_name": user.first_name,
-                "last_name":  user.last_name,
-                "email":      user.email,
-            }
-            for user in users
-        ]
+        return [user.to_dict() for user in users]
 
 
 @api.route("/<user_id>")
 class UserResource(Resource):
     @api.doc(params={"user_id": "The unique ID of the user"})
+    @api.marshal_with(response_user_model)
     @api.response(200, "User details retrieved successfully", response_user_model)
     @api.response(404, "User not found")
     def get(self, user_id):
@@ -83,16 +76,12 @@ class UserResource(Resource):
         if not user:
             return {"error": "User not found"}, 404
 
-        return {
-            "id":         user.id,
-            "first_name": user.first_name,
-            "last_name":  user.last_name,
-            "email":      user.email,
-        }, 200
+        return user.to_dict(), 200
 
     @api.expect(user_model, validate=True)
     @api.doc(params={"user_id": "The unique ID of the user"})
-    @api.response(200, "User successfully updated", response_user_model)
+    @api.marshal_with(response_user_model)
+    @api.response(200, "User successfully updated")
     @api.response(400, "Invalid input data or email already registered")
     @jwt_required()
     def put(self, user_id):
@@ -121,9 +110,4 @@ class UserResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 400
 
-        return {
-            "id":         user.id,
-            "first_name": user.first_name,
-            "last_name":  user.last_name,
-            "email":      user.email,
-        }, 200
+        return user.to_dict(), 200

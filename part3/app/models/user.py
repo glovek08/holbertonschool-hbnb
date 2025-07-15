@@ -69,7 +69,7 @@ class User(BaseModel):
         return value
 
     def to_dict(self):
-        data = super().export_data() # export_data no longer exists.
+        data = super().to_dict()
         data.update(
             first_name=self.first_name,
             last_name=self.last_name,
