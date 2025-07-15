@@ -38,6 +38,7 @@ class Place(BaseModel):
         "Amenity",
         secondary = place_amenities,
         back_populates = "places",
+        lazy="selectin",
         overlaps = "places",
     )
     reviews: Mapped[List["Review"]] = relationship(
@@ -47,7 +48,8 @@ class Place(BaseModel):
     )
     owner: Mapped["User"] = relationship(
         "User",
-        back_populates="places"
+        back_populates="places",
+        lazy="joined"
     )
 
     # OWNER ID
