@@ -17,7 +17,7 @@ amenity_model = api.model(
 response_amenity_model = api.model(
     "AmenityResponse",
     {
-        "id": fields.String(requiered=True, description="ID of the amenity"),
+        "id": fields.String(required=True, description="ID of the amenity"),
         "name": fields.String(required=True, description="Name of the amenity"),
         "description": fields.String(
             required=False, description="Short description of the amenity"
@@ -31,7 +31,7 @@ class AmenityList(Resource):
     @api.expect(amenity_model, validate=True)
     @api.response(201, "Amenity successfully created", response_amenity_model)
     @api.response(400, "Invalid input data")
-    @jwt_required
+    @jwt_required()
     def post(self):
         """Register a new amenity"""
         amenity_data = api.payload
@@ -43,11 +43,7 @@ class AmenityList(Resource):
             new_amenity = facade.create_amenity(amenity_data)
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
-        return {
-            "id": new_amenity.id,
-            "name": new_amenity.name,
-            "description": new_amenity.description,
-        }, 201
+        return new_amenity.to_dict(), 201
 
     @api.response(
         200, "List of amenities retrieved successfully", [response_amenity_model]
@@ -55,10 +51,7 @@ class AmenityList(Resource):
     def get(self):
         """Retrieve a list of all amenities"""
         amenities = facade.get_all_amenities()
-        return [
-            {"id": amenity.id, "name": amenity.name, "description": amenity.description}
-            for amenity in amenities
-        ], 200
+        return [amenity.to_dict() for amenity in amenities], 200
 
 
 @api.route("/<amenity_id>")
@@ -69,21 +62,17 @@ class AmenityResource(Resource):
     def get(self, amenity_id):
         """Get amenity details by ID"""
         my_amenity = facade.get_amenity(amenity_id)
-        if not amenity:
+        if not my_amenity:
             return {"error": "Amenity not found"}, 404
 
-        return {
-            "id": my_amenity.id,
-            "name": my_amenity.name,
-            "description": my_amenity.description,
-        }, 200
+        return my_amenity.to_dict(), 200
 
     @api.expect(amenity_model, validate=True)
     @api.doc(params={"amenity_id": "The unique ID of the amenity"})
     @api.response(200, "Amenity updated successfully", response_amenity_model)
     @api.response(404, "Amenity not found")
     @api.response(400, "Invalid input data")
-    @jwt_required
+    @jwt_required()
     def put(self, amenity_id):
         """Update an amenity's information"""
         amenity_data = api.payload
@@ -102,8 +91,4 @@ class AmenityResource(Resource):
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
-        return {
-            "id": my_amenity.id,
-            "name": my_amenity.name,
-            "description": my_amenity.description,
-        }, 200
+        return my_amenity.to_dict(), 200
