@@ -2,7 +2,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from http import HTTPStatus
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.utils import check_api_payload
 
 api = Namespace("reviews", description="Review operations")
@@ -47,6 +47,7 @@ class ReviewList(Resource):
     @api.response(201, "Review successfully created", response_review_model)
     @api.response(400, "Invalid input data")
     @api.response(403, "Not Authorized")
+    @api.response(409, "You already review this place, bitch!")
     @jwt_required()
     def post(self):
         """Create a new review"""
@@ -64,36 +65,21 @@ class ReviewList(Resource):
 
         for review in review_target_place.reviews:
             if review.owner_id == current_user:
-                return {"error": "You have already reviewed this place"}, 400
+                return {"error": "You have already reviewed this place"}, 409
 
         try:
             new_review = facade.create_review(review_data)
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
-        return {
-            "id":       new_review.id,
-            "owner_id": new_review.owner_id,
-            "place_id": new_review.place_id,
-            "rating":   new_review.rating,
-            "comment":  new_review.comment,
-        }, 201
+        return new_review.to_dict(), 201
 
     @api.response(200, "List of reviews retrieved successfully")
     @api.marshal_with(response_review_model, as_list=True)
     def get(self):
         """Retrieve a list of all reviews"""
         reviews = facade.get_all_reviews()
-        return [
-            {
-                "id":       review.id,
-                "owner_id": review.owner_id,
-                "place_id": review.place_id,
-                "rating":   review.rating,
-                "comment":  review.comment,
-            }
-            for review in reviews
-        ]
+        return [ review.to_dict() for review in reviews ], 200
 
 
 @api.route("/<review_id>")
@@ -107,13 +93,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
 
-        return {
-            "id":       review.id,
-            "owner_id": review.owner_id,
-            "place_id": review.place_id,
-            "rating":   review.rating,
-            "comment":  review.comment,
-        }, 200
+        return review.to_dict(), 200
 
     @api.expect(update_review_model, validate=True)
     @api.doc(params={"review_id": "The unique ID of the review"})
@@ -135,7 +115,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
 
-        if not is_admin or review.owner_id != current_user:
+        if not is_admin and review.owner_id != current_user:
             return {"error": "Unauthorized action."}, 403
 
         try:
@@ -143,13 +123,7 @@ class ReviewResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 400
 
-        return {
-            "id":       review.id,
-            "owner_id": review.owner_id,
-            "place_id": review.place_id,
-            "rating":   review.rating,
-            "comment":  review.comment,
-        }, 200
+        return review.to_dict(), 200
 
     @api.doc(params={"review_id": "The unique ID of the review"})
     @api.response(200, "Review deleted successfully")
@@ -185,16 +159,6 @@ class PlaceReviewList(Resource):
         """Get all reviews for a specific place"""
         if not facade.get_place(place_id):
             return {"error": "Place not found"}, 404
-
         reviews = facade.get_reviews_by_place(place_id)
 
-        return [
-            {
-                "id":       review.id,
-                "owner_id": review.owner_id,
-                "place_id": review.place_id,
-                "rating":   review.rating,
-                "comment":  review.comment,
-            }
-            for review in reviews
-        ], 200
+        return [ review.to_dict() for review in reviews ], 200
