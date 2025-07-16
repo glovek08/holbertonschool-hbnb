@@ -12,13 +12,13 @@ api = Namespace("places", description="Place operations")
 place_model = api.model(
     "Place",
     {
-        "title":        fields.String(required=True, description="Title of the place"),
-        "description":  fields.String(description="Description of the place"),
-        "price":        fields.Float(required=True, description="Price per night"),
-        "latitude":     fields.Float(required=True, description="Latitude of the place"),
-        "longitude":    fields.Float(required=True, description="Longitude of the place"),
-        "owner_id":     fields.String(required=True, description="ID of the owner"),
-        "amenities":    fields.List(
+        "title":       fields.String(required=True, description="Title of the place"),
+        "description": fields.String(description="Description of the place"),
+        "price":       fields.Float(required=True, description="Price per night"),
+        "latitude":    fields.Float(required=True, description="Latitude of the place"),
+        "longitude":   fields.Float(required=True, description="Longitude of the place"),
+        "owner_id":    fields.String(required=True, description="ID of the owner"),
+        "amenities":   fields.List(
             fields.String, required=True, description="List of amenities ID's"
         ),
     },
@@ -48,12 +48,12 @@ class PlaceList(Resource):
             return {"error": str(error)}, 400
 
         return {
-            "owner_id":     new_place.owner_id,
-            "title":        new_place.title,
-            "description":  new_place.description,
-            "price":        new_place.price,
-            "latitude":     new_place.latitude,
-            "longitude":    new_place.longitude,
+            "owner_id":    new_place.owner_id,
+            "title":       new_place.title,
+            "description": new_place.description,
+            "price":       new_place.price,
+            "latitude":    new_place.latitude,
+            "longitude":   new_place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,
@@ -80,11 +80,11 @@ class PlaceList(Resource):
                     if (owner := facade.get_user(place.owner_id))
                     else None
                 ),
-                "title":        place.title,
-                "description":  place.description,
-                "price":        place.price,
-                "latitude":     place.latitude,
-                "longitude":    place.longitude,
+                "title":       place.title,
+                "description": place.description,
+                "price":       place.price,
+                "latitude":    place.latitude,
+                "longitude":   place.longitude,
                 "amenities": [
                     {
                         "id": amenity.id,
@@ -119,14 +119,14 @@ class PlaceResource(Resource):
             return {"error": str(error)}, 400
 
         return {
-            "id":           place.id,
-            "owner_id":     place.owner_id,
-            "owner":        owner_basic_info,
-            "title":        place.title,
-            "description":  place.description,
-            "price":        place.price,
-            "latitude":     place.latitude,
-            "longitude":    place.longitude,
+            "id":          place.id,
+            "owner_id":    place.owner_id,
+            "owner":       owner_basic_info,
+            "title":       place.title,
+            "description": place.description,
+            "price":       place.price,
+            "latitude":    place.latitude,
+            "longitude":   place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,
@@ -178,14 +178,14 @@ class PlaceResource(Resource):
             return {"error": str(error)}, 400
 
         return {
-            "id":           place.id,
-            "owner_id":     place.owner_id,
-            "owner":        owner_basic_info,
-            "title":        place.title,
-            "description":  place.description,
-            "price":        place.price,
-            "latitude":     place.latitude,
-            "longitude":    place.longitude,
+            "id":          place.id,
+            "owner_id":    place.owner_id,
+            "owner":       owner_basic_info,
+            "title":       place.title,
+            "description": place.description,
+            "price":       place.price,
+            "latitude":    place.latitude,
+            "longitude":   place.longitude,
             "amenities": [
                 {
                     "id": amenity.id,

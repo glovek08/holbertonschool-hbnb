@@ -56,7 +56,7 @@ class UserList(Resource):
             "id": new_user.id,
         }, 201
 
-    @api.marshal_with(response_user_model, as_list=True, code=200)  # type: ignore
+    @api.marshal_with(response_user_model, as_list=True, code=200)
     @api.response(200, "List of users retrieved successfully")
     def get(self):
         """Get all users"""
