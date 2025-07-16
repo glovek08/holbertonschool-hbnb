@@ -28,16 +28,6 @@ amenity_model = api.model(
 place_model = api.model(
     "Place",
     {
-<<<<<<< HEAD
-        "title":       fields.String(required=True, description="Title of the place"),
-        "description": fields.String(description="Description of the place"),
-        "price":       fields.Float(required=True, description="Price per night"),
-        "latitude":    fields.Float(required=True, description="Latitude of the place"),
-        "longitude":   fields.Float(required=True, description="Longitude of the place"),
-        "owner_id":    fields.String(required=True, description="ID of the owner"),
-        "amenities":   fields.List(
-            fields.String, required=True, description="List of amenities ID's"
-=======
         "title":        fields.String(required=True, description="Title of the place"),
         "description":  fields.String(description="Description of the place"),
         "price":        fields.Float(required=True, description="Price per night"),
@@ -46,7 +36,6 @@ place_model = api.model(
         "owner_id":     fields.String(required=True, description="ID of the owner"),
         "amenities":    fields.List(
             fields.Nested(amenity_model), description="List of amenities"
->>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
         ),
     },
 )
@@ -70,7 +59,7 @@ place_response_model = api.model(
 @api.route("/")
 class PlaceList(Resource):
     @api.expect(place_model, validate=True)
-    @api.marshall_with(place_response_model, code=201)
+    @api.marshal_with(place_response_model, code=201)
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
     @api.response(403, "Cannot create place for another user")
@@ -90,70 +79,20 @@ class PlaceList(Resource):
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
-<<<<<<< HEAD
-        return {
-            "owner_id":    new_place.owner_id,
-            "title":       new_place.title,
-            "description": new_place.description,
-            "price":       new_place.price,
-            "latitude":    new_place.latitude,
-            "longitude":   new_place.longitude,
-            "amenities": [
-                {
-                    "id": amenity.id,
-                    "name": getattr(amenity, "name", None),
-                    "description": getattr(amenity, "description", None),
-                }
-                for amenity in new_place.amenities
-            ],
-        }, 201
-=======
         return new_place.to_dict(), 201
->>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
-    @api.marshall_with(place_response_model, as_list=True)
+    @api.marshal_with(place_response_model, as_list=True)
     @api.response(200, "List of places retrieved successfully")
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
-<<<<<<< HEAD
-        return [
-            {
-                "id":       place.id,
-                "owner_id": place.owner_id,
-                "owner": (
-                    {
-                        "first_name": owner.first_name,
-                        "last_name":  owner.last_name,
-                    }
-                    if (owner := facade.get_user(place.owner_id))
-                    else None
-                ),
-                "title":       place.title,
-                "description": place.description,
-                "price":       place.price,
-                "latitude":    place.latitude,
-                "longitude":   place.longitude,
-                "amenities": [
-                    {
-                        "id": amenity.id,
-                        "name": getattr(amenity, "name", None),
-                        "description": getattr(amenity, "description", None),
-                    }
-                    for amenity in place.amenities
-                ],
-            }
-            for place in places
-        ]
-=======
         return [place.to_dict() for place in places]
->>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
 
 @api.route("/<place_id>")
 class PlaceResource(Resource):
     @api.doc(params={"place_id": "The unique ID of the place"})
-    @api.marshall_with(place_response_model)
+    @api.marshal_with(place_response_model)
     @api.response(200, "Place details retrieved successfully")
     @api.response(404, "Place not found")
     def get(self, place_id):
@@ -162,41 +101,11 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-<<<<<<< HEAD
-        try:
-            owner = facade.get_user(place.owner_id)
-            owner_basic_info = {
-                "first_name": owner.first_name,
-                "last_name":  owner.last_name,
-            }
-        except ValueError as error:
-            return {"error": str(error)}, 400
-
-        return {
-            "id":          place.id,
-            "owner_id":    place.owner_id,
-            "owner":       owner_basic_info,
-            "title":       place.title,
-            "description": place.description,
-            "price":       place.price,
-            "latitude":    place.latitude,
-            "longitude":   place.longitude,
-            "amenities": [
-                {
-                    "id": amenity.id,
-                    "name": getattr(amenity, "name", None),
-                    "description": getattr(amenity, "description", None),
-                }
-                for amenity in place.amenities
-            ],
-        }
-=======
         return place.to_dict(), 200
->>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
     @api.expect(place_model, validate=True)
     @api.doc(params={"place_id": "The unique ID of the place"})
-    @api.marshall_with(place_model)
+    @api.marshal_with(place_model)
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
@@ -228,28 +137,7 @@ class PlaceResource(Resource):
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
-<<<<<<< HEAD
-        return {
-            "id":          place.id,
-            "owner_id":    place.owner_id,
-            "owner":       owner_basic_info,
-            "title":       place.title,
-            "description": place.description,
-            "price":       place.price,
-            "latitude":    place.latitude,
-            "longitude":   place.longitude,
-            "amenities": [
-                {
-                    "id": amenity.id,
-                    "name": getattr(amenity, "name", None),
-                    "description": getattr(amenity, "description", None),
-                }
-                for amenity in place.amenities
-            ],
-        }, 200
-=======
         return place.to_dict(), 200
->>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
     @api.doc(params={"place_id": "The unique ID of the place"})
     @api.response(200, "Place deleted successfully")
