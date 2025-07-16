@@ -7,11 +7,28 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 api = Namespace("places", description="Place operations")
 
 
-# potential improvement: we are returning the same shit in two responses, find way to recycle code.
+owner_model = api.model(
+    "Owner",
+    {
+        "first_name": fields.String(description="First name of the owner"),
+        "last_name":  fields.String(description="Last name of the owner"),
+    }
+)
+
+amenity_model = api.model(
+    "Amenity",
+    {
+        "id":          fields.String(description="ID of the amenity"),
+        "name":        fields.String(description="Name of the amenity"),
+        "description": fields.String(description="Description of the amenity"),
+    }
+)
+
 
 place_model = api.model(
     "Place",
     {
+<<<<<<< HEAD
         "title":       fields.String(required=True, description="Title of the place"),
         "description": fields.String(description="Description of the place"),
         "price":       fields.Float(required=True, description="Price per night"),
@@ -20,14 +37,40 @@ place_model = api.model(
         "owner_id":    fields.String(required=True, description="ID of the owner"),
         "amenities":   fields.List(
             fields.String, required=True, description="List of amenities ID's"
+=======
+        "title":        fields.String(required=True, description="Title of the place"),
+        "description":  fields.String(description="Description of the place"),
+        "price":        fields.Float(required=True, description="Price per night"),
+        "latitude":     fields.Float(required=True, description="Latitude of the place"),
+        "longitude":    fields.Float(required=True, description="Longitude of the place"),
+        "owner_id":     fields.String(required=True, description="ID of the owner"),
+        "amenities":    fields.List(
+            fields.Nested(amenity_model), description="List of amenities"
+>>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
         ),
     },
 )
 
+place_response_model = api.model(
+    "Place_Response",
+    {
+        "title":        fields.String(required=True, description="Title of the place"),
+        "description":  fields.String(description="Description of the place"),
+        "price":        fields.Float(required=True, description="Price per night"),
+        "latitude":     fields.Float(required=True, description="Latitude of the place"),
+        "longitude":    fields.Float(required=True, description="Longitude of the place"),
+        "owner_id":     fields.String(required=True, description="ID of the owner"),
+        "owner":        fields.Nested(owner_model, description="Owner of the place"),
+        "amenities":    fields.List(
+            fields.Nested(amenity_model), description="List of amenities"
+        ),
+    },
+)
 
 @api.route("/")
 class PlaceList(Resource):
     @api.expect(place_model, validate=True)
+    @api.marshall_with(place_response_model, code=201)
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
     @api.response(403, "Cannot create place for another user")
@@ -47,6 +90,7 @@ class PlaceList(Resource):
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
+<<<<<<< HEAD
         return {
             "owner_id":    new_place.owner_id,
             "title":       new_place.title,
@@ -63,11 +107,16 @@ class PlaceList(Resource):
                 for amenity in new_place.amenities
             ],
         }, 201
+=======
+        return new_place.to_dict(), 201
+>>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
+    @api.marshall_with(place_response_model, as_list=True)
     @api.response(200, "List of places retrieved successfully")
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
+<<<<<<< HEAD
         return [
             {
                 "id":       place.id,
@@ -96,11 +145,15 @@ class PlaceList(Resource):
             }
             for place in places
         ]
+=======
+        return [place.to_dict() for place in places]
+>>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
 
 @api.route("/<place_id>")
 class PlaceResource(Resource):
     @api.doc(params={"place_id": "The unique ID of the place"})
+    @api.marshall_with(place_response_model)
     @api.response(200, "Place details retrieved successfully")
     @api.response(404, "Place not found")
     def get(self, place_id):
@@ -109,6 +162,7 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
+<<<<<<< HEAD
         try:
             owner = facade.get_user(place.owner_id)
             owner_basic_info = {
@@ -136,9 +190,13 @@ class PlaceResource(Resource):
                 for amenity in place.amenities
             ],
         }
+=======
+        return place.to_dict(), 200
+>>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
     @api.expect(place_model, validate=True)
     @api.doc(params={"place_id": "The unique ID of the place"})
+    @api.marshall_with(place_model)
     @api.response(200, "Place updated successfully")
     @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
@@ -167,16 +225,10 @@ class PlaceResource(Resource):
 
         try:
             facade.update_place(place_id, place_new_data)
-            owner = facade.get_user(place_new_data["owner_id"])
-            if not owner:
-                return {"error": "Owner doesn't exists"}, 400
-            owner_basic_info = {
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
-            }
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
+<<<<<<< HEAD
         return {
             "id":          place.id,
             "owner_id":    place.owner_id,
@@ -195,6 +247,9 @@ class PlaceResource(Resource):
                 for amenity in place.amenities
             ],
         }, 200
+=======
+        return place.to_dict(), 200
+>>>>>>> e44d9efc6d01e0a2e1ffdb28728e2b2823788391
 
     @api.doc(params={"place_id": "The unique ID of the place"})
     @api.response(200, "Place deleted successfully")

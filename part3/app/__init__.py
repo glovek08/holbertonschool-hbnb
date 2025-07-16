@@ -18,6 +18,22 @@ from app.models.review import Review
 from app.custom_ui import custom_ui
 
 
+def seed_admin():
+    if not User.query.filter_by(is_admin=True).first():
+        admin = User(
+            first_name="Admin",
+            last_name="Root",
+            email="admin@gmail.com",
+            password="admin123",
+            is_admin=True,
+        )
+        db.session.add(admin)
+        db.session.commit()
+        print("Admin user created ✅")
+    else:
+        print("Admin user already exists 🧙‍♂️")
+
+
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -156,24 +172,6 @@ def create_app(config_class="config.DevelopmentConfig"):
     # --- TEST DATA END ---
     # endregion
 
-    # with app.app_context():
-    #     from app.services import facade
-
-    #     user_data = {
-    #         "first_name": "Alice",
-    #         "last_name": "Smith",
-    #         "email": "alice@example.com",
-    #         "password": "secure123",  # your User model hashes this automatically
-    #         "is_admin": False,
-    #     }
-
-    #     try:
-    #         new_user = facade.create_user(user_data)
-    #         print(f"User created: {new_user}")
-    #     except ValueError as error:
-    #         print(f"Error creating user: {error}")
-    #     db.session.add(new_user)
-    #     db.session.commit()
-    #     db.create_all()  # Only for development!
-
+    with app.app_context():
+        seed_admin()
     return app
