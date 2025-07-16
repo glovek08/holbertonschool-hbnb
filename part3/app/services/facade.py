@@ -1,4 +1,3 @@
-# from app.persistence.repository import InMemoryRepository # Uncomment to use in-memory repository for testing purporses.
 from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repo import UserRepository
 from app.models.review import Review
@@ -14,12 +13,6 @@ class HBnBFacade:
         self.amenity_repo = SQLAlchemyRepository(Amenity)
         self.review_repo = SQLAlchemyRepository(Review)
 
-    # ************ IN-MEMORY REPO ******************
-    # self.user_repo = InMemoryRepository()
-    # self.place_repo = InMemoryRepository()
-    # self.amenity_repo = InMemoryRepository()
-    # self.review_repo = InMemoryRepository()
-
     # **************** USER DATA MANAGEMENT *****************
     def create_user(self, user_data):
         # from app.models.user import User
@@ -30,9 +23,6 @@ class HBnBFacade:
         return user
 
     def get_user(self, user_id):
-        # potential performance issue, n+1 query problem. Small queries = slow, one complex query = fast
-        # we need to taylor the sql query (execute(query)) to target specific user without searching
-        # the entire database for one user id in each iteration.
         return self.user_repo.get(user_id)
 
     def get_all_users(self):

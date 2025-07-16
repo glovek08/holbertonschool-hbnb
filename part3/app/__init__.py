@@ -18,6 +18,7 @@ from app.models.review import Review
 from app.custom_ui import custom_ui
 
 
+# Inject admin user for testing purposes
 def seed_admin():
     if not User.query.filter_by(is_admin=True).first():
         admin = User(

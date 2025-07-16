@@ -1,7 +1,7 @@
 from app.models.base_model import BaseModel
 from app.services import facade
 
-
+from typing import List
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
