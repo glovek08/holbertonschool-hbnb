@@ -5,9 +5,7 @@ from app.services import facade
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
-
-# test_stuff
-from typing import List, TYPE_CHECKING
+# If circular import arises, import places inside Amenity.
 from app.models.place import place_amenities
 
 
@@ -17,8 +15,7 @@ class Amenity(BaseModel):
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
-    # if TYPE_CHECKING:
-    #   from app.models.place import Place    If circular import put again.
+
     places: Mapped[List["Place"]] = relationship(
         "Place",
         secondary=place_amenities,
@@ -38,6 +35,14 @@ class Amenity(BaseModel):
         if not isinstance(value, str):
             raise TypeError("Description must be a string!")
         return value
+
+    def to_dict(self):
+        data = super().to_dict()
+        data.update(
+            name=self.name,
+            description=self.description,
+        )
+        return data
 
     def __repr__(self):
         return f"<Amenity id={self.id} name={self.name!r}>"

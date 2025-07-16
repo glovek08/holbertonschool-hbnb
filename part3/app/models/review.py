@@ -50,5 +50,15 @@ class Review(BaseModel):
     def validate_comment(self, key: str, value: str):
         return self.validate_string(value, "Comment")
 
+    def to_dict(self):
+        data = super().to_dict()
+        data.update(
+            owner_id=self.owner_id,
+            place_id=self.place_id,
+            rating=self.rating,
+            comment=self.comment,
+        )
+        return data
+
     def __repr__(self):
         return f"<Review author_id={self.owner_id}>"
