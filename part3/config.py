@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote_plus
 
 
 class Config:
@@ -8,7 +9,13 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///development.db"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{}:{}@{}:{}/{}".format(
+        os.getenv("DB_USER", "pizza"),
+        quote_plus(os.getenv("DB_PASSWORD", "Pizza123@@")),
+        os.getenv("DB_HOST", "localhost"),
+        os.getenv("DB_PORT", "3306"),
+        os.getenv("DB_NAME", "hbnb_v1"),
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

@@ -5,3 +5,4 @@ email-validator
 flask-jwt-extended
 sqlalchemy
 flask-sqlalchemy
+PyMySQL
