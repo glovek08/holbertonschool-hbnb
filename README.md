@@ -130,11 +130,13 @@ Data storage and retrieval, data integrity maintenance.
 ###
 
 ## **ER Diagram**
-<picture>
-  <source srcset="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" media="(prefers-color-scheme: light)">
-  <source srcset="https://i.ibb.co/JTq6sXY/ERDiagram-white.png" media="(prefers-color-scheme: dark)">
-  <img src="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" alt="ER Diagram">
-</picture>
+<p align="center">
+  <picture>
+    <source srcset="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" media="(prefers-color-scheme: light)">
+    <source srcset="https://i.ibb.co/JTq6sXY/ERDiagram-white.png" media="(prefers-color-scheme: dark)">
+    <img src="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" alt="ER Diagram">
+  </picture>
+</p>
 
 ### **User:**
 
