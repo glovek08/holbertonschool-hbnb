@@ -129,20 +129,24 @@ Data storage and retrieval, data integrity maintenance.
 
 ###
 
-## **Class Diagram**
-
-![WhatsApp Image 2025-06-08 at 5 23 49 PM](https://github.com/user-attachments/assets/fb4a28c6-a76d-443e-a519-e287906f634c)
+## **ER Diagram**
+<picture>
+  <source srcset="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" media="(prefers-color-scheme: light)">
+  <source srcset="https://i.ibb.co/JTq6sXY/ERDiagram-white.png" media="(prefers-color-scheme: dark)">
+  <img src="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" alt="ER Diagram">
+</picture>
 
 ### **User:**
 
 Represents a client using the app.
 
-* **id\_user**: used for auditing purposes.  
+* **id**: Primary Key.  
 * **first\_name**: User’s first name.  
 * **last\_name**: User’s last name.  
 * **email**: User’s email.  
-* **password**: User’s password  
 * **is\_admin**: if *True*, this instance of *User* has elevated privileges.
+* **created_at**: auto-generated creation date.
+* **updated_at**: auto-generated update date.
 
 Characteristics and relations:
 
@@ -155,12 +159,15 @@ Characteristics and relations:
 
 Represents asset locations, whatever a *User* registers as a listing that can be rented and be rated according to its amenities.
 
-* **id\_place**: used for auditing purposes.  
-* **title**: listing’s title.  
+* **id**: Primary Key.
+* **owner_id**: Foreign Key of user who created the place.
+* **title**: listing’s title.
 * **description**: a short description made by the *User* who owns it.  
 * **price**: rent price per day.  
-* **tuple**: the coordinates of this Place.  
-* **Amenities**: list containing this Place’s amenities.
+* **longitude**: longitude of this place.
+* **latitude**: latitude of this place.
+* **created_at**: auto-generated creation date.
+* **updated_at**: auto-generated update date.
 
 Characteristics and relations:
 
@@ -175,9 +182,11 @@ Can be features or services registered to a specific place like; WiFi, free park
 Amenities are created and managed only by Admin Users.  
 After the amenities are created, normal users can select them from a list to append it to places.
 
-* **id\_amenity**: used for auditing purposes.  
+* **id**: Primary Key.  
 * **name**: the name of the amenity  
 * **description**: a short description.
+* **created_at**: auto-generated creation date.
+* **updated_at**: auto-generated update date.
 
 Characteristics and relations:
 
@@ -189,9 +198,11 @@ Characteristics and relations:
 
 It’s the feedback a *User* who rented a *Place* gave it.
 
-* **id\_entity**: used for auditing purposes.  
-* **rating**: the user’s rating of one place. *Will be validated from 1 to 5 in the form of stars. User will select it from a select-box.*  
+* **id**: Primary Key.  
+* **rating**: the user’s rating of a place he rented. 
 * **comment**: a public comment that will describe the rating’s reason to other users.
+* **created_at**: auto-generated creation date.
+* **updated_at**: auto-generated update date.
 
 Characteristics and relations:
 
@@ -200,9 +211,12 @@ Characteristics and relations:
 - One *Place* can have many reviews from different users.  
 - Can be created, updated and deleted by the author.
 
-### **BaseModel:**
+### **Place-Amenity:**
 
-All entities inherit from a *BaseModel* that automatically tracks when records are created and last updated, plus, it provides abstract methods for child classes, for database operations like create, update, delete. Each child class will have to implement its own create, update, delete method.
+Relational Many-To-Many table between places and amenities.
+
+* **place_id**: Foreign key of place.
+* **amenity_id**: Foreign key of amenity.
 
 ## **Sequence Diagrams**
 
