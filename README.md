@@ -1,25 +1,37 @@
 ![HolbertonBnB_Banner](https://github.com/user-attachments/assets/dbab0855-bd6f-461d-a316-ecb34d77987b)
 
-# 
+
 <div align="center">
-  <h1>HOLBERTON BnB</h1>
-  <h2>An AirBnB-like project.</h2>
+  <h1>Holberton BnB</h1>
+  <p>An AirBnB-like project.</p>
 </div>
+
+HBNB Is an app built on Flask where users can post places, but not listing, actually in this app you can only post a place. It's kind of a Placebook.
+
+<!-- Framework -->
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=flat-square)
+![Flask](https://img.shields.io/badge/Flask-2.0+-blue?logo=flask&style=flat-square)
+![Flask-RESTX](https://img.shields.io/badge/Flask--RESTX-API-green?logo=flask&style=flat-square)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue?logo=sqlalchemy&style=flat-square)
+![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=flat-square)
+
+<!-- License -->
+![License](https://img.shields.io/github/license/glovek08/holbertonschool-hbnb?style=flat-square)
+
+<!-- Repo stats -->
+![Last Commit](https://img.shields.io/github/last-commit/glovek08/holbertonschool-hbnb?style=flat-square)
+![Repo Size](https://img.shields.io/github/repo-size/glovek08/holbertonschool-hbnb?style=flat-square)
+
 
 Project Participants:
 
 * [Federico Paganini Vanoli.](https://github.com/federico-paganini)  
 * [Gabriel Baez Barnada.](https://github.com/glovek08)
 
-## **Introduction:**
-
-The purpose of this document is to guide you through the design process of our AirBnB-like application.   
-In this documentation you can find UML diagrams.
-
 ### **What you'll find in this document:** 
 
-* High-level system architecture diagrams  
-* Detailed class relationships and data models   
+* High-level system architecture diagrams
+* Detailed class relationships and data models
 * Business logic flow documentation  
 * Component interaction specifications
 
@@ -35,7 +47,7 @@ Each layer has responsibilities and communicates through defined interfaces.
 
 * #### **Presentation Layer:**
 
-  * User interface and user experience.  
+  * UI/UX 
   * Client-side interactions.  
   * Request/Responses formatting.  
   * HTTP status management.  
@@ -63,7 +75,7 @@ This approach ensures that the presentation layer doesn't need to understand the
 
 ##  **High-Level Package Diagram**
 
-For this project, we developed a three-layer architecture implementing the Facade pattern for separation of concern and scalability. *Also because it’s the only one we know enough about.*
+For this project, we developed a three-layer architecture implementing the Facade pattern for separation of concern and scalability.
 ###
 
 <p align="center">
