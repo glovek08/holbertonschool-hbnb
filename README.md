@@ -25,8 +25,9 @@ HBNB Is an app built on Flask where users can post places, but not listing, actu
 
 Project Participants:
 
-* [Federico Paganini Vanoli.](https://github.com/federico-paganini)  
-* [Gabriel Baez Barnada.](https://github.com/glovek08)
+[![glovek08](https://img.shields.io/badge/GitHub-glovek08-blue?logo=github)](https://github.com/glovek08)
+[![federico-paganini](https://img.shields.io/badge/GitHub-federico--paganini-blue?logo=github)](https://github.com/federico-paganini)
+
 
 ### **What you'll find in this document:** 
 
