@@ -18,23 +18,6 @@ from app.models.review import Review
 from app.custom_ui import custom_ui
 
 
-# Inject admin user for testing purposes
-def seed_admin():
-    if not User.query.filter_by(is_admin=True).first():
-        admin = User(
-            first_name="Admin",
-            last_name="Root",
-            email="admin@gmail.com",
-            password="admin123",
-            is_admin=True,
-        )
-        db.session.add(admin)
-        db.session.commit()
-        print("Admin user created ✅")
-    else:
-        print("Admin user already exists 🧙‍♂️")
-
-
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -76,5 +59,4 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     with app.app_context():
         db.create_all()
-        seed_admin()
     return app

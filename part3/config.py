@@ -8,6 +8,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    RESTX_VALIDATE = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{}:{}@{}:{}/{}".format(
         os.getenv("DB_USER", "pizza"),
