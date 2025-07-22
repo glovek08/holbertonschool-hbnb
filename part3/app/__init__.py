@@ -63,6 +63,10 @@ def create_app(config_class="config.DevelopmentConfig"):
         default_label="HBnB API Operations",
     )
 
+    @api.documentation
+    def swagger_ui():
+        return custom_ui(api)
+
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(places_ns, path="/api/v1/places")
     api.add_namespace(amenity_ns, path="/api/v1/amenities")
