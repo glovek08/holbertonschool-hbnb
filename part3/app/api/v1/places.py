@@ -2,6 +2,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from app.utils import check_api_payload
+from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("places", description="Place operations")
@@ -63,6 +64,7 @@ class PlaceList(Resource):
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
     @api.response(403, "Cannot create place for another user")
+    @api.response(404, "User doesn't exists")
     @api.doc(security="Bearer")
     @jwt_required()
     def post(self):
@@ -76,6 +78,8 @@ class PlaceList(Resource):
 
         try:
             new_place = facade.create_place(place_data)
+        except IntegrityError:
+            return {"error": str(error)}, 404
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
@@ -107,9 +111,9 @@ class PlaceResource(Resource):
     @api.doc(params={"place_id": "The unique ID of the place"})
     @api.marshal_with(place_model)
     @api.response(200, "Place updated successfully")
-    @api.response(404, "Place not found")
     @api.response(400, "Invalid input data")
     @api.response(403, "Unauthorized action")
+    @api.response(404, "Place not found")
     @api.doc(security="Bearer")
     @jwt_required()
     def put(self, place_id):
