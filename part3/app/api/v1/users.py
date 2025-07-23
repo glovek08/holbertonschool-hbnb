@@ -3,6 +3,7 @@ from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from app.utils import check_api_payload
 
 api = Namespace("users", description="User operations")
 
@@ -50,7 +51,7 @@ class UserList(Resource):
 
         try:
             new_user = facade.create_user(user_data)
-        except IntegrityError:
+        except IntegrityError as error:
             return {"error": str(error)}, 409
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
@@ -90,6 +91,9 @@ class UserResource(Resource):
     def put(self, user_id):
         """Update user information by ID"""
         user_new_data = api.payload
+        if not check_api_payload(user_new_data, user_model):
+            return {"error": "Invalid input data"}, 400
+
         current_user = get_jwt_identity()
         user = facade.get_user(user_id)
         if not user:
