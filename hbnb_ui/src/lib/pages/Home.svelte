@@ -7,5 +7,8 @@
 </div>
 
 <style>
-
+  .home {
+    outline: 1px solid yellow;
+    height: 100px;
+  }
 </style>

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import apiService from './api.js';
+  import apiService from '../api.js';
 
   let users = [];
   let places = [];
@@ -11,7 +11,6 @@
   async function loadData() {
     loading = true;
     error = null;
-    
     try {
       // Test multiple endpoints
       const [usersData, placesData, amenitiesData] = await Promise.all([
@@ -32,7 +31,6 @@
       loading = false;
     }
   }
-
   onMount(() => {
     loadData();
   });

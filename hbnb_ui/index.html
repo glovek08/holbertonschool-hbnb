@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HolbertonBnB - Test API Integration</title>
+    <title>HBnB</title>
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
@@ -19,11 +19,11 @@
       http-equiv="Content-Security-Policy"
       content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval';
-        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kit.fontawesome.com;
+        style-src 'self' 'unsafe-inline' https://ka-f.fontawesome.com;
         img-src 'self' data: https:;
-        font-src 'self' data:;
-        connect-src 'self' https:;
+        font-src 'self' data: https://ka-f.fontawesome.com;
+        connect-src 'self' https: https://ka-p.fontawesome.com;
         media-src 'self';
         object-src 'none';
         child-src 'none';
@@ -35,9 +35,34 @@
         upgrade-insecure-requests;
     "
     />
+    <link rel="shortcut icon" id="favicon" href="/src/assets/favicon_white.ico" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/1b73c2ec6e.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+        <script>
+      const updateFavicon = () => {
+        const favicon = document.getElementById('favicon');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (prefersDark) {
+          favicon.href = '/src/assets/favicon_white.ico';
+        } else {
+          favicon.href = '/src/assets/favicon_black.ico';
+        }
+      }
+      updateFavicon();
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+    </script>
   </body>
 </html>
+<style>
+  #app {
+    max-width: 100dvw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+</style>
