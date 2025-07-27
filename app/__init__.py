@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory
 from flask_restx import Api
+from flask_cors import CORS
 
 from config import DevelopmentConfig
 from app.extensions import bcrypt, jwt, db
@@ -21,6 +22,11 @@ from app.custom_ui import custom_ui
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    # This enables cors for all routes
+    # It allows the frontend to communicate with the backend
+    CORS(app, origins=["http://localhost:5173"])
+
     bcrypt.init_app(app)
     jwt.init_app(app)
     db.init_app(app)
