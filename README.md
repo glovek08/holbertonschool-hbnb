@@ -1,289 +1,268 @@
-![HolbertonBnB_Banner](https://github.com/user-attachments/assets/dbab0855-bd6f-461d-a316-ecb34d77987b)
+# Holberton School - hbnb (Part 2)
 
-# 
-<div align="center">
-  <h1>HOLBERTON BnB</h1>
-  <h2>An AirBnB-like project.</h2>
-</div>
+This project is part of the Holberton School curriculum and focuses on building the backend of an AirBnB clone. It extends the previous work by adding new features and improving the codebase.
 
-Project Participants:
+## Authors
 
-* [Federico Paganini Vanoli.](https://github.com/federico-paganini)  
-* [Gabriel Baez Barnada.](https://github.com/glovek08)
+- [Gabriel Barnada](https://github.com/glovek08/)
+- [Federico Paganin Vanoli](https://github.com/federico-paganini)
 
-## **Introduction:**
+## Features
 
-The purpose of this document is to guide you through the design process of our AirBnB-like application.   
-In this documentation you can find UML diagrams.
+- **Data Storage:** In-memory persistance. (For Now)
+- **Models:** Includes User, Place, Amenity, and Review models. All inherit from a Base Model.
+- **RESTful API:** Provides endpoints for CRUD operations.
+- **Web Framework:** Integrates with Flask for web-based interfaces.
 
-### **What you'll find in this document:** 
+## Requirements
 
-* High-level system architecture diagrams  
-* Detailed class relationships and data models   
-* Business logic flow documentation  
-* Component interaction specifications
+- Ubuntu 22.04
+- Python 3.8+
+- pip (for installing dependencies)
 
-## **High-Level Architecture:**
+## Installation
 
-### **Layered Architecture Overview**
+1. Clone the repository using SSH:
+    ```bash
+    git clone git@github.com:glovek08/holbertonschool-hbnb.git
+    cd holbertonschool-hbnb/part2
+    ```
 
-This AirBnB-like project follows a three-tier layered architecture pattern that guarantees separation of concerns, maintainability and scalability.
+2. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Each layer has responsibilities and communicates through defined interfaces.
+3. Set up environment variables as needed (see `.env.example`).
 
-### **Layers**
+## Usage
 
-* #### **Presentation Layer:**
+- **Start Web Server:**
+  ```bash
+  python3 app.py
+  ```
 
-  * User interface and user experience.  
-  * Client-side interactions.  
-  * Request/Responses formatting.  
-  * HTTP status management.  
-  * API Controllers.
+## Project Structure
 
-* #### **Business Logic Layer:**
+* The `app/` directory contains the core application code.
+* The `api/` subdirectory houses the API endpoints, organized by version (v1/).
+* The `models/` subdirectory contains the business logic classes (e.g., user.py, place.py).
+* The `services/` subdirectory is where the Facade pattern is implemented, managing the interaction between layers.
+* The `persistence/` subdirectory is where the in-memory repository is implemented. This will later be replaced by a database-backed solution using SQL Alchemy.
+* `app.py` is the entry point for running the Flask application.
+* `config.py` will be used for configuring environment variables and application settings.
+* `requirements.txt` will list all the Python packages needed for the project.
 
-  * Contains core application logic and business rules.  
-  * Manages data models and their relationships.  
-  * Validation, processing and business operations.  
-  * Components: User, Place, Review, Amenity.
+---
 
-* #### **Persistence Layer:**
+# Business Logic Layer
 
-  * Manages data storage and operations.  
-  * Provides data access.  
-  * Persistence operations.  
-  * JSON processing.
+The Business Logic Layer is responsible for implementing the core rules and workflows of the application. It defines the main entities and their interactions, ensuring data integrity and encapsulating the application's functionality.
 
-### **Facade Pattern Implementation:**
+## Entities
 
-The [Facade Pattern](https://refactoring.guru/design-patterns/facade/python/example) is an interface between the Presentation and Business Logic layers.  
-The fundamental purpose is don’t expose entities (User, Place, Review, Amenities) providing high-level operation (functions).  
-This approach ensures that the presentation layer doesn't need to understand the details of business logic implementation, promoting low coupling and easier maintenance.
+- **User:** Represents a user of the platform. Handles user-specific actions and validation (e.g., name and email format).
+- **Place:** Represents a property listed on the platform. Manages attributes like location, description, price, amenities, and reviews. Provides methods to add/remove amenities and reviews.
+- **Amenity:** Represents features or services available at a place (e.g., Wi-Fi, pool). Handles amenity-specific data and validation.
+- **Review:** Represents user feedback for a place, including ratings and comments. Ensures ratings are within valid bounds and links reviews to both users and places.
+- **BaseModel:** Abstract base class providing common attributes (e.g., `id`, `created_at`, `updated_at`) and methods for serialization and updating.
 
-##  **High-Level Package Diagram**
 
-For this project, we developed a three-layer architecture implementing the Facade pattern for separation of concern and scalability. *Also because it’s the only one we know enough about.*
-###
+## Example Usage
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/00f70623-1ce4-4f9f-b239-7069fd4ee644" alt="Banner">
-</p>
+```python
+from app.models.user import User
+from app.models.place import Place
+from app.models.amenity import Amenity
+from app.models.review import Review
 
-### 
+# Create a new user
+user = User(first_name="Jane", last_name="Doe", email="jane@example.com")
+print(user.id, user.first_name, user.email)
 
-### **Presentation Layer:**
+# Create amenities
+wifi = Amenity(name="Wi-Fi", description="Fast wireless internet")
+pool = Amenity(name="Pool", description="Outdoor swimming pool")
 
-User-System communication, this represents the application GUI’s and the higher level logic in our app.
+# Create a new place
+place = Place(
+    owner_id=user.id,
+    title="Cozy Apartment",
+    description="A nice place to stay",
+    price=120,
+    latitude=48.8566,
+    longitude=2.3522,
+    amenities=[wifi, pool]
+)
 
-* #### **Front-End:**
+# Add an amenity after creation
+gym = Amenity(name="Gym", description="Fitness center")
+place.add_amenity(gym)
 
-  * **Login:** User log-in/sign-in authentication.  
-  * **User Management:**  Where the user can customize its profile, change user settings, see user-related information.  
-  * **Publish Offer:** Manage places, create/update user listings.  
-  * **Rent a Place:** Showcase listings available for rent.
+# Leave a review
+review = Review(owner_id=user.id, place_id=place.id, rating=5, comment="Great stay!")
+place.add_review(review)
 
-* #### **API:**
+# Access reviews and amenities
+for rev in place.reviews:
+    print(f"Review by {rev.owner_id}: {rev.comment}")
 
-  * **Requests:** Manage user requests to the application.  
-  * **Responses:** Parse response from the lower level layers back to the user.  
-  * **HTTP Status Management:** HTTP codes and error handling.
+for amenity in place.amenities:
+    print(f"Amenity: {amenity.name} - {amenity.description}")
 
-### **Business Logic Layer:**
+# Update place details
+place.title = "Modern Cozy Apartment"
+place.price = 130
+place.save()
+```
 
-Main design and logic of our application, this is where the facade pattern takes form.  
-The facade pattern gives the components of the business logic layer a straightforward way to communicate with higher level components.
+**Key Methods and Responsibilities:**
 
-* #### **Core:**
+- `User`: Validates names and emails, stores user data.
+- `Place`: Manages amenities and reviews, validates location and price, provides methods `add_amenity`, `remove_amenity`, `add_review`, `remove_review`.
+- `Amenity`: Stores amenity details, validates input.
+- `Review`: Validates rating and comment, links to user and place.
+- `BaseModel`: Provides unique ID, timestamps, and update/serialization helpers.
 
-  * **Client:** User-related operations. (create user, update user information, validate information, manage user-user interactions)  
-  * **Places:** Place-related operations. (create/update place, validate place information, manage status like; available, rented, hidden, etc)  
-  * **Reviews:** Review moderation, calculate place rating (imagine a 5-star system based on the number of starts where each review can be 1-5 stars).  
-  * **Amenities**: Create/Update/Delete amenity, categorize amenities based on their level of comfort (a jacuzzi is a premium amenity.)
+Each model provides methods for creating, updating, deleting, and serializing instances, ensuring a clean separation between business logic and data storage.
 
-* #### **Rules:**
+# Testing the Business Logic Layer
 
-  * **Validate Data:** Ensures data integrity and enforces business rules before processing. Validates input information like; data type, required fields. validates email, phone and dates. Cleans up data. Handles relationship logic like: *review target place exists* and *user rented that place within a time-frame.*  
-  * **Logic Operations:** This item includes all the verifications for every entity, functionalities and necessary calcs.  
-    For example: Performs pricing calculations, booking conflicts, calculates commission profit, handles cancellations and so on. *\[WIP\]Logic operations combined produces a basic workflow; for example could be: check availability \> validate client \> calculate price \> reserve property \> send confirmations.*  
-  * **Relation Management:** validates relationships, for example: one client per booking, multiple amenities per place. Prevent orphaned entities and broken references, handles entity operations like: deleting a client affects their bookings, reviews, and listings.
+The file `tests/test_models.py` contains unit tests for the core entities. These tests verify that:
 
-### **Persistence Layer**
+- Users are created with valid data and validation is enforced.
+- Places are created with correct attributes, and amenities and reviews can be added.
+- Amenities are created and validated.
+- Reviews are created, validated, and linked to users and places.
 
-Data storage and retrieval, data integrity maintenance.
+## Running the Entity Tests
 
-* #### **Storage:**
+From the `part2` directory, run:
 
-  * **Client Data:** User information storage.  
-  * **Place Data:** Place information storage.  
-  * **JSON Processing**: data serialization.
+```bash
+python3 -m unittest discover -s tests -p "test_models.py"
+```
 
-**Data flow example:**
+## Example Test (from `test_models.py`)
 
-1. User registers.  
-2. API handles this request to facade.  
-3. Request is processed.  
-4. Data is validated.  
-5. Data is stored.  
-6. JSON serialization.
+```python
+def test_place_creation(self):
+    owner = User(
+        first_name="Alice", last_name="Smith", email="alice.smith@example.com"
+    )
+    place = Place(
+        owner_id=owner.id,
+        title="Cozy Apartment",
+        description="A nice place to stay",
+        price=100,
+        latitude=37.7749,
+        longitude=-122.4194,
+        amenities=[],
+        reviews=[],
+    )
 
-###
+    # Create a review and add to place
+    review = Review(
+        owner_id=owner.id, place_id=place.id, rating=5, comment="Great stay!"
+    )
+    place.add_review(review)
 
-## **Class Diagram**
+    self.assertEqual(place.title, "Cozy Apartment")
+    self.assertEqual(place.price, 100)
+    self.assertEqual(len(place.reviews), 1)
+    self.assertEqual(place.reviews[0].comment, "Great stay!")
+```
 
-![WhatsApp Image 2025-06-08 at 5 23 49 PM](https://github.com/user-attachments/assets/fb4a28c6-a76d-443e-a519-e287906f634c)
+## Extending the Tests
 
-### **User:**
+You can add more tests for each entity by following the structure in `test_models.py`. Each test should:
 
-Represents a client using the app.
+- Instantiate the model with valid and invalid data.
+- Assert that validation and business logic are enforced.
+- Test relationships between entities (e.g., adding reviews to places).
 
-* **id\_user**: used for auditing purposes.  
-* **first\_name**: User’s first name.  
-* **last\_name**: User’s last name.  
-* **email**: User’s email.  
-* **password**: User’s password  
-* **is\_admin**: if *True*, this instance of *User* has elevated privileges.
+Continue reading below for API endpoint documentation and endpoint testing.
 
-Characteristics and relations:
+---
 
-- One user can have none or many places listed.  
-- An user can be either regular or administrator.  
-- Can create, update and delete his account.  
-- One user can author one reviews for each place he rented.
+# Endpoints
 
-### **Place:**
+The project provides a RESTful API for managing users, places, amenities, and reviews. All endpoints are documented and accessible via Swagger UI at `/api/v1/` when the server is running.
 
-Represents asset locations, whatever a *User* registers as a listing that can be rented and be rated according to its amenities.
+### Example Endpoints
 
-* **id\_place**: used for auditing purposes.  
-* **title**: listing’s title.  
-* **description**: a short description made by the *User* who owns it.  
-* **price**: rent price per day.  
-* **tuple**: the coordinates of this Place.  
-* **Amenities**: list containing this Place’s amenities.
+- `POST /api/v1/users/` — Create a new user
+- `GET /api/v1/users/` — List all users
+- `GET /api/v1/users/<user_id>` — Retrieve a user by ID
+- `PUT /api/v1/users/<user_id>` — Update a user
 
-Characteristics and relations:
+- `POST /api/v1/places/` — Create a new place
+- `GET /api/v1/places/` — List all places
+- `GET /api/v1/places/<place_id>` — Retrieve a place by ID
+- `PUT /api/v1/places/<place_id>` — Update a place
 
-- One place can have one *User* who owns it.  
-- The owner can create, update and delete this place.  
-- One place can have many reviews by many *Users* who rented it.  
-- Each place is rated according to *User* reviews, *amenities*’ quality and quantity.
+- `POST /api/v1/amenity/` — Create a new amenity
+- `GET /api/v1/amenity/` — List all amenities
+- `GET /api/v1/amenity/<amenity_id>` — Retrieve an amenity by ID
+- `PUT /api/v1/amenity/<amenity_id>` — Update an amenity
 
-### **Amenity:**
+- `POST /api/v1/reviews/` — Create a new review
+- `GET /api/v1/reviews/` — List all reviews
+- `GET /api/v1/reviews/<review_id>` — Retrieve a review by ID
+- `PUT /api/v1/reviews/<review_id>` — Update a review
 
-Can be features or services registered to a specific place like; WiFi, free parking, a jacuzzi and so on.   
-Amenities are created and managed only by Admin Users.  
-After the amenities are created, normal users can select them from a list to append it to places.
+---
 
-* **id\_amenity**: used for auditing purposes.  
-* **name**: the name of the amenity  
-* **description**: a short description.
+# Testing the API
 
-Characteristics and relations:
+Unit and integration tests are provided to ensure the correctness of the API endpoints and business logic. The main test file for endpoint testing is:
 
-- One amenity can be shared across many *Places*.  
-- \[not implemented yet\] One amenity can be classified as one of 3 grades: basic, extra and premium. Which in turn will give a *Place* part of its rating.  
-- Can be created, updated and deleted by the Admin Users.
+- `tests/test_endpoints.py`
 
-### **Review:**
+## Running the Tests
 
-It’s the feedback a *User* who rented a *Place* gave it.
+From the `part2` directory, run:
 
-* **id\_entity**: used for auditing purposes.  
-* **rating**: the user’s rating of one place. *Will be validated from 1 to 5 in the form of stars. User will select it from a select-box.*  
-* **comment**: a public comment that will describe the rating’s reason to other users.
+```bash
+python3 -m unittest discover -s tests -p "test_review_endpoint.py"
+```
 
-Characteristics and relations:
+## What is Tested
 
-- One *User* can author many reviews.  
-- One review can rate one *Place*.  
-- One *Place* can have many reviews from different users.  
-- Can be created, updated and deleted by the author.
+- **User endpoints:** Creation, validation, retrieval, and update of users.
+- **Place endpoints:** (Extendable) Creation, retrieval, and update of places.
+- **Error handling:** Ensures proper error messages and status codes are returned for invalid input.
 
-### **BaseModel:**
+## Example Test (from `test_endpoints.py`)
 
-All entities inherit from a *BaseModel* that automatically tracks when records are created and last updated, plus, it provides abstract methods for child classes, for database operations like create, update, delete. Each child class will have to implement its own create, update, delete method.
+```python
+def test_create_user(self):
+    response = self.client.post(
+        "/api/v1/users/",
+        json={
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane.doe@example.com",
+        },
+    )
+    self.assertEqual(response.status_code, 201)
+    data = response.get_json()
+    self.assertIn("id", data)
+    self.assertEqual(data["first_name"], "Jane")
+    self.assertEqual(data["last_name"], "Doe")
+    self.assertEqual(data["email"], "jane.doe@example.com")
+```
 
-## **Sequence Diagrams**
+## Extending the Tests
 
-### **API Interaction Flow**
+You can add more tests for places, amenities, and reviews by following the structure in `test_endpoints.py`. Each test should:
 
-#### 
+- Use the Flask test client to make requests to the API.
+- Assert the expected status code and response data.
+- Optionally, chain requests (e.g., create a user, then create a place for that user).
 
-#### Overview:
+---
 
-The following diagrams illustrates the core operations of our AirBnB-like implementation.  
-The purpose is to demonstrate the interaction flow between system layers, capturing the four primary workflows (listing creation, user registration, listings retrieval and review submission).
+## License
 
-### **User Registration sequence**
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/89013a4f-bed7-47d5-a0db-3ecbb659c161" alt="Banner">
-</p>
-
-Process:
-
-1. A new user fills the registration form and submits the request.  
-2. API receives the request and delegates to Business Logic through create\_user().  
-3. Business logic operations (data integrity, required fields, and business rules check)  
-4. Valid data is saved into a database, the confirmation flows back to the client with HTTP 201 Created response.
-
-On failure:
-
-1. Business Logic determines that the data is invalid.  
-2. Business Logic responds “Invalid user data request” back to the API.  
-3. API returns HTTP 400 Bad Request status to the Client App.
-
-### **Place Creation sequence**
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/bde858af-c929-4bf1-b1c3-90954769591a" alt="Banner">
-</p>
-
-Process:
-
-1. Listing creation request.  
-2. API receives request and calls create\_listing(data)  
-3. Business logic operation (Ensures data integrity and business rules compliance)  
-4. Valid data is saved in the database with HTTP 201 Created response.
-
-On failure:
-
-1. Business Logic determines that the listing data is invalid.  
-2. Business Logic responds “Invalid data request” back to the API.  
-3. API returns HTTP 400 Bad Request status to the Client App.
-
-### **Review Submission sequence**
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4d4e757c-a230-45a5-9be3-a93ca30ae2df" alt="Banner">
-</p>
-
-Process:
-
-1. Client App initiates a "Review Submission" request to the API.  
-2. API calls the post\_review() function on the Business Logic layer.  
-3. Business Logic validates the review data internally.  
-4. Business Logic commands the Database for review storing.  
-5. Database confirms the review storage with "Review stored confirmation".  
-6. Business Logic responds "Review posted successfully" back to the API.  
-7. API returns HTTP 201 Created response to the Client App.
-
-On failure:
-
-4. Business Logic determines that the data is invalid.  
-5. Business Logic responds “Review not valid” back to the API.  
-6. API returns HTTP 400 Bad Request status to the Client App.
-
-### **Fetching a List of Places**
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/af3fad2a-d029-43fa-91ab-093553f06dad" alt="Banner">
-</p>
-
-Process:
-
-1. Available places list request.  
-2. API receives requests and calls get\_places() from Business Logic.  
-3. Business Logic queries database for listing.  
-4. Results returned with HTTP 200 OK Response. If no matches are found, an empty list is returned. Front-end is then refreshed with returned listings.
+This project is licensed under the MIT License.
