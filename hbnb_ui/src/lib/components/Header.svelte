@@ -1,22 +1,33 @@
-<header>
+<script>
+  import { onMount } from "svelte";
+  let headerElement;
+  let isScrolled = false;
+
+  onMount(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 100) {
+        isScrolled = true;
+      } else {
+        isScrolled = false;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+</script>
+
+<header bind:this={headerElement} class:scrolled={isScrolled}>
   <a id="header-logo-anchor" href="/">
-    <picture id="header-logo-pictureset">
-      <source srcset="/src/assets/images/main_logo.png" media="(max-width: 600px)" />
-      <source
-        srcset="/src/assets/images/hbnb_logo_black.png"
-        media="(prefers-color-scheme: light)"
-      />
-      <source
-        srcset="/src/assets/images/hbnb_logo_white.png"
-        media="(prefers-color-scheme: dark)"
-      />
-      <img src="/src/assets/images/main_logo.png" alt="HBnB Logo" height="50"/>
-    </picture>
+    <img src="src/assets/images/main_logo.png" alt="HBnB Logo" height="40" />
   </a>
   <nav>
     <ul>
       <li>
-        <a href="/" aria-label="User" title="User"><i class="fa-solid fa-user"></i></a
+        <a href="/login" aria-label="User" title="User" class="header_button"
+          ><i class="fa-solid fa-user"></i></a
         >
       </li>
     </ul>
@@ -26,39 +37,35 @@
 <style>
   header {
     /* outline: 1px solid green; */
+    z-index: 1000;
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 2rem;
+    padding: 5px 2rem;
     width: 100%;
-    max-width: 100dvw;
     max-height: 90px;
-    background: #08051d;
-    background: linear-gradient(126deg, #3a0101 0%, #040a25 100%);
+    background: var(--header-background);
+    transition: background 500ms ease-in-out;
   }
-  :root.light {
-    header {
-      background: #751b1b;
-      background: linear-gradient(
-        126deg,
-        #f06e57 0%,
-        #d87793 49%,
-        #c579c5 100%
-      );
-    }
+  header.scrolled {
+    background: transparent;
+  }
+  :root.light header.scrolled {
+    background: transparent;
   }
   ul {
     /* outline: 1px solid red; */
     list-style: none;
     display: flex;
     gap: 20px;
-    padding: 5px;
     margin: 0;
   }
   li {
     /* outline: 1px solid yellow; */
-    padding: 10px;
-    font-size: 1.2em;
+    padding: 15px;
+    font-size: 1.4em;
     transition: transform ease-in-out 150ms;
     cursor: pointer;
   }
@@ -68,10 +75,23 @@
     color: var(--accent);
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.267);
   }
-  #header-logo-pictureset {
-    /* outline: 1px solid red; */
+  #header-logo-anchor {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  #header-logo-anchor img {
+    filter: brightness(5);
+    transition: filter 200ms ease-in-out;
+  }
+  :root.light #header-logo-anchor img {
+    filter: brightness(0);
+  }
+    :root.light #header-logo-anchor img:hover {
+    filter: brightness(0.9);
+  }
+  #header-logo-anchor img:hover {
+    filter: brightness(1.2);
   }
 </style>

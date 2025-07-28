@@ -16,17 +16,22 @@
     <div id="footer-container">
       <div id="footer-info-wrapper">
         <div class="footer-item">
-          <a class="footer-anchor"
-            href="http://www.github.com/glovek08"
+          <a
+            class="footer-anchor"
+            href="https://www.github.com/glovek08"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Gabriel Barn github link"
             >Gabriel Barn <i class="fa-brands fa-github"></i></a
-          > / 
-          <a class="footer-anchor"
-            href="https://github.com/federico-paganini"
+          >
+          /
+          <a
+            class="footer-anchor"
+            href="https://www.github.com/federico-paganini"
             target="_blank"
             rel="noopener noreferrer"
-          >Federico Paganini <i class="fa-brands fa-github"></i></a
+            aria-label="Federico Paganini github link"
+            >Federico Paganini <i class="fa-brands fa-github"></i></a
           >
         </div>
         <div class="horizontal-rule"></div>
@@ -43,31 +48,33 @@
 
 <style>
   footer {
-    background: var(--secondary-color);
     /* outline: 1px solid rgb(0, 255, 64); */
     color: var(--text-color);
     width: 100%;
     min-height: 100px;
-    max-width: 100dvw;
     margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
+    padding: 50px 20px 20px 20px;
     text-align: center;
   }
   :root {
     footer {
-      background: #08051d;
-      background: linear-gradient(126deg, #080b16 0%, #220b0b 100%);
+      background: url("/src/assets/svgs/footer_bg_dark.svg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   }
   :root.light {
     footer {
-      background: #08051d;
-      background: linear-gradient(126deg, #ee6d6d 0%, #b0bdec 100%);
+      background: url("/src/assets/svgs/footer_bg_light.svg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   }
   #footer-logo-img {
@@ -103,6 +110,9 @@
     text-align: left;
     min-width: 220px;
   }
+  footer a:hover {
+    text-shadow: 0 0 10px var(--background-color);
+  }
   .footer-anchor {
     /* outline: 1px solid green;  */
     text-align: right;
@@ -114,7 +124,7 @@
     min-height: 45px;
     background: var(--text-color);
   }
-  
+
   @media (max-width: 720px) {
     .horizontal-rule {
       display: none;

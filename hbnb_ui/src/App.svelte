@@ -3,6 +3,7 @@
   // import ApiTest from "./lib/ApiTest.svelte";
   import Header from "./lib/components/Header.svelte";
   import Footer from "./lib/components/Footer.svelte";
+  import Home from "./lib/pages/Home.svelte";
 
   onMount(() => {
     const updateTheme = () => {
@@ -29,6 +30,7 @@
 
 <Header />
 <main>
+  <Home />
   <!-- If you want to test the endpoints and the connection with
    the backend, uncomment the component ApiTest-->
   <!-- <ApiTest /> -->
@@ -37,15 +39,13 @@
 
 <style>
   main {
+    /* outline: 1px solid blue; */
     min-height: 900px;
     width: 100%;
-    max-width: 100dvw;
-    margin-top: 10px;
-    padding: 2rem 3rem;
+    padding: 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    outline: 1px solid blue;
   }
 </style>
