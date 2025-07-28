@@ -1,21 +1,20 @@
 <header>
   <a id="header-logo-anchor" href="/">
     <picture id="header-logo-pictureset">
-      <source srcset="/src/assets/main_logo.png" media="(max-width: 600px)" />
+      <source srcset="/src/assets/images/main_logo.png" media="(max-width: 600px)" />
       <source
-        srcset="/src/assets/hbnb_logo_black.png"
+        srcset="/src/assets/images/hbnb_logo_black.png"
         media="(prefers-color-scheme: light)"
       />
       <source
-        srcset="/src/assets/hbnb_logo_white.png"
+        srcset="/src/assets/images/hbnb_logo_white.png"
         media="(prefers-color-scheme: dark)"
       />
-      <img src="/src/assets/main_logo.png" alt="HBnB Logo" height="40" />
+      <img src="/src/assets/images/main_logo.png" alt="HBnB Logo" height="50"/>
     </picture>
   </a>
   <nav>
     <ul>
-      <li><a href="/about">About</a></li>
       <li>
         <a href="/" aria-label="User" title="User"><i class="fa-solid fa-user"></i></a
         >
@@ -68,5 +67,11 @@
     transform: scale(1.2);
     color: var(--accent);
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.267);
+  }
+  #header-logo-pictureset {
+    /* outline: 1px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
