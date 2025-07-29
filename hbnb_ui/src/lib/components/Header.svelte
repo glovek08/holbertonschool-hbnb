@@ -1,7 +1,49 @@
 <script>
   import { onMount } from "svelte";
+  import Sidebar from "./Sidebar.svelte";
   let headerElement;
   let isScrolled = false;
+  let sidebarComponent;
+
+  /******** SIDEBAR CRAP **********/
+  let showSidebar = false;
+  let userLoggedIn = false;
+  function toggleSidebar() {
+    const toggleSidebarSpan = document.querySelector("#toggle-sidebar-span");
+
+    if (showSidebar) {
+      // Use the sidebar's animated close instead of direct toggle
+      if (sidebarComponent) {
+        sidebarComponent.requestClose();
+      }
+      // Update icon immediately
+      if (toggleSidebarSpan) {
+        toggleSidebarSpan.classList.add("fa-sliders");
+        toggleSidebarSpan.classList.remove("fa-circle-xmark");
+      }
+    } else {
+      // Opening sidebar
+      showSidebar = true;
+      if (toggleSidebarSpan) {
+        toggleSidebarSpan.classList.remove("fa-sliders");
+        toggleSidebarSpan.classList.add("fa-circle-xmark");
+      }
+    }
+  }
+  function closeSidebar() {
+    showSidebar = false;
+    // Reset the icon when sidebar closes
+    const toggleSidebarSpan = document.querySelector("#toggle-sidebar-span");
+    if (toggleSidebarSpan) {
+      toggleSidebarSpan.classList.add("fa-sliders");
+      toggleSidebarSpan.classList.remove("fa-circle-xmark");
+    }
+  }
+  function logout() {
+    userLoggedIn = false;
+    showSidebar = false;
+    console.log("User logged out");
+  }
 
   function toggleTheme() {
     const root = document.documentElement;
@@ -21,7 +63,7 @@
       localStorage.setItem("theme", "light");
       // Remember to respect the fucking user preferences!
     }
-    window.dispatchEvent(new CustomEvent('themechange'));
+    window.dispatchEvent(new CustomEvent("themechange"));
   }
   onMount(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -40,7 +82,6 @@
         themeIcon.classList.add("fa-sun");
       }
     }
-    // Scroll handler
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (scrollY > 100) {
@@ -74,18 +115,24 @@
         >
       </li>
       <li>
-        <a href="/login" aria-label="User" title="User" class="header-button"
-          ><i class="fa-solid fa-user"></i></a
+        <button
+          id="toggle-sidebar"
+          class="header-button"
+          aria-label={showSidebar ? "Close Menu" : "Open Menu"}
+          on:click={toggleSidebar}
+          ><i id="toggle-sidebar-span" class="fa-solid fa-sliders"></i></button
         >
       </li>
     </ul>
   </nav>
 </header>
 
+<Sidebar bind:this={sidebarComponent} show={showSidebar} {userLoggedIn} {closeSidebar} {logout} />
+
 <style>
   header {
     /* outline: 1px solid green; */
-    z-index: 1000;
+    z-index: 20;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
