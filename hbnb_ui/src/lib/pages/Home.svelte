@@ -5,7 +5,7 @@
 <section id="welcome-section">
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 1440 320"
+    viewBox="0 0 1400 320"
     id="waves-svg-bg"
   >
     <path
@@ -31,6 +31,8 @@
   </div>
 </section>
 
+<section id="places-section"></section>
+
 <style>
   :global(.button-1) {
     /* for this page only */
@@ -41,9 +43,9 @@
   }
   #welcome-section {
     /* outline: 1px solid red; */
-    position: relative; /* Might fuck things up, in that case, revert to normal positioning. */
+    /* position: relative; Might fuck things up, in that case, revert to normal positioning. */
     width: 100%;
-    min-height: 80vh;
+    min-height: 94vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,25 +70,19 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap-reverse;
-    gap: 20px;
+    gap: 100px;
   }
-  #welcome-section-wrapper > * {
-    /* outline: 1px solid blue; */
-  }
-  #welcome-section-svg-container {
-    position: relative;
-    left: -100px;
-    top: 100px;
-  }
+
   .welcome-section-flex-item {
+    /* outline: 1px solid blue; */
+    padding: 20px;
   }
+
   #user-welcome-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    position: relative;
-    top: 50px;
     text-align: left;
     font-size: 1.5rem;
     max-width: 500px;
@@ -100,5 +96,25 @@
   #user-subtitle {
     padding: 10px;
     margin: 0 0 50px 0;
+  }
+
+  @media screen and (max-width: 1200px) {
+    #welcome-section-wrapper {
+      padding-top: 70px;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+
+
+  /* **************************** PLACES KINGDOM *********************** */
+
+  #places-section {
+    /* outline: 1px solid yellow; */
+    margin-top: 0;
+    background: var(--header-background);
+    width: 100%;
+    min-height: 200px;
   }
 </style>

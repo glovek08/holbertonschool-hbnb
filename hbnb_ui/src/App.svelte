@@ -5,27 +5,27 @@
   import Footer from "./lib/components/Footer.svelte";
   import Home from "./lib/pages/Home.svelte";
 
-  onMount(() => {
-    const updateTheme = () => {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      const root = document.documentElement;
-      if (prefersDark) {
-        root.classList.remove("light");
-      } else {
-        root.classList.add("light");
-      }
-    };
-    updateTheme();
+  // onMount(() => {
+  //   const updateTheme = () => {
+  //     const prefersDark = window.matchMedia(
+  //       "(prefers-color-scheme: dark)"
+  //     ).matches;
+  //     const root = document.documentElement;
+  //     if (prefersDark) {
+  //       root.classList.remove("light");
+  //     } else {
+  //       root.classList.add("light");
+  //     }
+  //   };
+  //   updateTheme();
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQuery.addEventListener("change", updateTheme);
+  //   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  //   mediaQuery.addEventListener("change", updateTheme);
 
-    return () => {
-      mediaQuery.removeEventListener("change", updateTheme);
-    };
-  });
+  //   return () => {
+  //     mediaQuery.removeEventListener("change", updateTheme);
+  //   };
+  // });
 </script>
 
 <Header />
