@@ -52,25 +52,33 @@
     <script>
       const updateFavicon = () => {
         const favicon = document.getElementById("favicon");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
+        const root = document.documentElement;
+        const isLightTheme = root.classList.contains("light");
 
-        if (prefersDark) {
-          favicon.href = "/src/assets/images/favicon_white.ico";
-        } else {
+        if (isLightTheme) {
           favicon.href = "/src/assets/images/favicon_black.ico";
+        } else {
+          favicon.href = "/src/assets/images/favicon_white.ico";
         }
       };
       updateFavicon();
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", updateFavicon);
+
+      // comes from Header.svelte
+      window.addEventListener("themechange", updateFavicon);
+      const observer = new MutationObserver(() => {
+        updateFavicon();
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
     </script>
   </body>
 </html>
 <style>
   #app {
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     flex-direction: column;

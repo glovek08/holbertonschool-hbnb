@@ -21,6 +21,7 @@
       localStorage.setItem("theme", "light");
       // Remember to respect the fucking user preferences!
     }
+    window.dispatchEvent(new CustomEvent('themechange'));
   }
   onMount(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -97,8 +98,8 @@
     width: 100%;
     max-height: 90px;
     background: var(--header-background);
-    transition: background 500ms ease-in-out;
-    -webkit-transition: background 500ms ease-in-out;
+    transition: background 400ms ease-out;
+    -webkit-transition: background 400ms ease-out;
   }
   header:hover {
     background: var(--header-background);
@@ -173,8 +174,8 @@
     filter: brightness(0);
   }
   :root.light #header-logo-anchor img:hover {
-    -webkit-filter: brightness(0.9);
-    filter: brightness(0.9);
+    -webkit-filter: brightness(1);
+    filter: brightness(1);
   }
   #header-logo-anchor img:hover {
     -webkit-filter: brightness(1.2);

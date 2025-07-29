@@ -45,14 +45,13 @@
     /* outline: 1px solid red; */
     /* position: relative; Might fuck things up, in that case, revert to normal positioning. */
     width: 100%;
-    min-height: 94vh;
+    min-height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     overflow: hidden;
-    margin: 0;
-    padding: 0;
+    padding: 50px 20px;
   }
   #waves-svg-bg {
     position: absolute;
@@ -66,11 +65,15 @@
     simulate the transition of the header on scrollY*/
   }
   #welcome-section-wrapper {
+    /* outline: 1px solid red; */
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap-reverse;
-    gap: 100px;
+    gap: 20px;
+    position: relative;
+    left: -40px;
   }
 
   .welcome-section-flex-item {
@@ -79,6 +82,7 @@
   }
 
   #user-welcome-container {
+    /* outline: 1px solid yellow; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,6 +107,7 @@
       padding-top: 70px;
       align-items: center;
       justify-content: center;
+      position: static;
     }
   }
 
@@ -112,7 +117,7 @@
 
   #places-section {
     /* outline: 1px solid yellow; */
-    margin-top: 0;
+    margin-top: 150px;
     background: var(--header-background);
     width: 100%;
     min-height: 200px;

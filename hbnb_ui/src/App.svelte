@@ -40,12 +40,13 @@
 <style>
   main {
     /* outline: 1px solid blue; */
-    min-height: 900px;
+    flex: 1;
     width: 100%;
-    padding: 0 0;
+    padding: 8% 0 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    min-height: 1000px;
   }
 </style>
