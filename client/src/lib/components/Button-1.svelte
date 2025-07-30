@@ -1,8 +1,9 @@
 <script>
   export let text = "Button 1";
+  export let type = "button";
 </script>
 
-<button class="button-1">{text}</button>
+<button class="button-1" {type}>{text}</button>
 
 <style>
   .button-1 {

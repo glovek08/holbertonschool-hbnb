@@ -1,4 +1,5 @@
 <script>
+  import Button_1 from "./Button-1.svelte";
   export let show = false;
   export let userLoggedIn = false;
   export let closeSidebar = () => {};
@@ -16,17 +17,27 @@
 </script>
 
 {#if show}
-  <div
+  <button
+    type="button"
     class="sidebar-backdrop"
     class:closing={isClosing}
     on:click={handleClose}
-  ></div>
+    on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClose(); }}
+    aria-label={show ? 'Close sidebar' : 'Open sidebar'}
+    tabindex="0"
+    style="border:none;background:rgba(0,0,0,0);padding:0;position:fixed;inset:0;z-index:9;"
+  ></button>
   <aside class="sidebar" class:closing={isClosing}>
     {#if !userLoggedIn}
       <div class="login-section">
-        <h3>Welcome!</h3>
+        <h3 id="sidebar-heading">Welcome!</h3>
         <p>Please log in to access your account</p>
         <!-- login form should be here! -->
+         <form id="user-login-form" action="" method="post">
+          <input type="text" class="login-input" name="username" id="username" placeholder="username" required aria-label="username" />
+          <input type="password" class="login-input" name="password" id="password" placeholder="password" required aria-label="password"/>
+            <Button_1 text="LOGIN" type="submit"/>
+         </form>
       </div>
     {:else}
       <div class="user-section">
@@ -54,6 +65,28 @@
   .sidebar-backdrop.closing {
     animation: backdropFadeOut 300ms ease-out;
   }
+  .login-section {
+    /* outline: 1px solid yellow; */
+    padding: 20px;
+    text-align: center;
+  }
+
+  #user-login-form {
+    /* outline: 1px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 10px;
+  }
+  .login-input {
+    padding: 7px 15px;
+  }
+  #login-button {
+    padding: 10px;
+    width: 50%;
+  }
 
   aside.sidebar {
     /* outline: 1px solid red; */
@@ -72,6 +105,10 @@
     width: 350px;
     animation: slideInFromRight 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform: translateX(0);
+    transition: background-color 300ms ease-in-out;
+  }
+  #sidebar-heading {
+    font-size: 1.5rem;
   }
   aside.sidebar.closing {
     animation: slideOutToRight 300ms cubic-bezier(0.55, 0.06, 0.68, 0.19);
@@ -115,6 +152,7 @@
   @media (max-width: 768px) {
     aside.sidebar {
       width: 100vw;
+      padding: 20px;
     }
   }
 </style>
