@@ -101,7 +101,7 @@
 
 <header bind:this={headerElement} class:scrolled={isScrolled}>
   <a id="header-logo-anchor" href="/">
-    <img src="src/assets/images/main_logo.png" alt="HBnB Logo" height="40" />
+    <img src="main_logo.png" alt="HBnB Logo" height="40" />
   </a>
   <nav>
     <ul>

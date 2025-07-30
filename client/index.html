@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HBnB</title>
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
-    <meta
-      http-equiv="Referrer-Policy"
-      content="strict-origin-when-cross-origin"
-    />
-    <meta
-      http-equiv="Permissions-Policy"
-      content="geolocation=(), microphone=(), camera=(), payment=(), usb=()"
-    />
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -26,21 +15,18 @@
         connect-src 'self' https: https://ka-p.fontawesome.com;
         media-src 'self';
         object-src 'none';
-        child-src 'none';
+        frame-src 'none';
         worker-src 'self';
         manifest-src 'self';
         base-uri 'self';
         form-action 'self';
-        frame-ancestors 'none';
         upgrade-insecure-requests;
-    "
-    />
+    ">
     <link
       rel="shortcut icon"
       id="favicon"
-      href="/src/assets/images/favicon_white.ico"
-      type="image/x-icon"
-    />
+      href="favicon_white.ico"
+      type="image/x-icon">
     <script
       src="https://kit.fontawesome.com/1b73c2ec6e.js"
       crossorigin="anonymous"
@@ -56,9 +42,9 @@
         const isLightTheme = root.classList.contains("light");
 
         if (isLightTheme) {
-          favicon.href = "/src/assets/images/favicon_black.ico";
+          favicon.href = "favicon_black.ico";
         } else {
-          favicon.href = "/src/assets/images/favicon_white.ico";
+          favicon.href = "favicon_white.ico";
         }
       };
       updateFavicon();
@@ -76,12 +62,4 @@
     </script>
   </body>
 </html>
-<style>
-  #app {
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-</style>
+
