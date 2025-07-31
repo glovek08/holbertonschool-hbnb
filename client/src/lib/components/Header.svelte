@@ -211,7 +211,7 @@
 
   #header-logo-anchor img {
     -webkit-filter: brightness(5);
-    filter: brightness(5);
+    filter: brightness(0) invert(1);
     transition: filter 200ms ease-in-out;
     -webkit-transition: -webkit-filter 200ms ease-in-out;
   }

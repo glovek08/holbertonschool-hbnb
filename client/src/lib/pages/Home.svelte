@@ -104,14 +104,16 @@
 
   @media screen and (max-width: 1200px) {
     #welcome-section-wrapper {
-      padding-top: 70px;
+      padding-top: 0;
+      margin-top: 0;
       align-items: center;
       justify-content: center;
       position: static;
     }
+    #house-search {
+      width: 100%;
+    }
   }
-
-
 
   /* **************************** PLACES KINGDOM *********************** */
 
@@ -121,5 +123,10 @@
     background: var(--header-background);
     width: 100%;
     min-height: 200px;
+  }
+  @media screen and (max-width: 1200px) {
+    #places-section {
+      margin-top: 0;
+    }
   }
 </style>

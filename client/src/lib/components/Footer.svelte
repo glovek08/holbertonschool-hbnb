@@ -24,7 +24,6 @@
             aria-label="Gabriel Barn github link"
             >Gabriel Barn <i class="fa-brands fa-github"></i></a
           >
-          /
           <a
             class="footer-anchor"
             href="https://www.github.com/federico-paganini"
@@ -36,7 +35,7 @@
         </div>
         <div class="horizontal-rule"></div>
         <div class="footer-item">
-          <a href="/about">About</a> /
+          <a href="/about">About</a>
           <a href="/contact">Contact</a>
         </div>
         <h3 class="playwrite">Made in Uruguay</h3>
@@ -110,6 +109,9 @@
     text-align: left;
     min-width: 220px;
   }
+  .footer-item a {
+    margin: 10px;
+  }
   footer a:hover {
     text-shadow: 0 0 10px var(--background-color);
   }
@@ -128,6 +130,16 @@
   @media (max-width: 720px) {
     .horizontal-rule {
       display: none;
+    }
+    .footer-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      flex-direction: column;
+    }
+    .footer-anchor {
+      margin: 10px;
     }
   }
 </style>
