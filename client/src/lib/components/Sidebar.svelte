@@ -22,8 +22,10 @@
     class="sidebar-backdrop"
     class:closing={isClosing}
     on:click={handleClose}
-    on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClose(); }}
-    aria-label={show ? 'Close sidebar' : 'Open sidebar'}
+    on:keydown={(e) => {
+      if (e.key === "Enter" || e.key === " ") handleClose();
+    }}
+    aria-label={show ? "Close sidebar" : "Open sidebar"}
     tabindex="0"
     style="border:none;background:rgba(0,0,0,0);padding:0;position:fixed;inset:0;z-index:9;"
   ></button>
@@ -33,11 +35,27 @@
         <h3 id="sidebar-heading">Welcome!</h3>
         <p>Please log in to access your account</p>
         <!-- login form should be here! -->
-         <form id="user-login-form" action="" method="post">
-          <input type="text" class="login-input" name="username" id="username" placeholder="username" required aria-label="username" />
-          <input type="password" class="login-input" name="password" id="password" placeholder="password" required aria-label="password"/>
-            <Button_1 text="LOGIN" type="submit"/>
-         </form>
+        <form id="user-login-form" action="" method="post">
+          <input
+            type="text"
+            class="login-input"
+            name="username"
+            id="username"
+            placeholder="username"
+            required
+            aria-label="username"
+          />
+          <input
+            type="password"
+            class="login-input"
+            name="password"
+            id="password"
+            placeholder="password"
+            required
+            aria-label="password"
+          />
+          <Button_1 text="LOGIN" type="submit" />
+        </form>
       </div>
     {:else}
       <div class="user-section">
@@ -53,6 +71,7 @@
 {/if}
 
 <style>
+
   .sidebar-backdrop {
     position: fixed;
     inset: 0;
@@ -83,9 +102,13 @@
   .login-input {
     padding: 7px 15px;
   }
-  #login-button {
-    padding: 10px;
-    width: 50%;
+
+  /* Custom styling for login button in sidebar */
+  #user-login-form :global(button) {
+    width: 100%;
+    padding: 10px 10px !important;
+    filter: hue-rotate(180deg);
+    -webkit-filter: hue-rotate(180deg);
   }
 
   aside.sidebar {
@@ -95,17 +118,19 @@
     right: 0;
     top: 0;
     background: var(--header-background);
-    padding: 100px 90px 30px 30px;
+    padding: 100px 30px 30px 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     z-index: 10;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.329);
-    width: 350px;
+    width: 20%;
+    min-width: 240px;
     animation: slideInFromRight 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform: translateX(0);
     transition: background-color 300ms ease-in-out;
+    overflow-y: auto;
   }
   #sidebar-heading {
     font-size: 1.5rem;

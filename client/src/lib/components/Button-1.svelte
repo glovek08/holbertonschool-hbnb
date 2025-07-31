@@ -3,7 +3,7 @@
   export let type = "button";
 </script>
 
-<button class="button-1" {type}>{text}</button>
+<button class="button-1" type={type}>{text}</button>
 
 <style>
   .button-1 {
