@@ -1,19 +1,56 @@
 <script>
-  import Button_1 from "./Button-1.svelte";
+  // ********************** SIDEBAR *********************************
   export let show = false;
   export let userLoggedIn = false;
   export let closeSidebar = () => {};
   export let logout = () => {};
   let isClosing = false;
 
-  function handleClose() {
+  const handleClose = () => {
     isClosing = true;
     setTimeout(() => {
       closeSidebar();
       isClosing = false;
     }, 300);
-  }
+  };
   export { handleClose as requestClose };
+
+  // *********************** LOGIN FUNCTION **************************
+  let email = "";
+  let password = "";
+  let isLoading = false;
+  let loginError = "";
+  async function handleLogin(event) {
+    event.preventDefault();
+    isLoading = true;
+    loginError = "";
+    let fetchJWTResponse = await fetchJWTToken(email, password);
+    if (fetchJWTResponse.token) {
+    }
+  }
+  async function fetchJWTToken(email, password) {
+    try {
+      const response = await fetch("/api/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        userLoggedIn = true;
+        isLoading = false;
+        return { token: data.access_token };
+        // this will trigger the functionality to list user options.
+      } else {
+        isLoading = false;
+        return { error: data.error || "Login failed" };
+      }
+    } catch (error) {
+      return { error: `Error in fetching JWT Token: ${error}` };
+    }
+  }
 </script>
 
 {#if show}
@@ -34,30 +71,34 @@
       <div class="login-section">
         <h3 id="sidebar-heading">Welcome!</h3>
         <p>Please log in to access your account</p>
-        <!-- login form should be here! -->
-        <form id="user-login-form" action="" method="post">
+        <form id="user-login-form" on:submit={handleLogin}>
           <input
-            type="text"
+            type="email"
             class="login-input"
-            name="username"
-            id="username"
-            placeholder="username"
+            name="login-email"
+            id="login-email"
+            placeholder="email"
+            aria-label="email"
+            maxlength="254"
             required
-            aria-label="username"
+            bind:value={email}
           />
           <input
             type="password"
             class="login-input"
-            name="password"
-            id="password"
+            name="login-password"
+            id="login-password"
             placeholder="password"
-            required
             aria-label="password"
+            maxlength="60"
+            required
+            bind:value={password}
           />
-          <Button_1 text="LOGIN" type="submit" />
+          <button type="submit">LOG IN</button>
         </form>
       </div>
     {:else}
+      <!-- If the user logs in, hide the login form and display this. -->
       <div class="user-section">
         <h3>Your Account</h3>
         <ul class="user-menu">
@@ -71,7 +112,6 @@
 {/if}
 
 <style>
-
   .sidebar-backdrop {
     position: fixed;
     inset: 0;
