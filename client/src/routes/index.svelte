@@ -26,7 +26,18 @@
     <div id="user-welcome-container" class="welcome-section-flex-item">
       <h1 id="user-title">Welcome!</h1>
       <h3 id="user-subtitle">Let's find you a place :D</h3>
-      <Button_1 text="Find My Place" />
+      <Button_1
+        text="Find My Place"
+        on:click={() => {
+          const section = document.querySelector('#places-section');
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            console.log("Scrolling into view...");
+          } else {
+            console.warn("Section not found!");
+          }
+        }}
+      />
     </div>
   </div>
 </section>

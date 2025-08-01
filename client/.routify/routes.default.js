@@ -30,20 +30,6 @@ export const routes = {
       "children": []
     },
     {
-      "meta": {},
-      "id": "_default_Place_svelte",
-      "name": "Place",
-      "file": {
-        "path": "src/routes/Place.svelte",
-        "dir": "src/routes",
-        "base": "Place.svelte",
-        "ext": ".svelte",
-        "name": "Place"
-      },
-      "asyncModule": () => import('../src/routes/Place.svelte'),
-      "children": []
-    },
-    {
       "meta": {
         "isDefault": true
       },
@@ -57,6 +43,20 @@ export const routes = {
         "name": "index"
       },
       "asyncModule": () => import('../src/routes/index.svelte'),
+      "children": []
+    },
+    {
+      "meta": {},
+      "id": "_default_place_svelte",
+      "name": "place",
+      "file": {
+        "path": "src/routes/place.svelte",
+        "dir": "src/routes",
+        "base": "place.svelte",
+        "ext": ".svelte",
+        "name": "place"
+      },
+      "asyncModule": () => import('../src/routes/place.svelte'),
       "children": []
     },
     {

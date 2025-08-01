@@ -1,9 +1,10 @@
 <script>
   export let text = "Button 1";
-  export let type = "";
+  export const type = "";
+
 </script>
 
-<button class="button-1">{text}</button>
+<button class="button-1" on:click>{text}</button>
 
 <style>
   .button-1 {
