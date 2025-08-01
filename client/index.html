@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HBnB</title>
-
     <meta
       http-equiv="Content-Security-Policy"
       content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kit.fontawesome.com;
-        style-src 'self' 'unsafe-inline' https://ka-f.fontawesome.com;
-        img-src 'self' data: https:;
-        font-src 'self' data: https://ka-f.fontawesome.com;
-        connect-src 'self' https: https://ka-p.fontawesome.com;
-        media-src 'self';
-        object-src 'none';
-        frame-src 'none';
-        worker-src 'self';
-        manifest-src 'self';
-        base-uri 'self';
-        form-action 'self';
-    ">
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kit.fontawesome.com;
+    style-src 'self' 'unsafe-inline' https://ka-f.fontawesome.com;
+    img-src 'self' data: https:;
+    font-src 'self' data: https://ka-f.fontawesome.com;
+    connect-src 'self' http://localhost:5000 https: https://ka-p.fontawesome.com;
+    media-src 'self';
+    object-src 'none';
+    frame-src 'none';
+    worker-src 'self';
+    manifest-src 'self';
+    base-uri 'self';
+    form-action 'self';
+"
+    />
     <!-- Remove the upgrade-insecure-requests to debug on android, it's forcing to HTTPS only. -->
-   
+
     <link
       rel="shortcut icon"
       id="favicon"
       href="favicon_white.ico"
-      type="image/x-icon">
+      type="image/x-icon"
+    />
     <script
       src="https://kit.fontawesome.com/1b73c2ec6e.js"
       crossorigin="anonymous"
@@ -64,4 +65,3 @@
     </script>
   </body>
 </html>
-

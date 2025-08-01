@@ -1,9 +1,12 @@
 <script>
+  import { onMount } from "svelte";
+  import Checkbox from "./Checkbox.svelte";
+
+  // The sidebar is being mounter in the header.
   // ********************** SIDEBAR *********************************
   export let show = false;
   export let userLoggedIn = false;
   export let closeSidebar = () => {};
-  export let logout = () => {};
   let isClosing = false;
 
   const handleClose = () => {
@@ -16,31 +19,40 @@
   export { handleClose as requestClose };
 
   // *********************** LOGIN FUNCTION **************************
+  let stayLoggedIn = false;
   let email = "";
   let password = "";
   let isLoading = false;
-  let loginError = "";
+
   async function handleLogin(event) {
+    const errorLogDiv = document.querySelector("#error-log-div");
+
     event.preventDefault();
     isLoading = true;
-    loginError = "";
-    let fetchJWTResponse = await fetchJWTToken(email, password);
+    let fetchJWTResponse = await fetchJWTToken(email, password, stayLoggedIn);
     if (fetchJWTResponse.token) {
+      errorLogDiv.textContent = "";
+    } else {
+      errorLogDiv.textContent = "Invalid Credentials!";
     }
   }
-  async function fetchJWTToken(email, password) {
+  async function fetchJWTToken(email, password, stay_logged) {
     try {
+      console.log(`Login with: ${email}, ${password}, ${stay_logged}`)
       const response = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, stay_logged }),
+        credentials: "include",
       });
+      console.log(`Sending response: ${response}`)
       const data = await response.json();
       if (response.ok) {
         userLoggedIn = true;
         isLoading = false;
+        console.log("User logged in successfully");
         return { token: data.access_token };
         // this will trigger the functionality to list user options.
       } else {
@@ -49,8 +61,60 @@
       }
     } catch (error) {
       return { error: `Error in fetching JWT Token: ${error}` };
+    } finally {
+      isLoading = false;
     }
   }
+
+  /* ************************* LOG OUT *****************************/
+  async function handleLogout(event) {
+    event.preventDefault();
+    isLoading = true;
+    // call logout endpoint, on success clear svelte thing
+    try {
+      const requestLogout = await fetch("/api/v1/auth/logout", {
+        method: "POST",
+      });
+      if (requestLogout.ok) {
+        userLoggedIn = false;
+        console.log("Successfully logged out!");
+      } else {
+      }
+    } catch (error) {
+      return { error: `Error in fetching session logout: ${error}` };
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  /* ********************** CHECK USER LOG STATUS ***********************/
+  async function checkUserLogStatus(event) {
+    isLoading = true;
+    try {
+      const requestLogStatus = await fetch("/api/v1/auth/check_status", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (requestLogStatus.ok) {
+        console.log("User Already logged in!");
+        userLoggedIn = true;
+        return true;
+      } else {
+        console.log("User not logged in!");
+        userLoggedIn = false;
+        return false;
+      }
+    } catch (error) {
+      userLoggedIn = false;
+      return { error: `Error in checking user log in status!: ${error}` };
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  onMount(() => {
+    checkUserLogStatus();
+  });
 </script>
 
 {#if show}
@@ -68,8 +132,8 @@
   ></button>
   <aside class="sidebar" class:closing={isClosing}>
     {#if !userLoggedIn}
-      <div class="login-section">
-        <h3 id="sidebar-heading">Welcome!</h3>
+      <div class="login-div">
+        <h3 id="login-div-heading">Welcome!</h3>
         <p>Please log in to access your account</p>
         <form id="user-login-form" on:submit={handleLogin}>
           <input
@@ -94,7 +158,12 @@
             required
             bind:value={password}
           />
-          <button type="submit">LOG IN</button>
+          <div id="stay-logged-checkbox-div">
+            <Checkbox bind:checked={stayLoggedIn} id="stay-logged-checkbox" />
+            <label for="stay-logged-checkbox">Stay Logged</label>
+          </div>
+          <div id="error-log-div"></div>
+          <button type="submit" id="login-button">LOG IN</button>
         </form>
       </div>
     {:else}
@@ -104,7 +173,7 @@
         <ul class="user-menu">
           <li><a href="/profile">Profile</a></li>
           <li><a href="/bookings">My Bookings</a></li>
-          <li><button on:click={logout}>Logout</button></li>
+          <li><button on:click={handleLogout}>Logout</button></li>
         </ul>
       </div>
     {/if}
@@ -112,6 +181,27 @@
 {/if}
 
 <style>
+  aside.sidebar {
+    /* outline: 1px solid red; */
+    position: fixed;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background: var(--header-background);
+    padding: 30px 30px 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.329);
+    width: 20%;
+    min-width: 300px;
+    animation: slideInFromRight 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateX(0);
+    transition: background-color 300ms ease-in-out;
+    overflow-y: auto;
+  }
   .sidebar-backdrop {
     position: fixed;
     inset: 0;
@@ -124,10 +214,12 @@
   .sidebar-backdrop.closing {
     animation: backdropFadeOut 300ms ease-out;
   }
-  .login-section {
+  .login-div {
     /* outline: 1px solid yellow; */
     padding: 20px;
     text-align: center;
+    width: 100%;
+    margin-top: 100px;
   }
 
   #user-login-form {
@@ -141,38 +233,48 @@
   }
   .login-input {
     padding: 7px 15px;
+    width: 200px;
   }
-
-  /* Custom styling for login button in sidebar */
-  #user-login-form :global(button) {
-    width: 100%;
-    padding: 10px 10px !important;
-    filter: hue-rotate(180deg);
-    -webkit-filter: hue-rotate(180deg);
-  }
-
-  aside.sidebar {
-    /* outline: 1px solid red; */
-    position: fixed;
-    height: 100%;
-    right: 0;
-    top: 0;
-    background: var(--header-background);
-    padding: 100px 30px 30px 30px;
+  #stay-logged-checkbox-div {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 10;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.329);
-    width: 20%;
-    min-width: 240px;
-    animation: slideInFromRight 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform: translateX(0);
-    transition: background-color 300ms ease-in-out;
-    overflow-y: auto;
+    gap: 0.5em;
   }
-  #sidebar-heading {
+  label[for="stay-logged-checkbox"] {
+    display: inline;
+    font-size: 1rem;
+    color: var(--primary-font);
+    cursor: pointer;
+    margin-right: 0.5em;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+  #login-button {
+    width: 200px;
+    padding: 10px;
+    background-color: var(--green);
+    cursor: pointer;
+    color: white;
+    font-family: "Quicksand";
+    font-weight: 900;
+    border-radius: 7px;
+    border: none;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    transition: filter 200ms ease-in-out;
+  }
+  #error-log-div {
+    color: var(--red);
+    font-weight: bolder;
+  }
+  #login-button:hover {
+    filter: brightness(1.1);
+  }
+  #login-button:active {
+    filter: brightness(0.9);
+  }
+
+  #login-div-heading {
     font-size: 1.5rem;
   }
   aside.sidebar.closing {
@@ -217,7 +319,11 @@
   @media (max-width: 768px) {
     aside.sidebar {
       width: 100vw;
-      padding: 20px;
+    }
+  }
+  @media (max-width: 550px) {
+    aside.sidebar {
+      padding-top: 200px;
     }
   }
 </style>

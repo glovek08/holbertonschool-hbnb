@@ -18,6 +18,11 @@ class DevelopmentConfig(Config):
         os.getenv("DB_NAME", "hbnb_v1"),
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_TOKEN_LOCATION = ["cookies"]
+    JWT_COOKIE_SECURE = False  # or True if using HTTPS
+    JWT_COOKIE_SAMESITE = "Lax"
+    JWT_SESSION_COOKIE = False
+    JWT_COOKIE_CSRF_PROTECT = False
 
 
 config = {"development": DevelopmentConfig, "default": DevelopmentConfig}

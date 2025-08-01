@@ -39,11 +39,6 @@
       toggleSidebarSpan.classList.remove("fa-circle-xmark");
     }
   }
-  function logout() {
-    userLoggedIn = false;
-    showSidebar = false;
-    console.log("User logged out");
-  }
 
   function toggleTheme() {
     const root = document.documentElement;
@@ -127,7 +122,7 @@
   </nav>
 </header>
 
-<Sidebar bind:this={sidebarComponent} show={showSidebar} {userLoggedIn} {closeSidebar} {logout} />
+<Sidebar bind:this={sidebarComponent} show={showSidebar} {userLoggedIn} {closeSidebar} />
 
 <style>
   header {

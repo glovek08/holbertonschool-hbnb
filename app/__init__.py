@@ -25,7 +25,7 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # This enables cors for all routes
     # It allows the frontend to communicate with the backend
-    CORS(app, origins=["http://localhost:5173"])
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
     bcrypt.init_app(app)
     jwt.init_app(app)

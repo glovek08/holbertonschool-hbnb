@@ -6,7 +6,7 @@
 
 <style>
   .button-1 {
-    z-index: 9;
+    z-index: 2;
     margin: 10px;
     padding: 15px 30px;
     text-align: center;

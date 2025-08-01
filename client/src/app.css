@@ -6,6 +6,8 @@
   --background-secondary: black;
   --text-color: #c6c6d6;
   --header-background: #4b0721;
+  --green: rgb(55, 100, 55);
+  --red: rgb(255, 121, 121);
 }
 :root.light {
   --primary-color: #e0e1ee;
@@ -15,6 +17,8 @@
   --background-secondary: black;
   --text-color: #1d1818;
   --header-background: #9dc9e7;
+  --green: rgb(57, 122, 57);
+  --red: rgb(185, 4, 4);
 }
 *,
 *::before,
