@@ -10,10 +10,10 @@ HBNB Is an app built on Flask where users can post places, but not listing, actu
 
 <!-- Framework -->
 # Back end
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=flat-square)
-![Flask-RESTX](https://img.shields.io/badge/Flask--RESTX-API-green?logo=flask&style=flat-square)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue?logo=sqlalchemy&style=flat-square)
-![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=for-the-badge)
+![Flask-RESTX](https://img.shields.io/badge/Flask--RESTX-API-green?logo=flask&style=for-the-badge)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue?logo=sqlalchemy&style=for-the-badge)
+![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=for-the-badge)
 
 # Front end
 ![Svelte](https://img.shields.io/badge/Svelte-v3.5.1-orange?style=for-the-badge&logo=svelte)
