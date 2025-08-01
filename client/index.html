@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HBnB</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kit.fontawesome.com;
+    style-src 'self' 'unsafe-inline' https://ka-f.fontawesome.com;
+    img-src 'self' data: https:;
+    font-src 'self' data: https://ka-f.fontawesome.com;
+    connect-src 'self' http://localhost:5000 https: https://ka-p.fontawesome.com;
+    media-src 'self';
+    object-src 'none';
+    frame-src 'none';
+    worker-src 'self';
+    manifest-src 'self';
+    base-uri 'self';
+    form-action 'self';"
+    />
+    <!-- Remove the upgrade-insecure-requests to debug on android, it's forcing to HTTPS only. -->
+
+    <link
+      rel="shortcut icon"
+      id="favicon"
+      href="favicon_white.ico"
+      type="image/x-icon"
+    />
+    <script
+      src="https://kit.fontawesome.com/1b73c2ec6e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      const updateFavicon = () => {
+        const favicon = document.getElementById("favicon");
+        const root = document.documentElement;
+        const isLightTheme = root.classList.contains("light");
+
+        if (isLightTheme) {
+          favicon.href = "favicon_black.ico";
+        } else {
+          favicon.href = "favicon_white.ico";
+        }
+      };
+      updateFavicon();
+
+      // comes from Header.svelte
+      window.addEventListener("themechange", updateFavicon);
+      const observer = new MutationObserver(() => {
+        updateFavicon();
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2 @@
+*.svelte linguist-language=Svelte
+*.svelte text eol=lf
