@@ -17,20 +17,24 @@
   --primary-color: #12121a;
   --secondary-color: #090d11;
   --accent: #685aec;
+  --shadow-primary: rgb(15, 15, 15);
   --background-primary: #1b191f;
-  --background-secondary: black;
-  --text-color: #c6c6d6;
+  --background-secondary: rgb(209, 206, 206);
+  --font-primary: #c6c6d6;
+  --font-secondary: black;
   --header-background: #4b0721;
-  --green: rgb(55, 100, 55);
+  --green: rgb(75, 133, 75);
   --red: rgb(255, 121, 121);
 }
 :root.light {
   --primary-color: #e0e1ee;
   --secondary-color: #ebdcca;
   --accent: #df7a69;
+  --shadow-primary: rgba(138, 127, 127, 0.541);
   --background-primary: #f5f5f5;
-  --background-secondary: black;
-  --text-color: #1d1818;
+  --background-secondary: rgb(73, 79, 80);
+  --font-primary: #1d1818;
+  --font-secondary: rgb(221, 211, 211);
   --header-background: #9dc9e7;
   --green: rgb(57, 122, 57);
   --red: rgb(185, 4, 4);
@@ -78,7 +82,7 @@ a:hover {
 html {
   background-color: var(--background-primary);
   scroll-behavior: smooth;
-  color: var(--text-color);
+  color: var(--font-primary);
   padding: 0;
   margin: 0;
   width: 100%;

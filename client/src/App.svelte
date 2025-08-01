@@ -1,22 +1,25 @@
 <script>
   import { onMount } from "svelte";
   import { checkAuth, isAuthenticated } from "./lib/stores/auth";
-  import { Router, createRouter } from '@roxi/routify'
-  import routes from '../.routify/routes.default.js'
+  import { Router, createRouter } from "@roxi/routify";
+  import routes from "../.routify/routes.default.js";
   import Header from "./components/Header.svelte";
   import Footer from "./components/Footer.svelte";
 
-  export const router = createRouter({ routes })
+  export const router = createRouter({ routes });
 
   onMount(async () => {
-    await checkAuth();
-    console.log(`user auth: ${$isAuthenticated}`);
+    if ((await checkAuth()).msg) {
+      console.log(`User authenticated`);
+    } else {
+      console.warn(`User not authenticated`);
+    }
   });
 </script>
 
 <Header />
 <main>
-  <Router {router}/>
+  <Router {router} />
 </main>
 <Footer />
 

@@ -14,7 +14,7 @@
     setTimeout(() => {
       closeSidebar();
       isClosing = false;
-    }, 300);
+    }, 290);
   };
   export { handleClose as requestClose };
   // *********************** LOGIN FUNCTION **************************

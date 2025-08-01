@@ -2,7 +2,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt, create_access_token
 from app.utils import check_api_payload
 
 api = Namespace("users", description="User operations")
@@ -39,18 +39,20 @@ class UserList(Resource):
     @api.response(400, "Invalid input data")
     @api.response(403, "Admin privileges required")
     @api.response(409, "Email already registered")
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         """Register a new user"""
         user_data = api.payload
-        claims = get_jwt()
-        is_admin = claims.get("is_admin", False)
+        print("Entering user post")
+        # claims = get_jwt()
+        # is_admin = claims.get("is_admin", False)
 
-        if not is_admin:
-            return {"error": "Admin privileges required"}, 403
+        # if not is_admin:
+        #     return {"error": "Admin privileges required"}, 403
 
         try:
             new_user = facade.create_user(user_data)
+            access_token = create_access_token(identity=new_user.id)
         except IntegrityError as error:
             return {"error": str(error)}, 409
         except (TypeError, ValueError) as error:
@@ -58,6 +60,7 @@ class UserList(Resource):
 
         return {
             "id": new_user.id,
+            "access_token": access_token
         }, 201
 
     @api.marshal_with(response_user_model, as_list=True)

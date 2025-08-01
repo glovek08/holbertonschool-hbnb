@@ -1,5 +1,6 @@
 <script>
   export let text = "Button 1";
+  export let type = "";
 </script>
 
 <button class="button-1">{text}</button>
