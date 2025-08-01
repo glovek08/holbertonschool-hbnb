@@ -43,6 +43,7 @@ place_model = api.model(
 place_response_model = api.model(
     "Place_Response",
     {
+        "id":           fields.String(required=True, description="Unique ID of the place"),
         "title":        fields.String(required=True, description="Title of the place"),
         "description":  fields.String(description="Description of the place"),
         "price":        fields.Float(required=True, description="Price per night"),

@@ -1,9 +1,22 @@
 <script>
   import { onMount } from "svelte";
+  import { checkAuth, isAuthenticated } from "./lib/stores/auth";
+  import Router from "svelte-spa-router";
   // import ApiTest from "./lib/ApiTest.svelte";
   import Header from "./lib/components/Header.svelte";
   import Footer from "./lib/components/Footer.svelte";
   import Home from "./lib/pages/Home.svelte";
+  import Signup from './lib/pages/Signup.svelte';
+
+  onMount(async () => {
+    await checkAuth();
+    console.log(`user auth: ${$isAuthenticated}`)
+  });
+
+  const routes={
+    '/': Home,
+    '/signup': Signup,
+  };
 
   // onMount(() => {
   //   const updateTheme = () => {
@@ -30,7 +43,7 @@
 
 <Header />
 <main>
-  <Home />
+  <Router {routes}/>
   <!-- If you want to test the endpoints and the connection with
    the backend, uncomment the component ApiTest-->
   <!-- <ApiTest /> -->

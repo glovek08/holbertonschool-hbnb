@@ -122,7 +122,7 @@
   </nav>
 </header>
 
-<Sidebar bind:this={sidebarComponent} show={showSidebar} {userLoggedIn} {closeSidebar} />
+<Sidebar bind:this={sidebarComponent} show={showSidebar} {closeSidebar} />
 
 <style>
   header {

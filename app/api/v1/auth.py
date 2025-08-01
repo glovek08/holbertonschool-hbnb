@@ -50,14 +50,18 @@ class Login(Resource):
                 access_token,
                 max_age=expires.total_seconds(),
             )
+            print("Stay Logged In")
+            return response
         else:
             access_token = create_access_token(
                 identity=str(user.id),
                 additional_claims={"is_admin": user.is_admin},
+                # expires_delta=timedelta(minutes=15), Uncomment if shit gets wild
             )
             response = make_response({"access_token": access_token}, 200)
             set_access_cookies(response, access_token)
-        return response
+            print("Session Log In.")
+            return response
 
 
 @api.route("/logout")

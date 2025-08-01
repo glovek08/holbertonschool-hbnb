@@ -21,7 +21,7 @@ class DevelopmentConfig(Config):
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_COOKIE_SECURE = False  # or True if using HTTPS
     JWT_COOKIE_SAMESITE = "Lax"
-    JWT_SESSION_COOKIE = False
+    JWT_SESSION_COOKIE = True
     JWT_COOKIE_CSRF_PROTECT = False
 
 

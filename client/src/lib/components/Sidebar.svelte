@@ -1,14 +1,14 @@
 <script>
   import { onMount } from "svelte";
+    import { checkAuth, isAuthenticated, login, logout } from '../stores/auth';
   import Checkbox from "./Checkbox.svelte";
+
 
   // The sidebar is being mounter in the header.
   // ********************** SIDEBAR *********************************
   export let show = false;
-  export let userLoggedIn = false;
   export let closeSidebar = () => {};
   let isClosing = false;
-
   const handleClose = () => {
     isClosing = true;
     setTimeout(() => {
@@ -17,104 +17,25 @@
     }, 300);
   };
   export { handleClose as requestClose };
-
   // *********************** LOGIN FUNCTION **************************
   let stayLoggedIn = false;
+  let errorMessage = "";
   let email = "";
   let password = "";
-  let isLoading = false;
-
   async function handleLogin(event) {
-    const errorLogDiv = document.querySelector("#error-log-div");
-
     event.preventDefault();
-    isLoading = true;
-    let fetchJWTResponse = await fetchJWTToken(email, password, stayLoggedIn);
-    if (fetchJWTResponse.token) {
-      errorLogDiv.textContent = "";
-    } else {
-      errorLogDiv.textContent = "Invalid Credentials!";
+    let logged = await login(email, password, stayLoggedIn);
+    if (!logged.success) {
+      errorMessage = logged.error;
     }
   }
-  async function fetchJWTToken(email, password, stay_logged) {
-    try {
-      console.log(`Login with: ${email}, ${password}, ${stay_logged}`)
-      const response = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, stay_logged }),
-        credentials: "include",
-      });
-      console.log(`Sending response: ${response}`)
-      const data = await response.json();
-      if (response.ok) {
-        userLoggedIn = true;
-        isLoading = false;
-        console.log("User logged in successfully");
-        return { token: data.access_token };
-        // this will trigger the functionality to list user options.
-      } else {
-        isLoading = false;
-        return { error: data.error || "Login failed" };
-      }
-    } catch (error) {
-      return { error: `Error in fetching JWT Token: ${error}` };
-    } finally {
-      isLoading = false;
-    }
-  }
-
   /* ************************* LOG OUT *****************************/
-  async function handleLogout(event) {
-    event.preventDefault();
-    isLoading = true;
-    // call logout endpoint, on success clear svelte thing
-    try {
-      const requestLogout = await fetch("/api/v1/auth/logout", {
-        method: "POST",
-      });
-      if (requestLogout.ok) {
-        userLoggedIn = false;
-        console.log("Successfully logged out!");
-      } else {
-      }
-    } catch (error) {
-      return { error: `Error in fetching session logout: ${error}` };
-    } finally {
-      isLoading = false;
-    }
-  }
+async function handleLogout(event) {
+  event.preventDefault();
+  await logout();
+}
 
-  /* ********************** CHECK USER LOG STATUS ***********************/
-  async function checkUserLogStatus(event) {
-    isLoading = true;
-    try {
-      const requestLogStatus = await fetch("/api/v1/auth/check_status", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (requestLogStatus.ok) {
-        console.log("User Already logged in!");
-        userLoggedIn = true;
-        return true;
-      } else {
-        console.log("User not logged in!");
-        userLoggedIn = false;
-        return false;
-      }
-    } catch (error) {
-      userLoggedIn = false;
-      return { error: `Error in checking user log in status!: ${error}` };
-    } finally {
-      isLoading = false;
-    }
-  }
 
-  onMount(() => {
-    checkUserLogStatus();
-  });
 </script>
 
 {#if show}
@@ -131,7 +52,7 @@
     style="border:none;background:rgba(0,0,0,0);padding:0;position:fixed;inset:0;z-index:9;"
   ></button>
   <aside class="sidebar" class:closing={isClosing}>
-    {#if !userLoggedIn}
+    {#if !$isAuthenticated}
       <div class="login-div">
         <h3 id="login-div-heading">Welcome!</h3>
         <p>Please log in to access your account</p>
@@ -162,17 +83,22 @@
             <Checkbox bind:checked={stayLoggedIn} id="stay-logged-checkbox" />
             <label for="stay-logged-checkbox">Stay Logged</label>
           </div>
-          <div id="error-log-div"></div>
+          <div id="error-log-div">{errorMessage}</div>
           <button type="submit" id="login-button">LOG IN</button>
         </form>
+        <p>
+          Don't have an account?
+          <a href="/login" id="create-account-link">Create account</a>
+        </p>
       </div>
     {:else}
       <!-- If the user logs in, hide the login form and display this. -->
       <div class="user-section">
         <h3>Your Account</h3>
         <ul class="user-menu">
-          <li><a href="/profile">Profile</a></li>
+          <li><a href="/user">My Profile</a></li>
           <li><a href="/bookings">My Bookings</a></li>
+          <li><a href="/support">Support</a></li>
           <li><button on:click={handleLogout}>Logout</button></li>
         </ul>
       </div>
