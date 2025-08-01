@@ -76,6 +76,7 @@ a:hover {
   color: var(--accent);
 }
 html {
+  background-color: var(--background-primary);
   scroll-behavior: smooth;
   color: var(--text-color);
   padding: 0;

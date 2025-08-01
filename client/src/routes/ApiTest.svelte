@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import apiService from '../api.js';
+  import apiService from '../lib/api';
 
   let users = [];
   let places = [];

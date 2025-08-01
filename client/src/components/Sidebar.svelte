@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-    import { checkAuth, isAuthenticated, login, logout } from '../stores/auth';
+    import { checkAuth, isAuthenticated, login, logout } from '../lib/stores/auth';
   import Checkbox from "./Checkbox.svelte";
 
 
@@ -32,7 +32,13 @@
   /* ************************* LOG OUT *****************************/
 async function handleLogout(event) {
   event.preventDefault();
-  await logout();
+  const logout_msg = await logout();
+  if (logout_msg.success){
+    console.log(logout_msg.msg);
+  } else {
+    console.warn(logout_msg.error);
+  }
+  
 }
 
 
@@ -88,7 +94,7 @@ async function handleLogout(event) {
         </form>
         <p>
           Don't have an account?
-          <a href="/login" id="create-account-link">Create account</a>
+          <a href="/signup" id="create-account-link">Create account</a>
         </p>
       </div>
     {:else}
