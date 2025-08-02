@@ -1,5 +1,6 @@
 # fmt: off
 from flask_restx import Namespace, Resource, fields
+from flask import request
 from app.services import facade
 from app.utils import check_api_payload
 from sqlalchemy.exc import IntegrityError
@@ -22,6 +23,15 @@ amenity_model = api.model(
         "id":          fields.String(description="ID of the amenity"),
         "name":        fields.String(description="Name of the amenity"),
         "description": fields.String(description="Description of the amenity"),
+    }
+)
+review_model = api.model(
+    "Review",
+    {
+        "id":          fields.String(description="ID of the review"),
+        "owner_id":    fields.String(description="ID of the user who wrote the review"),
+        "rating":      fields.Float(description="Rating given by the user"),
+        "comment":     fields.String(description="Comment provided by the user"),
     }
 )
 
@@ -55,13 +65,16 @@ place_response_model = api.model(
         "amenities":    fields.List(
             fields.Nested(amenity_model), description="List of amenities"
         ),
-    },
+        "reviews":      fields.List(
+            fields.Nested(review_model), description="List of reviews for the place"
+        ),
+    }
 )
 
 @api.route("/")
 class PlaceList(Resource):
     @api.expect(place_model, validate=True)
-    @api.marshal_with(place_response_model, code=201)
+    @api.marshal_with(place_response_model, code=201) # type: ignore
     @api.response(201, "Place successfully created")
     @api.response(400, "Invalid input data")
     @api.response(403, "Cannot create place for another user")
@@ -79,7 +92,7 @@ class PlaceList(Resource):
 
         try:
             new_place = facade.create_place(place_data)
-        except IntegrityError:
+        except IntegrityError as error:
             return {"error": str(error)}, 404
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
@@ -89,9 +102,15 @@ class PlaceList(Resource):
     @api.marshal_with(place_response_model, as_list=True)
     @api.response(200, "List of places retrieved successfully")
     def get(self):
-        """Retrieve a list of all places"""
+        """Retrieve a list of places with reviews"""
         places = facade.get_all_places()
-        return [place.to_dict() for place in places]
+        place_list = []
+        for place in places:
+            place_dict = place.to_dict()
+            reviews = facade.get_reviews_by_place(place.id)
+            place_dict["reviews"] = [review.to_dict() for review in reviews]
+            place_list.append(place_dict)
+        return place_list
 
 
 @api.route("/<place_id>")
@@ -105,8 +124,11 @@ class PlaceResource(Resource):
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
+        reviews = facade.get_reviews_by_place(place_id)
+        place_dict = place.to_dict()
+        place_dict["reviews"] = [review.to_dict() for review in reviews]
 
-        return place.to_dict(), 200
+        return place_dict, 200
 
     @api.expect(place_model, validate=True)
     @api.doc(params={"place_id": "The unique ID of the place"})

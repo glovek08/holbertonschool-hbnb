@@ -23,7 +23,7 @@ export async function login(email, password, stay_logged) {
       return { success: false, error: data.error };
     }
   } catch (error) {
-    return { success: false, error: "Something happened." };
+    return { success: false, error: "Something bad happened." };
   }
 }
 
@@ -59,6 +59,7 @@ export async function checkAuth() {
     }
   }
   catch (error) {
+    console.error(`Error in checking authentication: ${error}`);
     return { error: `Error in checking authentication: ${error}`};
   }
 }

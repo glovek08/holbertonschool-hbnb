@@ -4,6 +4,7 @@
   import PlaceCard from "../components/PlaceCard.svelte";
   import Carousel from "svelte-carousel";
   import { onMount } from "svelte";
+  import api from "../lib/api";
 
   /* For the Carousel */
   let particlesToShow = 3;

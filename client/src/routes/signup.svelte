@@ -8,9 +8,9 @@
   let password = "";
   let error = "";
   let success = "";
-  console.log("SIGNPOOASD!");
+  console.log("Checking mount signup...");
   onMount(() => {
-    console.log("SIGNPOOASD!");
+    console.log("Mounted");
   });
 
   async function handleSignup(event) {
@@ -94,7 +94,7 @@
     border: none;
     border-radius: 10px;
     background: rgb(56, 53, 53);
-    padding: 5px 10px;
+    padding: 10px 15px;
   }
   .signup-container form input:last-of-type {
     margin-bottom: 20px;

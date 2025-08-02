@@ -14,7 +14,7 @@
     <div class="place-card-data-container">
       <h3 class="place-title">{title}</h3>
       <p class="place-description">{description}</p>
-      <p class="place-price">{price}</p>
+      <p class="place-price">{price} per Day.</p>
     </div>
   </div>
 </a>
@@ -51,6 +51,9 @@
     transition: background 200ms ease-in-out;
     padding: 2px 20px 12px 20px;
     position: relative;
+  }
+  .place-price {
+    text-align: right;
   }
 
   /* .card-container:hover .place-card-image {
