@@ -6,23 +6,29 @@
   import { onMount } from "svelte";
   import api from "../lib/api";
 
-  /* For the Carousel */
-  let particlesToShow = 3;
+  let particlesToShow = 3; /* For the Carousel, base cards to show */
+  let places = []
+
+  const fetchPlaces = async () => {
+    places = await api.getPlaces();
+    console.log("Fetched places:", places);
+  };
   // dynamically set the ammount of cards shown in the places carousel by calculating the width of the
   // parent container.
   const calculateParticlesToShow = () => {
-    const containerWidth = document.getElementById("places-carousel-container")?.offsetWidth || 0;
+    const containerWidth =
+      document.getElementById("places-carousel-container")?.offsetWidth || 0;
     particlesToShow = Math.floor(containerWidth / 360); // 300 width + 60px left/right padding
   };
+  const shuffleCards = () => {
+    console.log("Cards are shuffled, trust me bro.");
+  };
   onMount(() => {
+    fetchPlaces();
     calculateParticlesToShow();
     window.addEventListener("resize", calculateParticlesToShow);
     return () => window.removeEventListener("resize", calculateParticlesToShow);
   });
-
-  const shuffleCards = () => {
-    console.log("Cards are shuffled, trust me bro.");
-  }
 </script>
 
 <section id="welcome-section">
@@ -68,10 +74,10 @@
 <section id="places-section">
   <div id="places-carousel-container">
     <Carousel
-      particlesToShow={particlesToShow}
-      particlesToScroll={3}
+      {particlesToShow}
+      particlesToScroll={1}
       autoplay
-      autoplayDuration={10000}
+      autoplayDuration={5000}
       autoplayProgressVisible
       pauseOnFocus
     >
@@ -84,9 +90,22 @@
         />
       {/each}
     </Carousel>
-    <div id="places-carousel-toolbar"><Button_2 text="Shuffle"  title="Shuffle Place Listings" on:click={() => {shuffleCards();}}/></div>
+    <div id="places-carousel-toolbar">
+      <Button_2
+        text="Shuffle"
+        title="Shuffle Place Listings"
+        on:click={() => {
+          shuffleCards();
+        }}
+      />
+    </div>
   </div>
-  <Button_1 text="See All" on:click={() => { window.location.href = '/places'; }}/>
+  <Button_1
+    text="See All"
+    on:click={() => {
+      window.location.href = "/places";
+    }}
+  />
 </section>
 
 <style>

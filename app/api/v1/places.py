@@ -63,10 +63,10 @@ place_response_model = api.model(
         "owner_id":     fields.String(required=True, description="ID of the owner"),
         "owner":        fields.Nested(owner_model, description="Owner of the place"),
         "amenities":    fields.List(
-            fields.Nested(amenity_model), description="List of amenities"
+                            fields.Nested(amenity_model), description="List of amenities"
         ),
         "reviews":      fields.List(
-            fields.Nested(review_model), description="List of reviews for the place"
+                            fields.Nested(review_model), description="List of reviews for the place"
         ),
     }
 )
@@ -99,18 +99,21 @@ class PlaceList(Resource):
 
         return new_place.to_dict(), 201
 
+
+    # IMPLEMENT PAGINATION OR LIMIT
     @api.marshal_with(place_response_model, as_list=True)
     @api.response(200, "List of places retrieved successfully")
     def get(self):
-        """Retrieve a list of places with reviews"""
-        places = facade.get_all_places()
-        place_list = []
+        """Retrieve a list of places with reviews, limited by the 'limit' query parameter"""
+        limit = request.args.get("limit", default = 12, type=int)
+        places = facade.get_all_places(limit=limit)
+        places_list = []
         for place in places:
             place_dict = place.to_dict()
             reviews = facade.get_reviews_by_place(place.id)
             place_dict["reviews"] = [review.to_dict() for review in reviews]
-            place_list.append(place_dict)
-        return place_list
+            places_list.append(place_dict)
+        return places_list
 
 
 @api.route("/<place_id>")

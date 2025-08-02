@@ -1,8 +1,7 @@
 from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repo import UserRepository
 from app.persistence.review_repo import ReviewRepository
-from app.models.user import User
-from app.models.place import Place
+from app.persistence.place_repo import PlaceRepository
 from app.models.amenity import Amenity
 
 
@@ -10,12 +9,13 @@ class HBnBFacade:
     def __init__(self):
         self.user_repo = UserRepository()
         self.review_repo = ReviewRepository()
-        self.place_repo = SQLAlchemyRepository(Place)
+        self.place_repo = PlaceRepository()
         self.amenity_repo = SQLAlchemyRepository(Amenity)
 
     # **************** USER DATA MANAGEMENT *****************
     def create_user(self, user_data):
-        # from app.models.user import User
+        from app.models.user import User
+
         # ***** IF RANDOM ERROR OCCURS, UNCOMMENT THIS AND IMPORT EACH MODEL INSIDE LOCAL SCOPE. ****
 
         user = User(**user_data)
@@ -45,8 +45,8 @@ class HBnBFacade:
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
 
-    def get_all_places(self):
-        return self.place_repo.get_all()
+    def get_all_places(self, limit=None):
+        return self.place_repo.get_all(limit=limit)
 
     def update_place(self, place_id, place_data):
         self.place_repo.update(place_id, place_data)
