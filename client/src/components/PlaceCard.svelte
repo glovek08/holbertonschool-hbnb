@@ -26,8 +26,9 @@
     background: var(--white);
     color: rgb(27, 26, 26);
     transition: 300ms ease-in-out;
-    min-height: 400px;
-    width: 300px;
+    min-height: 350px;
+    min-width: 200px;
+    max-width: 400px;
     margin: 30px;
     display: flex;
     flex-direction: column;

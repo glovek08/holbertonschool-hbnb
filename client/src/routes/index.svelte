@@ -85,7 +85,7 @@
     </Carousel>
     <div id="places-carousel-toolbar"><Button_2 text="Shuffle"  title="Shuffle Place Listings" on:click={() => {shuffleCards();}}/></div>
   </div>
-  <Button_1 text="See All"/>
+  <Button_1 text="See All" on:click={() => { window.location.href = '/places'; }}/>
 </section>
 
 <style>

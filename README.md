@@ -16,10 +16,10 @@ HBNB Is an app built on Flask where users can post places, but not listing, actu
 ![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=for-the-badge)
 
 # Front end
-![Svelte](https://img.shields.io/badge/Svelte-v3.5.1-orange?style=for-the-badge&logo=svelte)
+![Svelte](https://img.shields.io/badge/Svelte-v5.37.2-orange?style=for-the-badge&logo=svelte)
 ![Routify 3.5](https://img.shields.io/badge/Routify-v3.5.1-blue?style=for-the-badge&logo=roxi)
-![Vite 6.0.0](https://img.shields.io/badge/Vite-v6.3.5-purple?style=for-the-badge&logo=vite)
-![Node.js](https://img.shields.io/badge/Node.js-v18.16.0-green?style=for-the-badge&logo=node.js)
+![Vite 6.3.5](https://img.shields.io/badge/Vite-v6.3.5-purple?style=for-the-badge&logo=vite)
+![Node.js](https://img.shields.io/badge/Node.js-v20.19.4-green?style=for-the-badge&logo=node.js)
 
 <!-- License -->
 ![License](https://img.shields.io/github/license/glovek08/holbertonschool-hbnb?style=flat-square)
