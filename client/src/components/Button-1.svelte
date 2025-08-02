@@ -1,5 +1,11 @@
+<!-- 
+  This is a redirection button, uses: navigation, deployment, engagement.
+  AKA Important button, keep it shiny. It's important the user sees it.
+-->
+
+
 <script>
-  export let text = "Button 1";
+  export let text = "Replace This Text";
   export const type = "";
 
 </script>

@@ -1,5 +1,6 @@
 <script>
   import Button_1 from "../components/Button-1.svelte";
+  import Button_2 from "../components/Button-2.svelte";
   import PlaceCard from "../components/PlaceCard.svelte";
   import Carousel from "svelte-carousel";
   import { onMount } from "svelte";
@@ -9,7 +10,7 @@
   // dynamically set the ammount of cards shown in the places carousel by calculating the width of the
   // parent container.
   const calculateParticlesToShow = () => {
-    const containerWidth = document.getElementById("places-catalog-container")?.offsetWidth || 0;
+    const containerWidth = document.getElementById("places-carousel-container")?.offsetWidth || 0;
     particlesToShow = Math.floor(containerWidth / 360); // 300 width + 60px left/right padding
   };
   onMount(() => {
@@ -17,6 +18,10 @@
     window.addEventListener("resize", calculateParticlesToShow);
     return () => window.removeEventListener("resize", calculateParticlesToShow);
   });
+
+  const shuffleCards = () => {
+    console.log("Cards are shuffled, trust me bro.");
+  }
 </script>
 
 <section id="welcome-section">
@@ -60,8 +65,7 @@
 </section>
 
 <section id="places-section">
-  <div id="places-catalog-container">
-    <div id="places-catalog-toolbar"></div>
+  <div id="places-carousel-container">
     <Carousel
       particlesToShow={particlesToShow}
       particlesToScroll={3}
@@ -79,7 +83,9 @@
         />
       {/each}
     </Carousel>
+    <div id="places-carousel-toolbar"><Button_2 text="Shuffle"  title="Shuffle Place Listings" on:click={() => {shuffleCards();}}/></div>
   </div>
+  <Button_1 text="See All"/>
 </section>
 
 <style>
@@ -164,25 +170,40 @@
     }
   }
 
-  /* ********************* SMALL PLACE CATALOG *********************** */
+  /* ********************* PLACE CAROUSEL *********************** */
   #places-section {
     margin-top: 150px;
     background: var(--header-background);
     width: 100%;
     min-height: 200px;
     padding: 100px 30px;
-  }
-
-  #places-catalog-container {
-    border-radius: 10px;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 100px;
+    gap: 40px;
+  }
+
+  #places-carousel-container {
+    background: var(--background-primary);
+    border-radius: 10px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
     padding: 50px 60px;
     overflow: visible;
     position: relative;
+  }
+  #places-carousel-toolbar {
+    /* outline: 1px solid red; */
+    padding: 5px;
+    width: 100%;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 </style>
