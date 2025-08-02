@@ -1,5 +1,22 @@
 <script>
   import Button_1 from "../components/Button-1.svelte";
+  import PlaceCard from "../components/PlaceCard.svelte";
+  import Carousel from "svelte-carousel";
+  import { onMount } from "svelte";
+
+  /* For the Carousel */
+  let particlesToShow = 3;
+  // dynamically set the ammount of cards shown in the places carousel by calculating the width of the
+  // parent container.
+  const calculateParticlesToShow = () => {
+    const containerWidth = document.getElementById("places-catalog-container")?.offsetWidth || 0;
+    particlesToShow = Math.floor(containerWidth / 360); // 300 width + 60px left/right padding
+  };
+  onMount(() => {
+    calculateParticlesToShow();
+    window.addEventListener("resize", calculateParticlesToShow);
+    return () => window.removeEventListener("resize", calculateParticlesToShow);
+  });
 </script>
 
 <section id="welcome-section">
@@ -29,9 +46,9 @@
       <Button_1
         text="Find My Place"
         on:click={() => {
-          const section = document.querySelector('#places-section');
+          const section = document.querySelector("#places-section");
           if (section) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
             console.log("Scrolling into view...");
           } else {
             console.warn("Section not found!");
@@ -42,7 +59,28 @@
   </div>
 </section>
 
-<section id="places-section"></section>
+<section id="places-section">
+  <div id="places-catalog-container">
+    <div id="places-catalog-toolbar"></div>
+    <Carousel
+      particlesToShow={particlesToShow}
+      particlesToScroll={3}
+      autoplay
+      autoplayDuration={10000}
+      autoplayProgressVisible
+      pauseOnFocus
+    >
+      {#each Array(9) as _, index}
+        <PlaceCard
+          title={`Place ${index + 1}`}
+          description="A wonderful place to stay."
+          price={`$${(index + 1) * 10}.00`}
+          image="template-bnb.jpg"
+        />
+      {/each}
+    </Carousel>
+  </div>
+</section>
 
 <style>
   :global(.button-1) {
@@ -126,18 +164,25 @@
     }
   }
 
-  /* **************************** PLACES KINGDOM *********************** */
-
+  /* ********************* SMALL PLACE CATALOG *********************** */
   #places-section {
-    /* outline: 1px solid yellow; */
     margin-top: 150px;
     background: var(--header-background);
     width: 100%;
     min-height: 200px;
+    padding: 100px 30px;
   }
-  @media screen and (max-width: 1200px) {
-    #places-section {
-      margin-top: 0;
-    }
+
+  #places-catalog-container {
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 100px;
+    padding: 50px 60px;
+    overflow: visible;
+    position: relative;
   }
 </style>

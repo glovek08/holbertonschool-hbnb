@@ -1,8 +1,12 @@
 <script>
   import { onMount } from "svelte";
-    import { checkAuth, isAuthenticated, login, logout } from '../lib/stores/auth';
+  import {
+    checkAuth,
+    isAuthenticated,
+    login,
+    logout,
+  } from "../lib/stores/auth";
   import Checkbox from "./Checkbox.svelte";
-
 
   // The sidebar is being mounter in the header.
   // ********************** SIDEBAR *********************************
@@ -30,18 +34,15 @@
     }
   }
   /* ************************* LOG OUT *****************************/
-async function handleLogout(event) {
-  event.preventDefault();
-  const logout_msg = await logout();
-  if (logout_msg.success){
-    console.log(logout_msg.msg);
-  } else {
-    console.warn(logout_msg.error);
+  async function handleLogout(event) {
+    event.preventDefault();
+    const logout_msg = await logout();
+    if (logout_msg.success) {
+      console.log(logout_msg.msg);
+    } else {
+      console.warn(logout_msg.error);
+    }
   }
-  
-}
-
-
 </script>
 
 {#if show}
@@ -94,7 +95,9 @@ async function handleLogout(event) {
         </form>
         <p>
           Don't have an account?
-          <a href="/signup" id="create-account-link">Create account</a>
+          <a href="/signup" id="create-account-link" style="display: block;"
+            >Create account <i class="fa-solid fa-hand-point-left"></i></a
+          >
         </p>
       </div>
     {:else}

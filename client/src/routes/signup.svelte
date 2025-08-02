@@ -65,7 +65,7 @@
   .signup-container {
     /* outline: 1px solid green; */
     color: var(--font-primary);
-    background-color: var(--background-primary);
+    background-color: var(--gray);
     width: clamp(260px, 35vw, 420px);
     padding: 2rem 1.5rem;
     border-radius: 12px;
@@ -89,15 +89,15 @@
     padding: 10px 5px 30px 5px;
     }
   .signup-container input {
+    /* outline: 1px solid red; */
     color: rgb(255, 255, 255);
     border: none;
-    /* outline: 1px solid red; */
     border-radius: 10px;
     background: rgb(56, 53, 53);
     padding: 5px 10px;
   }
-  .signup-container input:last-child {
-    outline: 5px solid red;
+  .signup-container form input:last-of-type {
+    margin-bottom: 20px;
   }
   .signup-container input::placeholder {
     color: rgb(228, 221, 221);
