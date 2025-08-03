@@ -1,21 +1,34 @@
 ![HolbertonBnB_Banner](https://github.com/user-attachments/assets/dbab0855-bd6f-461d-a316-ecb34d77987b)
 
-
 <div align="center">
   <h1>Holberton BnB</h1>
-  <p>An AirBnB-like project.</p>
+  <p>A modern, full-stack accommodation booking platform inspired by AirBnB</p>
 </div>
 
-HBNB Is an app built on Flask where users can post places, but not listing, actually in this app you can only post a place. It's kind of a Placebook.
+## About
 
-<!-- Framework -->
-# Back end
+Holberton BnB is a comprehensive web application that enables users to discover, list, and review accommodation properties. Built with modern web technologies, it features a robust three-tier architecture that ensures scalability, maintainability, and optimal user experience. The platform allows property owners to showcase their listings with detailed information, amenities, and ratings, while providing guests with an intuitive interface to explore available accommodations.
+
+## Key Features
+
+- **Property Management**: Create, update, and manage accommodation listings with detailed descriptions
+- **Star Rating System**: 5-star rating system for places with visual star indicators  
+- **Amenity Integration**: Comprehensive amenity management for enhanced property descriptions
+- **User Authentication**: Secure user registration and authentication system
+- **Review System**: Users can leave reviews and ratings for properties they've experienced
+- **Responsive Design**: Modern, mobile-friendly interface built with Svelte
+- **RESTful API**: Well-structured API endpoints with proper HTTP status handling
+- **Admin Panel**: Administrative features for managing amenities and platform oversight
+
+## Technology Stack
+
+### Backend
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=for-the-badge)
 ![Flask-RESTX](https://img.shields.io/badge/Flask--RESTX-API-green?logo=flask&style=for-the-badge)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue?logo=sqlalchemy&style=for-the-badge)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=for-the-badge)
 
-# Front end
+### Frontend
 ![Svelte](https://img.shields.io/badge/Svelte-v5.37.2-orange?style=for-the-badge&logo=svelte)
 ![Routify 3.5](https://img.shields.io/badge/Routify-v3.5.1-blue?style=for-the-badge&logo=roxi)
 ![Vite 6.3.5](https://img.shields.io/badge/Vite-v6.3.5-purple?style=for-the-badge&logo=vite)
@@ -28,19 +41,20 @@ HBNB Is an app built on Flask where users can post places, but not listing, actu
 ![Last Commit](https://img.shields.io/github/last-commit/glovek08/holbertonschool-hbnb?style=flat-square)
 ![Repo Size](https://img.shields.io/github/repo-size/glovek08/holbertonschool-hbnb?style=flat-square)
 
-
-Project Participants:
+## Contributors
 
 [![glovek08](https://img.shields.io/badge/GitHub-glovek08-blue?logo=github)](https://github.com/glovek08)
 [![federico-paganini](https://img.shields.io/badge/GitHub-federico--paganini-blue?logo=github)](https://github.com/federico-paganini)
 
+## Table of Contents
 
-### **What you'll find in this document:** 
-
-* High-level system architecture diagrams
-* Detailed class relationships and data models
-* Business logic flow documentation  
-* Component interaction specifications
+- [About](#about)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#high-level-architecture)
+- [Database Design](#er-diagram)
+- [API Workflows](#sequence-diagrams)
+- [Contributors](#contributors)
 
 ## **High-Level Architecture:**
 
@@ -182,11 +196,12 @@ Represents asset locations, whatever a *User* registers as a listing that can be
 
 * **id**: Primary Key.
 * **owner_id**: Foreign Key of user who created the place.
-* **title**: listing’s title.
+* **title**: listing's title.
 * **description**: a short description made by the *User* who owns it.  
 * **price**: rent price per day.  
 * **longitude**: longitude of this place.
 * **latitude**: latitude of this place.
+* **rating**: numerical rating from 0-5 stars for the place.
 * **created_at**: auto-generated creation date.
 * **updated_at**: auto-generated update date.
 
