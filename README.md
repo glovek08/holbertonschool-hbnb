@@ -11,28 +11,41 @@ Holberton BnB is a comprehensive web application that enables users to discover,
 
 ## Key Features
 
-- **Property Management**: Create, update, and manage accommodation listings with detailed descriptions
-- **Star Rating System**: 5-star rating system for places with visual star indicators  
-- **Amenity Integration**: Comprehensive amenity management for enhanced property descriptions
-- **User Authentication**: Secure user registration and authentication system
-- **Review System**: Users can leave reviews and ratings for properties they've experienced
-- **Responsive Design**: Modern, mobile-friendly interface built with Svelte
-- **RESTful API**: Well-structured API endpoints with proper HTTP status handling
-- **Admin Panel**: Administrative features for managing amenities and platform oversight
+- **Property Management**: Create, update, and manage accommodation listings with detailed descriptions and geolocation
+- **Star Rating System**: 5-star rating system for places with visual star indicators and rating validation
+- **User Authentication & Authorization**: JWT-based authentication with bcrypt password hashing and admin privileges
+- **Amenity Integration**: Comprehensive amenity management with many-to-many relationships
+- **Review System**: Users can leave reviews and ratings with proper validation and relationship management
+- **Database Persistence**: MySQL database with SQLAlchemy ORM and comprehensive data relationships
+- **Repository Pattern**: Specialized repositories for different entities with abstract base classes
+- **RESTful API**: Well-structured API endpoints with Swagger documentation and CORS support
+- **Responsive Design**: Modern, mobile-friendly interface built with Svelte and custom styling
+- **Testing Suite**: Comprehensive unit and integration tests for models and API endpoints
+- **Database Seeding**: Automated database seeding with test data for development
 
 ## Technology Stack
 
 ### Backend
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&style=for-the-badge)
+![Flask](https://img.shields.io/badge/Flask-Framework-black?logo=flask&style=for-the-badge)
 ![Flask-RESTX](https://img.shields.io/badge/Flask--RESTX-API-green?logo=flask&style=for-the-badge)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue?logo=sqlalchemy&style=for-the-badge)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-yellow?logo=mysql&style=for-the-badge)
+![PyMySQL](https://img.shields.io/badge/PyMySQL-Connector-orange?logo=mysql&style=for-the-badge)
+![JWT](https://img.shields.io/badge/JWT-Authentication-black?logo=jsonwebtokens&style=for-the-badge)
+![Bcrypt](https://img.shields.io/badge/Bcrypt-Password_Hashing-red?logo=letsencrypt&style=for-the-badge)
 
 ### Frontend
 ![Svelte](https://img.shields.io/badge/Svelte-v5.37.2-orange?style=for-the-badge&logo=svelte)
 ![Routify 3.5](https://img.shields.io/badge/Routify-v3.5.1-blue?style=for-the-badge&logo=roxi)
 ![Vite 6.3.5](https://img.shields.io/badge/Vite-v6.3.5-purple?style=for-the-badge&logo=vite)
 ![Node.js](https://img.shields.io/badge/Node.js-v20.19.4-green?style=for-the-badge&logo=node.js)
+
+### Development Tools
+![Docker](https://img.shields.io/badge/Docker-Containerization-blue?style=for-the-badge&logo=docker)
+![Git](https://img.shields.io/badge/Git-Version_Control-red?style=for-the-badge&logo=git)
+![Swagger](https://img.shields.io/badge/Swagger-API_Documentation-green?style=for-the-badge&logo=swagger)
+![Pytest](https://img.shields.io/badge/Pytest-Testing-blue?style=for-the-badge&logo=pytest)
 
 <!-- License -->
 ![License](https://img.shields.io/github/license/glovek08/holbertonschool-hbnb?style=flat-square)
@@ -83,10 +96,10 @@ Each layer has responsibilities and communicates through defined interfaces.
 
 * #### **Persistence Layer:**
 
-  * Manages data storage and operations.  
-  * Provides data access.  
-  * Persistence operations.  
-  * JSON processing.
+  * MySQL database with SQLAlchemy ORM integration
+  * Repository pattern with specialized repositories for different entities
+  * Database relationship management and foreign key constraints
+  * Automated database migrations and seeding capabilities
 
 ### **Facade Pattern Implementation:**
 
@@ -118,9 +131,11 @@ User-System communication, this represents the application GUI’s and the highe
 
 * #### **API:**
 
-  * **Requests:** Manage user requests to the application.  
-  * **Responses:** Parse response from the lower level layers back to the user.  
-  * **HTTP Status Management:** HTTP codes and error handling.
+  * **Authentication Endpoints:** JWT-based login and registration with secure cookie handling
+  * **CRUD Operations:** Complete REST API for users, places, amenities, and reviews
+  * **Swagger Documentation:** Interactive API documentation with authentication support
+  * **CORS Support:** Cross-origin resource sharing for frontend-backend communication
+  * **HTTP Status Management:** Comprehensive HTTP status codes and error handling
 
 ### **Business Logic Layer:**
 
@@ -137,28 +152,35 @@ The facade pattern gives the components of the business logic layer a straightfo
 * #### **Rules:**
 
   * **Validate Data:** Ensures data integrity and enforces business rules before processing. Validates input information like; data type, required fields. validates email, phone and dates. Cleans up data. Handles relationship logic like: *review target place exists* and *user rented that place within a time-frame.*  
-  * **Logic Operations:** This item includes all the verifications for every entity, functionalities and necessary calcs.  
-    For example: Performs pricing calculations, booking conflicts, calculates commission profit, handles cancellations and so on. *\[WIP\]Logic operations combined produces a basic workflow; for example could be: check availability \> validate client \> calculate price \> reserve property \> send confirmations.*  
-  * **Relation Management:** validates relationships, for example: one client per booking, multiple amenities per place. Prevent orphaned entities and broken references, handles entity operations like: deleting a client affects their bookings, reviews, and listings.
+  * **Logic Operations:** Performs comprehensive validation for every entity, including data type validation, business rule enforcement, and relationship integrity checks. Handles complex operations like user authentication, password hashing, rating calculations, and amenity associations.  
+  * **Relation Management:** Validates and manages relationships between entities, such as user-place ownership, place-amenity associations, and user-review authorship. Prevents orphaned entities and maintains referential integrity through proper foreign key constraints.
 
 ### **Persistence Layer**
 
-Data storage and retrieval, data integrity maintenance.
+Database storage and retrieval with comprehensive relationship management and data integrity.
 
-* #### **Storage:**
+* #### **Repository Pattern:**
 
-  * **Client Data:** User information storage.  
-  * **Place Data:** Place information storage.  
-  * **JSON Processing**: data serialization.
+  * **SQLAlchemyRepository:** Base repository with common CRUD operations
+  * **UserRepository:** Specialized user data management with email uniqueness
+  * **PlaceRepository:** Place data management with amenity and review relationships
+  * **ReviewRepository:** Review management with place and user associations
+
+* #### **Database Features:**
+
+  * **MySQL Integration:** Full MySQL database with PyMySQL connector
+  * **ORM Relationships:** SQLAlchemy relationships with lazy loading and cascade operations
+  * **Data Seeding:** Automated database seeding with comprehensive test data
+  * **Migration Support:** Database schema management and automated table creation
 
 **Data flow example:**
 
-1. User registers.  
-2. API handles this request to facade.  
-3. Request is processed.  
-4. Data is validated.  
-5. Data is stored.  
-6. JSON serialization.
+1. User registration request received
+2. API delegates to HBnBFacade
+3. Facade creates User model instance with validation
+4. UserRepository persists data to MySQL database
+5. Database confirms successful storage
+6. Response serialized and returned to client
 
 ###
 
@@ -226,9 +248,9 @@ After the amenities are created, normal users can select them from a list to app
 
 Characteristics and relations:
 
-- One amenity can be shared across many *Places*.  
-- \[not implemented yet\] One amenity can be classified as one of 3 grades: basic, extra and premium. Which in turn will give a *Place* part of its rating.  
-- Can be created, updated and deleted by the Admin Users.
+- One amenity can be shared across many *Places* through many-to-many relationships.  
+- Amenities enhance place attractiveness and can influence user booking decisions.
+- Can only be created, updated and deleted by Admin Users with elevated privileges.
 
 ### **Review:**
 
