@@ -8,6 +8,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM users;
 DELETE FROM amenities;
 DELETE FROM places;
+DELETE FROM reviews;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -31,16 +32,16 @@ INSERT INTO amenities (id, name, description, created_at, updated_at) VALUES
 (UUID(), 'Pet Friendly', "No kids allowed, just dogs",NOW(), NOW());
 
 -- @block
-INSERT INTO places (id, title, description, price, latitude, longitude, owner_id, created_at, updated_at) VALUES
-(UUID(), 'Cozy Apartment in NYC', 'A beautiful apartment in the heart of New York City.', 150, 40.7128, -74.0060, (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Beach House in Miami', 'A luxurious beach house with stunning ocean views.', 300, 25.7617, -80.1918, (SELECT id FROM users WHERE email = 'maestropanadero96@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Cabin in the Woods', 'A peaceful cabin surrounded by nature.', 120, 34.0522, -118.2437, (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Modern Loft in San Francisco', 'A stylish loft in downtown San Francisco.', 200, 37.7749, -122.4194, (SELECT id FROM users WHERE email = 'minecraft6969@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Villa in Tuscany', 'A charming villa in the beautiful countryside of Tuscany.', 400, 43.7711, 11.2486, (SELECT id FROM users WHERE email = 'redrogsoviet@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Penthouse in Tokyo', 'A luxurious penthouse with a breathtaking city view.', 500, 35.6895, 139.6917, (SELECT id FROM users WHERE email = 'admin@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Cottage in the Cotswolds', 'A cozy cottage in the picturesque Cotswolds.', 180, 51.8333, -1.8333, (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Lake House in Canada', 'A serene lake house perfect for a relaxing getaway.', 250, 44.2312, -76.4860, (SELECT id FROM users WHERE email = 'maestropanadero96@hbnb.io'), NOW(), NOW()),
-(UUID(), 'Desert Retreat in Arizona', 'A unique retreat in the heart of the Arizona desert.', 220, 34.0489, -111.0937, (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), NOW(), NOW());
+INSERT INTO places (id, title, description, price, latitude, longitude, rating, owner_id, created_at, updated_at) VALUES
+(UUID(), 'Cozy Apartment in NYC', 'A beautiful apartment in the heart of New York City.', 150, 40.7128, -74.0060, 2, (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Beach House in Miami', 'A luxurious beach house with stunning ocean views.', 300, 25.7617, -80.1918, 3, (SELECT id FROM users WHERE email = 'maestropanadero96@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Cabin in the Woods', 'A peaceful cabin surrounded by nature.', 120, 34.0522, -118.2437, 4, (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Modern Loft in San Francisco', 'A stylish loft in downtown San Francisco.', 200, 37.7749, -122.4194, 5, (SELECT id FROM users WHERE email = 'minecraft6969@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Villa in Tuscany', 'A charming villa in the beautiful countryside of Tuscany.', 400, 43.7711, 11.2486, 1, (SELECT id FROM users WHERE email = 'redrogsoviet@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Penthouse in Tokyo', 'A luxurious penthouse with a breathtaking city view.', 500, 35.6895, 139.6917, 3, (SELECT id FROM users WHERE email = 'admin@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Cottage in the Cotswolds', 'A cozy cottage in the picturesque Cotswolds.', 180, 51.8333, -1.8333, 5, (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Lake House in Canada', 'A serene lake house perfect for a relaxing getaway.', 250, 44.2312, -76.4860, 3, (SELECT id FROM users WHERE email = 'maestropanadero96@hbnb.io'), NOW(), NOW()),
+(UUID(), 'Desert Retreat in Arizona', 'A unique retreat in the heart of the Arizona desert.', 220, 34.0489, -111.0937, 2, (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), NOW(), NOW());
 
 -- @block
 INSERT INTO place_amenities (place_id, amenity_id) VALUES
@@ -64,7 +65,6 @@ INSERT INTO place_amenities (place_id, amenity_id) VALUES
 ((SELECT id FROM places WHERE title = 'Desert Retreat in Arizona'), (SELECT id FROM amenities WHERE name = 'WiFi'));
 
 -- @block
--- Seed reviews
 INSERT INTO reviews (id, owner_id, place_id, rating, comment, created_at, updated_at) VALUES
 (UUID(), (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), (SELECT id FROM places WHERE title = 'Cozy Apartment in NYC'), 4.5, 'Great place, I cant believe this used to be a meth house!', NOW(), NOW()),
 (UUID(), (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), (SELECT id FROM places WHERE title = 'Beach House in Miami'), 5.0, 'Great place! I wonder if its going to be featured in GTA 6!!', NOW(), NOW()),
@@ -75,3 +75,28 @@ INSERT INTO reviews (id, owner_id, place_id, rating, comment, created_at, update
 (UUID(), (SELECT id FROM users WHERE email = 'john.doe@hbnb.io'), (SELECT id FROM places WHERE title = 'Cottage in the Cotswolds'), 4.2, 'Charming and cozy, perfect for a weekend getaway.', NOW(), NOW()),
 (UUID(), (SELECT id FROM users WHERE email = 'alice.wonder@hbnb.io'), (SELECT id FROM places WHERE title = 'Lake House in Canada'), 4.7, 'Beautiful location and very serene.', NOW(), NOW()),
 (UUID(), (SELECT id FROM users WHERE email = 'maestropanadero96@hbnb.io'), (SELECT id FROM places WHERE title = 'Desert Retreat in Arizona'), 5.0, 'I got bitten by a snake right on the tip of my dick, thankfully my mom sucked the venom out! she saves my life bro!!:D', NOW(), NOW());
+
+-- @block
+CREATE OR REPLACE VIEW place_amenities_view AS
+SELECT
+    p.id AS place_id,
+    p.title AS place_title,
+    a.name AS amenity_name
+FROM
+    places p
+JOIN
+    place_amenities pa ON p.id = pa.place_id
+JOIN
+    amenities a ON pa.amenity_id = a.id;
+
+-- @block
+CREATE OR REPLACE VIEW place_reviews_view AS
+SELECT
+    p.id AS place_id,
+    p.title AS place_title,
+    r.rating AS review_rating,
+    r.comment AS review_comment
+FROM
+    places p
+JOIN
+    reviews r ON p.id = r.place_id;

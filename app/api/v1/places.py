@@ -20,9 +20,7 @@ owner_model = api.model(
 amenity_model = api.model(
     "Amenity",
     {
-        "id":          fields.String(description="ID of the amenity"),
-        "name":        fields.String(description="Name of the amenity"),
-        "description": fields.String(description="Description of the amenity"),
+        "id": fields.String(required=True, description="ID of the amenity"),
     }
 )
 review_model = api.model(
@@ -44,6 +42,7 @@ place_model = api.model(
         "price":        fields.Float(required=True, description="Price per night"),
         "latitude":     fields.Float(required=True, description="Latitude of the place"),
         "longitude":    fields.Float(required=True, description="Longitude of the place"),
+        "rating":       fields.Integer(required=False, description="Place rating"),
         "owner_id":     fields.String(required=True, description="ID of the owner"),
         "amenities":    fields.List(
             fields.Nested(amenity_model), description="List of amenities"
@@ -60,6 +59,7 @@ place_response_model = api.model(
         "price":        fields.Float(required=True, description="Price per night"),
         "latitude":     fields.Float(required=True, description="Latitude of the place"),
         "longitude":    fields.Float(required=True, description="Longitude of the place"),
+        "rating":       fields.Integer(required=False, description="Place rating"),
         "owner_id":     fields.String(required=True, description="ID of the owner"),
         "owner":        fields.Nested(owner_model, description="Owner of the place"),
         "amenities":    fields.List(
@@ -86,6 +86,7 @@ class PlaceList(Resource):
         place_data = api.payload
         current_user = get_jwt_identity()
         claims = get_jwt()
+        print("Payload received: ", request.json)
 
         if not (claims.get("is_admin", False) or place_data["owner_id"] == current_user):
             return {"error": "Unauthorized: cannot create place for another user"}, 403
@@ -100,7 +101,6 @@ class PlaceList(Resource):
         return new_place.to_dict(), 201
 
 
-    # IMPLEMENT PAGINATION OR LIMIT
     @api.marshal_with(place_response_model, as_list=True)
     @api.response(200, "List of places retrieved successfully")
     def get(self):

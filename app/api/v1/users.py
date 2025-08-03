@@ -44,6 +44,7 @@ class UserList(Resource):
         """Register a new user"""
         user_data = api.payload
         print("Entering user post")
+        # This was commented out because no one could register :P
         # claims = get_jwt()
         # is_admin = claims.get("is_admin", False)
 

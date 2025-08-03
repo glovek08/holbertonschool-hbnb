@@ -9,9 +9,14 @@
   let particlesToShow = 3; /* For the Carousel, base cards to show */
   let places = []
 
+
   const fetchPlaces = async () => {
-    places = await api.getPlaces();
-    console.log("Fetched places:", places);
+    try {
+      places = await api.getPlaces(9); // Calling with 9. TODO: Randomize them!
+      console.log("Fetched places:", places);
+    } catch (error) {
+      console.error("Error fetching places:", error);
+    }
   };
   // dynamically set the ammount of cards shown in the places carousel by calculating the width of the
   // parent container.
@@ -22,6 +27,7 @@
   };
   const shuffleCards = () => {
     console.log("Cards are shuffled, trust me bro.");
+    places = [...places].sort(() => Math.random() - 0.5);
   };
   onMount(() => {
     fetchPlaces();
@@ -73,23 +79,28 @@
 
 <section id="places-section">
   <div id="places-carousel-container">
-    <Carousel
-      {particlesToShow}
-      particlesToScroll={1}
-      autoplay
-      autoplayDuration={5000}
-      autoplayProgressVisible
-      pauseOnFocus
-    >
-      {#each Array(9) as _, index}
-        <PlaceCard
-          title={`Place ${index + 1}`}
-          description="A wonderful place to stay."
-          price={`$${(index + 1) * 10}.00`}
-          image="template-bnb.jpg"
-        />
-      {/each}
-    </Carousel>
+    {#if places.length > 0}
+      <Carousel
+        {particlesToShow}
+        particlesToScroll={1}
+        autoplay
+        autoplayDuration={5000}
+        autoplayProgressVisible
+        pauseOnFocus
+      >
+        {#each places as place (place.id)}
+          <PlaceCard
+            title={place.title}
+            description={place.description}
+            price={place.price}
+            image={place.image || "template-bnb.jpg"}
+            rating={place.rating}
+          />
+        {/each}
+      </Carousel>
+    {:else}
+      <p>Loading places...</p>
+    {/if}
     <div id="places-carousel-toolbar">
       <Button_2
         text="Shuffle"

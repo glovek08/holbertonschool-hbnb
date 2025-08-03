@@ -23,7 +23,6 @@ def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # This enables cors for all routes
     # It allows the frontend to communicate with the backend
     CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
@@ -61,7 +60,8 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(amenity_ns, path="/api/v1/amenities")
     api.add_namespace(reviews_ns, path="/api/v1/reviews")
     api.add_namespace(auth_ns, path="/api/v1/auth")
-
     with app.app_context():
         db.create_all()
+        print("CREATED DB!")
+
     return app

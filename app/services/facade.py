@@ -16,8 +16,6 @@ class HBnBFacade:
     def create_user(self, user_data):
         from app.models.user import User
 
-        # ***** IF RANDOM ERROR OCCURS, UNCOMMENT THIS AND IMPORT EACH MODEL INSIDE LOCAL SCOPE. ****
-
         user = User(**user_data)
         self.user_repo.add(user)
         return user
@@ -38,9 +36,18 @@ class HBnBFacade:
     def create_place(self, place_data):
         from app.models.place import Place
 
-        place = Place(**place_data)
-        self.place_repo.add(place)
-        return place
+        amenities_data = place_data.pop("amenities", [])
+        new_place = Place(**place_data)
+
+        for amenity_data in amenities_data:
+            amenity = self.amenity_repo.get(amenity_data["id"])
+            if amenity:
+                new_place.amenities.append(amenity)
+            else:
+                print(f"Couldn't find amenity {amenity_data['id']}")
+
+        self.place_repo.add(new_place)
+        return new_place
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)

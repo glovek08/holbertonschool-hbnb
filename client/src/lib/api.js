@@ -46,7 +46,13 @@ class ApiService {
   }
 
   // ******** PLACES KINGDOM ********
-  async getPlaces() {
+  async getPlaces(limit) {
+    if (limit) {
+      return this.request(`/places/?limit=${limit}`, {
+        method: "GET",
+        credentials: "include",
+      });
+    }
     return this.request("/places/", {
       method: "GET",
       credentials: "include",
