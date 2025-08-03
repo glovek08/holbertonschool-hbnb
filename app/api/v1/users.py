@@ -28,6 +28,7 @@ response_user_model = api.model(
         ),
         "last_name":    fields.String(required=True, description="Last name of the user"),
         "email":        fields.String(required=True, description="Email of the user"),
+        "is_admin":     fields.Boolean(required=True, description="Verifies if the user is administrator"),
     },
 )
 
@@ -36,20 +37,16 @@ response_user_model = api.model(
 class UserList(Resource):
     @api.expect(user_model, validate=True)
     @api.response(201, "User successfully created")
-    @api.response(400, "Invalid input data")
     @api.response(403, "Admin privileges required")
-    @api.response(409, "Email already registered")
-    # @jwt_required()
+    @jwt_required()
     def post(self):
         """Register a new user"""
         user_data = api.payload
-        print("Entering user post")
-        # This was commented out because no one could register :P
-        # claims = get_jwt()
-        # is_admin = claims.get("is_admin", False)
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
 
-        # if not is_admin:
-        #     return {"error": "Admin privileges required"}, 403
+        if "is_admin" in user_data and not is_admin: # this prevents manual is_admin injection
+            return {"error": "You can't do that boy."}, 403
 
         try:
             new_user = facade.create_user(user_data)

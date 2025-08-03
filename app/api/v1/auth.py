@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     jwt_required,
     set_access_cookies,
     unset_jwt_cookies,
+    get_jwt_identity,
 )
 
 from flask import make_response
@@ -44,11 +45,13 @@ class Login(Resource):
                 additional_claims={"is_admin": user.is_admin},
                 expires_delta=expires,
             )
-            response = make_response({"access_token": access_token}, 200)
+            response = make_response(
+                {"id": str(user.id), "access_token": access_token}, 200
+            )
             set_access_cookies(
                 response,
                 access_token,
-                max_age=expires.total_seconds(),
+                max_age=int(expires.total_seconds()),
             )
             print("Stay Logged In")
             return response
@@ -56,9 +59,11 @@ class Login(Resource):
             access_token = create_access_token(
                 identity=str(user.id),
                 additional_claims={"is_admin": user.is_admin},
-                # expires_delta=timedelta(minutes=15), Uncomment if shit gets wild
+                # expires_delta=timedelta(minutes=15), if shit gets wild uncomment.
             )
-            response = make_response({"access_token": access_token}, 200)
+            response = make_response(
+                {"id": str(user.id), "access_token": access_token}, 200
+            )
             set_access_cookies(response, access_token)
             print("Session Log In.")
             return response
@@ -93,4 +98,5 @@ class CheckStatus(Resource):
     @jwt_required()
     def post(self):
         """Checks if the user is already logged in"""
-        return {"msg": "User logged in"}, 200
+        user_id = get_jwt_identity()
+        return {"msg": "User logged in", "user": {"id": user_id}}, 200

@@ -68,15 +68,15 @@ class User(BaseModel):
             raise TypeError("Is Admin must be a boolean!")
         return value
 
-    def to_dict(self):
-        data = super().to_dict()
-        data.update(
-            first_name=self.first_name,
-            last_name=self.last_name,
-            email=self.email,
-            is_admin=self.is_admin,
-        )
-        return data
+    # def to_dict(self):
+    #     data = super().to_dict()
+    #     data.update(
+    #         first_name=self.first_name,
+    #         last_name=self.last_name,
+    #         email=self.email,
+    #         is_admin=self.is_admin,
+    #     )
+    #     return data
 
     def __repr__(self):
         return f"<User name={self.first_name!r}, email={self.email!r}>"

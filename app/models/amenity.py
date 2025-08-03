@@ -36,13 +36,13 @@ class Amenity(BaseModel):
             raise TypeError("Description must be a string!")
         return value
 
-    def to_dict(self):
-        data = super().to_dict()
-        data.update(
-            name=self.name,
-            description=self.description,
-        )
-        return data
+    # def to_dict(self):
+    #     data = super().to_dict()
+    #     data.update(
+    #         name=self.name,
+    #         description=self.description,
+    #     )
+    #     return data
 
     def __repr__(self):
         return f"<Amenity id={self.id} name={self.name!r}>"

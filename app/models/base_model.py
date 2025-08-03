@@ -4,10 +4,12 @@ import uuid
 # SQLAlchemy stuff
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
-from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy.inspection import inspect
 from app.extensions import db
 
 
+@as_declarative()
 class BaseModel(db.Model):
     __abstract__ = True
 
@@ -42,12 +44,8 @@ class BaseModel(db.Model):
                     print(f"{self.to_dict} Updated")
 
     def to_dict(self):
-        data = {
-            "id": self.id,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
-        }
-        return data
+        """Serialize the model to a dictionary."""
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
     def __repr__(self):
         return f"<{self.__class__.__name__} id={self.id}>"

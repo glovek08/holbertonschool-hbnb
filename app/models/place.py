@@ -32,7 +32,6 @@ class Place(BaseModel):
     price:       Mapped[float] = mapped_column(Float, nullable=False)
     latitude:    Mapped[float] = mapped_column(Float, nullable=False)
     longitude:   Mapped[float] = mapped_column(Float, nullable=False)
-    rating:      Mapped[int] = mapped_column(Integer, nullable=True, default=0)
     
     # Relationships
     amenities: Mapped[List["Amenity"]] = relationship(
@@ -107,12 +106,12 @@ class Place(BaseModel):
             raise ValueError("Longitude must be between -180 and 180")
         return value
 
-    @validates("rating")
-    def validate_rating(self, key: str, value: int):
-        value = int(super().validate_number(value, "Rating"))
-        if not (0 <= value <= 5):
-            raise ValueError("Rating must be between 0 and 5")
-        return value
+
+    @property
+    def average_rating(self):
+        if not self.reviews:
+            return 0
+        return sum(review.rating for review in self.reviews) / len(self.reviews)
 
     def to_dict(self):
         data = super().to_dict()
@@ -127,7 +126,7 @@ class Place(BaseModel):
             price=self.price,
             latitude=self.latitude,
             longitude=self.longitude,
-            rating=self.rating,
+            rating=self.average_rating,
             amenities=[
             {
                 "id": amenity.id,
