@@ -27,7 +27,7 @@ response_user_model = api.model(
             required=True, description="First name of the user"
         ),
         "last_name":    fields.String(required=True, description="Last name of the user"),
-        "email":        fields.String(required=True, description="Email of the user"),
+        # "email":        fields.String(required=True, description="Email of the user"), //Remove email, cause it's not needed
         "is_admin":     fields.Boolean(required=True, description="Verifies if the user is administrator"),
     },
 )

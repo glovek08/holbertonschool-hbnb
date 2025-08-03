@@ -77,6 +77,7 @@ class Logout(Resource):
         response = make_response({"msg": "Logout successful"}, 200)
         unset_jwt_cookies(response)
 
+        # Cross-site request forgery? maybe later :D
         response.set_cookie(
             "csrf_access_token", "", expires=0, path="/", samesite="Lax"
         )
