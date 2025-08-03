@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import {
     checkAuth,
     isAuthenticated,
@@ -7,16 +7,16 @@
     logout,
   } from "../lib/stores/auth";
   import Checkbox from "./Checkbox.svelte";
+  import { showSidebar } from "../lib/stores/sidebar"; 
 
   // The sidebar is being mounter in the header.
   // ********************** SIDEBAR *********************************
-  export let show = false;
-  export let closeSidebar = () => {};
   let isClosing = false;
+
   const handleClose = () => {
     isClosing = true;
     setTimeout(() => {
-      closeSidebar();
+      showSidebar.set(false);
       isClosing = false;
     }, 290);
   };
@@ -45,7 +45,7 @@
   }
 </script>
 
-{#if show}
+{#if $showSidebar}
   <button
     type="button"
     class="sidebar-backdrop"
@@ -54,7 +54,7 @@
     on:keydown={(e) => {
       if (e.key === "Enter" || e.key === " ") handleClose();
     }}
-    aria-label={show ? "Close sidebar" : "Open sidebar"}
+    aria-label={$showSidebar ? "Close sidebar" : "Open sidebar"}
     tabindex="0"
     style="border:none;background:rgba(0,0,0,0);padding:0;position:fixed;inset:0;z-index:9;"
   ></button>
@@ -91,7 +91,9 @@
             <label for="stay-logged-checkbox">Stay Logged</label>
           </div>
           <div id="error-log-div">{errorMessage}</div>
-          <button type="submit" id="login-button">LOG IN</button>
+          <button type="submit" id="login-button" class="function-button"
+            >LOG IN</button
+          >
         </form>
         <p>
           Don't have an account?
@@ -103,12 +105,17 @@
     {:else}
       <!-- If the user logs in, hide the login form and display this. -->
       <div class="user-section">
-        <h3>Your Account</h3>
+        <h3>Hello [user.name]</h3>
+        <!-- maybe use a rune to display Hello {user.name}! -->
         <ul class="user-menu">
-          <li><a href="/user">My Profile</a></li>
-          <li><a href="/bookings">My Bookings</a></li>
+          <li><a href="/user">My Account</a></li>
+          <li><a href="/asdaks">Another option</a></li>
           <li><a href="/support">Support</a></li>
-          <li><button on:click={handleLogout}>Logout</button></li>
+          <li>
+            <button class="logout-btn function-button" on:click={handleLogout}
+              >Logout</button
+            >
+          </li>
         </ul>
       </div>
     {/if}
@@ -185,32 +192,42 @@
     transition: color 0.2s ease;
   }
   #login-button {
-    width: 200px;
-    padding: 10px;
     background-color: var(--green);
-    cursor: pointer;
-    color: white;
-    font-family: "Quicksand";
-    font-weight: 900;
-    border-radius: 7px;
-    border: none;
-    margin-top: 2rem;
-    font-size: 1.5rem;
-    transition: filter 200ms ease-in-out;
   }
   #error-log-div {
     color: var(--red);
     font-weight: bolder;
   }
-  #login-button:hover {
-    filter: brightness(1.1);
-  }
-  #login-button:active {
-    filter: brightness(0.9);
-  }
 
   #login-div-heading {
     font-size: 1.5rem;
+  }
+  .user-section {
+    /* outline: 1px solid red; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .user-menu {
+    /* outline: 1px solid yellow; */
+    padding: 5px;
+  }
+  .user-menu li {
+    /* outline: 1px solid blue; */
+    padding: 10px;
+  }
+  .logout-btn {
+    width: 100%;
+    background-color: var(--red);
+    padding: 10px 30px;
+  }
+  .logout-btn:hover {
+    filter: brightness(0.9);
+  }
+  .logout-btn:active {
+    filter: brightness(0.5);
   }
   aside.sidebar.closing {
     animation: slideOutToRight 300ms cubic-bezier(0.55, 0.06, 0.68, 0.19);
