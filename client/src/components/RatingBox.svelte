@@ -16,6 +16,10 @@
     --star-fill: red;
     --star-empty: rgb(158, 161, 158);
   }
+  :root.light {
+    --star-fill: red;
+    --star-empty: rgb(110, 104, 104);
+  }
 
   .rating-container {
     display: flex;
