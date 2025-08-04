@@ -20,6 +20,12 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Install Node.js 20.19.4 using NodeSource repository
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs=20.19.4-1nodesource1 && \
+    apt-mark hold nodejs && \
+    npm install -g npm@10.8.2
+
 WORKDIR /hbnb
 
 RUN python3 -m venv venv
@@ -33,8 +39,16 @@ COPY app/ ./app/
 COPY static/ ./static/
 COPY templates/ ./templates/
 COPY swaggerui/ ./swaggerui/
+COPY client/ ./client/
 COPY app.py .
 COPY config.py .
+
+# Install client dependencies
+WORKDIR /hbnb/client
+RUN npm install
+
+# Return to main working directory
+WORKDIR /hbnb
 
 RUN mkdir -p instance
 
