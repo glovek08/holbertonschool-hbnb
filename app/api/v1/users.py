@@ -27,38 +27,46 @@ response_user_model = api.model(
             required=True, description="First name of the user"
         ),
         "last_name":    fields.String(required=True, description="Last name of the user"),
-        # "email":        fields.String(required=True, description="Email of the user"), //Remove email, cause it's not needed
+        # "email":        fields.String(required=True, description="Email of the user"),
         "is_admin":     fields.Boolean(required=True, description="Verifies if the user is administrator"),
     },
 )
-
 
 @api.route("/")
 class UserList(Resource):
     @api.expect(user_model, validate=True)
     @api.response(201, "User successfully created")
-    @api.response(403, "Admin privileges required")
-    @jwt_required()
+    @api.response(409, "Email already registered")
+    # @jwt_required()
     def post(self):
         """Register a new user"""
         user_data = api.payload
-        claims = get_jwt()
-        is_admin = claims.get("is_admin", False)
+        
+        # Do not remove, this is for the auth only registration.
+        # claims = get_jwt()
+        # is_admin = claims.get("is_admin", False)
 
-        if "is_admin" in user_data and not is_admin: # this prevents manual is_admin injection
-            return {"error": "You can't do that boy."}, 403
+        # if "is_admin" in user_data and not is_admin: # this prevents manual is_admin injection
+        #     print("You can't do that boy")
+        #     return {"error": "You can't do that boy."}, 403
+
+        if "is_admin" in user_data:
+            user_data.pop("is_admin")
 
         try:
             new_user = facade.create_user(user_data)
             access_token = create_access_token(identity=new_user.id)
         except IntegrityError as error:
-            return {"error": str(error)}, 409
+            if "Duplicate entry" in str(error):
+                return {"error": "Email already registered."}, 409
+            return {"error": "An unexpected database error occurred."}, 500
         except (TypeError, ValueError) as error:
             return {"error": str(error)}, 400
 
         return {
             "id": new_user.id,
-            "access_token": access_token
+            "access_token": access_token,
+            "message": "User successfully registered."
         }, 201
 
     @api.marshal_with(response_user_model, as_list=True)

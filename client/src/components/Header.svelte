@@ -8,7 +8,7 @@
   const theme = writable(localStorage.getItem("theme") || "dark");
 
   let sidebarComponent;
-  let headerElement;
+  let headerElement; // Ignore this because we need to bind it, trust me bro.
 
   function toggleSidebar() {
     if ($showSidebar) {
