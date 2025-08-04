@@ -1,9 +1,6 @@
 <script>
-  import PlaceCard from "../components/PlaceCard.svelte";
   import { isAuthenticated } from "../lib/stores/auth";
   import { showSidebar } from "../lib/stores/sidebar";
-  import Button_2  from "../components/Button-2.svelte";
-  import Sidebar from "../components/Sidebar.svelte";
   import PlacesCatalog from "../components/PlacesCatalog.svelte";
 </script>
 

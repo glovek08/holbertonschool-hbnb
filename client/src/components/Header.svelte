@@ -46,7 +46,7 @@
 
 <header bind:this={headerElement} class:scrolled={isScrolled}>
   <a id="header-logo-anchor" href="/" title="Back to Home" aria-label="Go Home">
-    <img src="main_logo.png" alt="HBnB Logo" height="40" />
+    <img src="/main_logo.png" alt="HBnB Logo" height="40" />
   </a>
   <nav>
     <ul id="header-ul">

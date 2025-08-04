@@ -1,7 +1,7 @@
 <script>
   import RatingBox from "./RatingBox.svelte";
 
-  export const place_id = "";
+  export let place_id = "";
   export let title = "No Title";
   export let description = "No Description";
   export let price = "00.00";
@@ -9,9 +9,9 @@
   export let rating = 0; // If place provides image, this will get overwritten.
 </script>
 
-<a href="/places">
-  <div
-    class="card-container"
+<a href={`/places/${place_id}`}>
+  <button
+    class="place-btn"
     style="background-image: url('{image}'); background-size: cover; background-position: center;"
   >
     <div class="place-card-data-container">
@@ -24,7 +24,7 @@
       <h3 class="place-title" {title}>{title}</h3>
       <p class="place-description" title={description}>{description}</p>
     </div>
-  </div>
+  </button>
 </a>
 
 <style>
@@ -40,12 +40,15 @@
     --card-text-shadow: rgb(193, 181, 181);
     --card-hover-background: rgba(232, 224, 224, 0.916);
   }
-  .card-container {
+  .place-btn {
     /* outline: 1px solid green; */
+    font-family: 'Quicksand';
     padding: 0;
     background: var(--white);
     color: var(--card-font-color);
     transition: 300ms ease-in-out;
+    border: none;
+    cursor: pointer;
     width: 300px;
     height: 450px;
     display: flex;
@@ -57,7 +60,7 @@
       transform 300ms ease-in-out,
       z-index 0ms ease-in-out;
   }
-  .card-container:hover {
+  .place-btn:hover {
     z-index: 10;
     transform: scale(1.02);
     .place-card-data-container {
@@ -74,6 +77,7 @@
     transition: background 200ms ease-in-out;
     padding: 2px 20px 12px 20px;
     position: relative;
+    outline: 2px solid var(--card-desc-background);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     text-shadow: 0 0 10px var(--card-text-shadow);

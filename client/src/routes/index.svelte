@@ -90,6 +90,7 @@
       >
         {#each places as place (place.id)}
           <PlaceCard
+            place_id={place.id}
             title={place.title}
             description={place.description}
             price={place.price}

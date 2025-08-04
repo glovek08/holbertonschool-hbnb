@@ -80,6 +80,20 @@ export const routes = {
     },
     {
       "meta": {},
+      "id": "_default_place_details_svelte",
+      "name": "place_details",
+      "file": {
+        "path": "src/routes/place_details.svelte",
+        "dir": "src/routes",
+        "base": "place_details.svelte",
+        "ext": ".svelte",
+        "name": "place_details"
+      },
+      "asyncModule": () => import('../src/routes/place_details.svelte'),
+      "children": []
+    },
+    {
+      "meta": {},
       "id": "_default_places_svelte",
       "name": "places",
       "file": {
