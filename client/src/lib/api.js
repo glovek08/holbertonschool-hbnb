@@ -67,7 +67,7 @@ class ApiService {
   }
 
   async getPlace(placeId) {
-    return this.request(`/places/${placeId}/`);
+    return this.request(`/places/${placeId}`);
   }
 
   // ******** AMENITIES KINGDOM ********
