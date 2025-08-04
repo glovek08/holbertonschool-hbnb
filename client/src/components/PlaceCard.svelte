@@ -5,15 +5,12 @@
   export let title = "No Title";
   export let description = "No Description";
   export let price = "00.00";
-  export let image = "/template-bnb.jpg";
+  export let image = "template-bnb.jpg";
   export let rating = 0; // If place provides image, this will get overwritten.
 </script>
 
 <a href={`/places/${place_id}`}>
-  <button
-    class="place-btn"
-    style="background-image: url('{image}'); background-size: cover; background-position: center;"
-  >
+  <button class="place-btn" aria-label="Link to place details" style="background-image: url(/{image}); background-size: cover; background-position: center;">
     <div class="place-card-data-container">
       <div class="place-card-infobox">
         <RatingBox {rating} />

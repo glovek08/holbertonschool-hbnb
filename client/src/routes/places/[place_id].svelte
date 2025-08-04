@@ -11,19 +11,26 @@
   console.log($params);
 
   async function fetchPlace() {
+    // catches the api.getPlace exception from deeper.
     try {
       place = await api.getPlace(place_id);
+      console.log("Fetched place:", place);
     } catch (error) {
       console.error(`Error fetching place: ${error}`);
     }
   }
-  onMount(() => {
+  $: if (place_id) {
     fetchPlace();
-  });
+  }
 </script>
 
 <AuthBox>
-  <h1 class="">Place Details</h1>
+  {#if place}
+    <h1>{place.title}</h1>
+    <p>{place.description}</p>
+  {:else}
+    <p>Loading place details...</p>
+  {/if}
 </AuthBox>
 
 <style>

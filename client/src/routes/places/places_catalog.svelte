@@ -6,7 +6,3 @@
 <AuthBox>
   <PlacesCatalog/>
 </AuthBox>
-
-<style>
-
-</style>
