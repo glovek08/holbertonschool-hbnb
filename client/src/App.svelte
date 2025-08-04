@@ -27,10 +27,10 @@
   main {
     flex: 1;
     width: 100%;
-    padding: 8% 0 0 0;
+    padding: 2% 0 0 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-direction: column;
     min-height: 1000px;
   }
