@@ -23,7 +23,7 @@
   const calculateParticlesToShow = () => {
     const containerWidth =
       document.getElementById("places-carousel-container")?.offsetWidth || 0;
-    particlesToShow = Math.floor(containerWidth / 360); // 300 width + 60px left/right padding
+    particlesToShow = Math.floor(containerWidth / 340); // 300 width + 60px left/right padding
   };
   const shuffleCards = () => {
     console.log("Cards are shuffled, trust me bro.");
@@ -82,7 +82,7 @@
     {#if places.length > 0}
       <Carousel
         {particlesToShow}
-        particlesToScroll={1}
+        particlesToScroll={particlesToShow >= 3 ? 3 : 1}
         autoplay
         autoplayDuration={5000}
         autoplayProgressVisible
@@ -117,6 +117,9 @@
       window.location.href = "/places";
     }}
   />
+  <p>
+    Discover a curated selection of our top-rated places—these exclusive offers are handpicked to give you the best experience. Explore the carousel above and find your next favorite stay!
+  </p>
 </section>
 
 <style>
@@ -218,7 +221,8 @@
   #places-carousel-container {
     background: var(--background-primary);
     border-radius: 10px;
-    width: 90%;
+    width: 93%;
+    max-width:3000px;
     display: flex;
     align-items: center;
     justify-content: center;
