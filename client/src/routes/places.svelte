@@ -4,10 +4,12 @@
   import { showSidebar } from "../lib/stores/sidebar";
   import Button_2  from "../components/Button-2.svelte";
   import Sidebar from "../components/Sidebar.svelte";
+  import PlacesCatalog from "../components/PlacesCatalog.svelte";
 </script>
 
 {#if $isAuthenticated}
-  <p>HELLO USER!</p>
+  <h3>Hello [user.name]</h3>
+  <PlacesCatalog />
 {:else}
   <section id="places-user-not-logged-section">
     <h2>You must log in to see this page!</h2>
