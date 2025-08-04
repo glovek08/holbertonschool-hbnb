@@ -9,7 +9,6 @@
 @font-face {
   font-family: "Playwrite";
   src: url("/fonts/PlaywriteAUQLD-Regular.ttf") format("truetype");
-  /* I know i should add woff but fuck it. */
   font-weight: normal;
   font-style: normal;
 }

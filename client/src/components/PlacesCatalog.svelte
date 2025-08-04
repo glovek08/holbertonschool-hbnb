@@ -75,7 +75,8 @@
     min-width: 400px;
     width: 74.6%;
     max-width: 2280px;
-    height: 2400px;
+    max-height: 2400px;
+    margin: 20px;
   }
   #places-grid-toolbox {
     background: var(--gray);
@@ -129,5 +130,21 @@
     row-gap: 30px;
     width: 100%;
     padding: 40px;
+    overflow-y: scroll;
+    /* Scrollbar styles */
+    scrollbar-width:auto;
+    scrollbar-color: var(--font-primary) var(--background-primary);
+    max-height: 2300px;
+  }
+  #places-grid-container::-webkit-scrollbar {
+    width: 10px;
+  }
+  #places-grid-container::-webkit-scrollbar-thumb {
+    background: var(--font-primary);
+    border-radius: 8px;
+  }
+  #places-grid-container::-webkit-scrollbar-track {
+    background: var(--font-primary);
+    border-radius: 8px;
   }
 </style>

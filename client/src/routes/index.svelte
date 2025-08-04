@@ -7,8 +7,7 @@
   import api from "../lib/api";
 
   let particlesToShow = 3; /* For the Carousel, base cards to show */
-  let places = []
-
+  let places = [];
 
   const fetchPlaces = async () => {
     try {
@@ -112,14 +111,11 @@
       />
     </div>
   </div>
-  <Button_1
-    text="See All"
-    on:click={() => {
-      window.location.href = "/places";
-    }}
-  />
+  <a href="/places/places_catalog"><Button_1 text="See All" /></a>
   <p>
-    Discover a curated selection of our top-rated places—these exclusive offers are handpicked to give you the best experience. Explore the carousel above and find your next favorite stay!
+    Discover a curated selection of our top-rated places—these exclusive offers
+    are handpicked to give you the best experience. Explore the carousel above
+    and find your next favorite stay!
   </p>
 </section>
 
@@ -223,7 +219,7 @@
     background: var(--background-primary);
     border-radius: 10px;
     width: 93%;
-    max-width:3000px;
+    max-width: 3000px;
     display: flex;
     align-items: center;
     justify-content: center;

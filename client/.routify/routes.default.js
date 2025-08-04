@@ -80,31 +80,49 @@ export const routes = {
     },
     {
       "meta": {},
-      "id": "_default_place_details_svelte",
-      "name": "place_details",
-      "file": {
-        "path": "src/routes/place_details.svelte",
-        "dir": "src/routes",
-        "base": "place_details.svelte",
-        "ext": ".svelte",
-        "name": "place_details"
-      },
-      "asyncModule": () => import('../src/routes/place_details.svelte'),
-      "children": []
-    },
-    {
-      "meta": {},
-      "id": "_default_places_svelte",
+      "id": "_default_places",
       "name": "places",
+      "module": false,
       "file": {
-        "path": "src/routes/places.svelte",
+        "path": "src/routes/places",
         "dir": "src/routes",
-        "base": "places.svelte",
-        "ext": ".svelte",
+        "base": "places",
+        "ext": "",
         "name": "places"
       },
-      "asyncModule": () => import('../src/routes/places.svelte'),
-      "children": []
+      "children": [
+        {
+          "meta": {
+            "dynamic": true,
+            "order": false
+          },
+          "id": "_default_places__place_id__svelte",
+          "name": "[place_id]",
+          "file": {
+            "path": "src/routes/places/[place_id].svelte",
+            "dir": "src/routes/places",
+            "base": "[place_id].svelte",
+            "ext": ".svelte",
+            "name": "[place_id]"
+          },
+          "asyncModule": () => import('../src/routes/places/[place_id].svelte'),
+          "children": []
+        },
+        {
+          "meta": {},
+          "id": "_default_places_places_catalog_svelte",
+          "name": "places_catalog",
+          "file": {
+            "path": "src/routes/places/places_catalog.svelte",
+            "dir": "src/routes/places",
+            "base": "places_catalog.svelte",
+            "ext": ".svelte",
+            "name": "places_catalog"
+          },
+          "asyncModule": () => import('../src/routes/places/places_catalog.svelte'),
+          "children": []
+        }
+      ]
     },
     {
       "meta": {},
