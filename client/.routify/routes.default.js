@@ -31,6 +31,39 @@ export const routes = {
     },
     {
       "meta": {
+        "dynamic": true,
+        "order": false,
+        "dynamicSpread": true,
+        "inline": false
+      },
+      "id": "_default_____404__svelte",
+      "name": "[...404]",
+      "file": {
+        "path": "src/routes/[...404].svelte",
+        "dir": "src/routes",
+        "base": "[...404].svelte",
+        "ext": ".svelte",
+        "name": "[...404]"
+      },
+      "asyncModule": () => import('../src/routes/[...404].svelte'),
+      "children": []
+    },
+    {
+      "meta": {},
+      "id": "_default_command_center_svelte",
+      "name": "command_center",
+      "file": {
+        "path": "src/routes/command_center.svelte",
+        "dir": "src/routes",
+        "base": "command_center.svelte",
+        "ext": ".svelte",
+        "name": "command_center"
+      },
+      "asyncModule": () => import('../src/routes/command_center.svelte'),
+      "children": []
+    },
+    {
+      "meta": {
         "isDefault": true
       },
       "id": "_default_index_svelte",
@@ -71,24 +104,6 @@ export const routes = {
         "name": "signup"
       },
       "asyncModule": () => import('../src/routes/signup.svelte'),
-      "children": []
-    },
-    {
-      "meta": {
-        "dynamic": true,
-        "dynamicSpread": true,
-        "order": false,
-        "inline": false
-      },
-      "name": "[...404]",
-      "file": {
-        "path": ".routify/components/[...404].svelte",
-        "dir": ".routify/components",
-        "base": "[...404].svelte",
-        "ext": ".svelte",
-        "name": "[...404]"
-      },
-      "asyncModule": () => import('./components/[...404].svelte'),
       "children": []
     }
   ]

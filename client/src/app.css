@@ -24,7 +24,7 @@
   --font-secondary: black;
   --header-background: #4b0721;
   --green: rgb(75, 133, 75);
-  --red: rgb(255, 121, 121);
+  --red: rgb(206, 57, 57);
   --white: rgb(186, 193, 196);
   --gray: rgb(76, 71, 71);
 }
@@ -57,7 +57,6 @@
   justify-content: space-between;
 }
 
-
 .playwrite {
   font-family: playwrite;
 }
@@ -87,6 +86,25 @@ h1 {
 }
 a:hover {
   color: var(--accent);
+}
+.function-button {
+  width: 200px;
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  font-family: "Quicksand";
+  font-weight: 900;
+  border-radius: 7px;
+  border: none;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  transition: filter 200ms ease-in-out;
+}
+.function-button:hover {
+  filter: brightness(.9);
+}
+.function-button:active {
+  filter: brightness(.8);
 }
 html {
   background-color: var(--background-primary);
