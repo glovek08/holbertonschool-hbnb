@@ -21,22 +21,33 @@
           $ <span class="price-span">{price}</span> per Day.
         </p>
       </div>
-      <h3 class="place-title">{title}</h3>
-      <p class="place-description">{description}</p>
+      <h3 class="place-title" {title}>{title}</h3>
+      <p class="place-description" title={description}>{description}</p>
     </div>
   </div>
 </a>
 
 <style>
+  :root {
+    --card-desc-background: rgba(33, 36, 36, 0.752);
+    --card-font-color: rgb(228, 218, 218);
+    --card-text-shadow: black;
+    --card-hover-background: rgba(63, 61, 60, 0.694);
+  }
+  :root.light {
+    --card-desc-background: rgba(199, 206, 206, 0.39);
+    --card-font-color: rgb(0, 0, 0);
+    --card-text-shadow: rgb(193, 181, 181);
+    --card-hover-background: rgba(232, 224, 224, 0.916);
+  }
   .card-container {
     /* outline: 1px solid green; */
     padding: 0;
     background: var(--white);
-    color: rgb(27, 26, 26);
+    color: var(--card-font-color);
     transition: 300ms ease-in-out;
     width: 300px;
     height: 450px;
-    margin: 30px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -48,15 +59,15 @@
   }
   .card-container:hover {
     z-index: 10;
-    transform: scale(1.1);
+    transform: scale(1.02);
     .place-card-data-container {
-      background: rgba(255, 255, 255, 0.62);
+      background: var(--card-hover-background);
     }
   }
   .place-card-data-container {
     /* outline: 1px solid yellow; */
-    background: rgba(255, 255, 255, 0.3);
-    height: 50%;
+    background: var(--card-desc-background);
+    height: 40%;
     overflow-y: auto;
     margin-bottom: 0;
     margin-top: auto;
@@ -65,7 +76,7 @@
     position: relative;
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    text-shadow: 0 0 10px rgb(165, 163, 163);
+    text-shadow: 0 0 10px var(--card-text-shadow);
     scrollbar-width: thin; /* Makes the scrollbar thinner */
     scrollbar-color: rgb(43, 49, 59) transparent;
     display: flex;
@@ -91,6 +102,12 @@
     padding: 0;
     margin-top: 0;
     margin-bottom: 5px;
+    width: 100%;
+    height: 1.5em; /* Set a fixed height (adjust based on font size) */
+    line-height: 1.5em; /* Match the height to ensure proper alignment */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis;
   }
   .place-title,
   .place-description {
