@@ -1,8 +1,9 @@
-import { isActiveUrl } from "@roxi/routify";
 import { writable } from "svelte/store";
 
 export const isAuthenticated = writable(false);
 export const isAdmin = writable(false);
+export const currentUserId = writable(null);
+
 
 export async function login(email, password, stay_logged) {
   try {
@@ -19,8 +20,6 @@ export async function login(email, password, stay_logged) {
     const data = await response.json();
 
     if (response.ok) {
-      isAuthenticated.set(true);
-
       // check if the user is an admin
       const user_response = await fetch(`/api/v1/users/${data.id}`, {
         method: "GET",
@@ -29,8 +28,10 @@ export async function login(email, password, stay_logged) {
 
       if (user_response.ok) {
         const user_data = await user_response.json();
+        isAuthenticated.set(true);
+        currentUserId.set(data.id);
         if (user_data.is_admin === true) {
-          console.log("User is an admin");
+          console.log("User is an admin ");
           isAdmin.set(true);
         } else {
           console.log("User is not an admin");
@@ -40,7 +41,6 @@ export async function login(email, password, stay_logged) {
         console.error("Failed to fetch user details");
         isAdmin.set(false);
       }
-
       return { success: true, msg: "Login successful" };
     } else {
       isAuthenticated.set(false);
@@ -74,6 +74,7 @@ export async function logout() {
   } catch (error) {
     isAuthenticated.set(false);
     isAdmin.set(false);
+    currentUserId.set(null);
     return { error: `Error in fetching session logout: ${error}` };
   }
 }
@@ -88,7 +89,7 @@ export async function checkAuth() {
     if (response.ok) {
       const data = await response.json();
       isAuthenticated.set(true);
-
+      currentUserId.set(data.user.id);
       const user_response = await fetch(`/api/v1/users/${data.user.id}`, {
         method: "GET",
         credentials: "include",
@@ -121,6 +122,7 @@ export async function checkAuth() {
   } catch (error) {
     isAuthenticated.set(false);
     isAdmin.set(false);
+    currentUserId.set(null);
     console.error(`Error in checking authentication: ${error}`);
     return { error: `Error in checking authentication: ${error}` };
   }

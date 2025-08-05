@@ -5,6 +5,8 @@
   import Carousel from "svelte-carousel";
   import { onMount } from "svelte";
   import api from "../lib/api";
+  import { currentUserId } from "../lib/stores/auth";
+  console.log(`Current User: ${$currentUserId}`);
 
   let particlesToShow = 3; /* For the Carousel, base cards to show */
   let places = [];
@@ -117,7 +119,7 @@
       />
     </div>
   </div>
-  <a href="/places/places_catalog"><Button_1 text="See All" /></a>
+  <a href="/places"><Button_1 text="See All" /></a>
 </section>
 
 <style>

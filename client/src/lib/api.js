@@ -42,7 +42,7 @@ class ApiService {
   }
 
   async getUser(userId) {
-    return this.request(`/users/${userId}/`);
+    return this.request(`/users/${userId}`);
   }
 
   // ******** PLACES KINGDOM ********

@@ -3,6 +3,7 @@
   import {
     checkAuth,
     isAuthenticated,
+    currentUserId,
     login,
     logout,
   } from "../lib/stores/auth";
@@ -26,11 +27,14 @@
   let errorMessage = "";
   let email = "";
   let password = "";
+
   async function handleLogin(event) {
     event.preventDefault();
     let logged = await login(email, password, stayLoggedIn);
     if (!logged.success) {
       errorMessage = logged.error;
+    } else {
+      console.log("Logging in: "+logged.msg);
     }
   }
   /* ************************* LOG OUT *****************************/
@@ -108,7 +112,7 @@
         <h3>Hello [user.name]</h3>
         <!-- maybe use a rune to display Hello {user.name}! -->
         <ul class="user-menu">
-          <li><a href="/user">My Account</a></li>
+          <li><a href="/user/{$currentUserId}">My Account</a></li>
           <li><a href="/asdaks">Another option</a></li>
           <li><a href="/support">Support</a></li>
           <li>
