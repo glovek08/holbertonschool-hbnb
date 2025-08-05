@@ -78,6 +78,7 @@
 
 <section id="places-section">
   <div id="places-carousel-container">
+    <h2 class="places-section-h2">Hot places</h2>
     {#if places.length > 0}
       <Carousel
         {particlesToShow}
@@ -213,6 +214,13 @@
     justify-content: center;
     flex-direction: column;
     gap: 40px;
+  }
+  .places-section-h2 {
+    text-align: left;
+    width: 100%;
+    margin-left: 30px;
+    font-size: 2.5rem;
+    margin: 0 30px 20px 60px;
   }
 
   #places-carousel-container {

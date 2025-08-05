@@ -8,7 +8,7 @@
     try {
       await checkAuth();
     } catch (error) {
-      // This is expected if the user is not logged in.
+      // console.warn(error);
     }
   });
 </script>

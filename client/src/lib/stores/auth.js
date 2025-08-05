@@ -96,12 +96,9 @@ export async function checkAuth() {
 
       if (user_response.ok) {
         const user_data = await user_response.json();
-        console.log(user_data)
         if (user_data.is_admin === true) {
-          console.log("IS ADMIN");
           isAdmin.set(true);
         } else {
-          console.log("NOT ADMIN");
           isAdmin.set(false);
         }
         return {
@@ -109,14 +106,17 @@ export async function checkAuth() {
           msg: "User is authenticated and user data fetched",
         };
       } else {
-        console.error("Failed to fetch user details");
         isAdmin.set(false);
         return { success: false, error: "Failed to fetch user details" };
       }
-    } else {
+    } else if (response.status === 401) {
       isAuthenticated.set(false);
       isAdmin.set(false);
       return { success: false, error: "User is not authenticated" };
+    } else {
+      isAuthenticated.set(false);
+      console.error("Unexpected error during auth check:", response.status);
+      return { success: false, error: "Unexpected error during auth check" };
     }
   } catch (error) {
     isAuthenticated.set(false);

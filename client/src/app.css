@@ -1,13 +1,16 @@
 @font-face {
   font-family: "Quicksand";
-  src: url("/fonts/Quicksand-VariableFont_wght.ttf") format("truetype");
-  /* I know i should add woff but fuck it. */
+  src: url("/fonts/Quicksand-VariableFont_wght.woff2") format("woff2"),
+       url("/fonts/Quicksand-VariableFont_wght.woff") format("woff"),
+       url("/fonts/Quicksand-VariableFont_wght.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Playwrite";
-  src: url("/fonts/PlaywriteAUQLD-Regular.ttf") format("truetype");
+  src:  url("/fonts/PlaywriteAUQLD-Regular.woff2") format("woff2"),
+        url("/fonts/PlaywriteAUQLD-Regular.woff") format("woff"),
+        url("/fonts/PlaywriteAUQLD-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -38,7 +41,7 @@
   --shadow-primary: rgba(138, 127, 127, 0.541);
   --background-primary: #f5f5f5;
   --background-secondary: rgb(73, 79, 80);
-  --font-primary: #1d1818;
+  --font-primary: #312d2d;
   --font-secondary: rgb(221, 211, 211);
   --header-background: #9dc9e7;
   --green: rgb(57, 122, 57);
