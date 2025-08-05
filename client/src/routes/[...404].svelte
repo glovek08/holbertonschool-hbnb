@@ -24,7 +24,7 @@
         the <a href="/">homepage</a>.
     </p>
     <p>BUT YOU FOUND SHREK!!</p>
-    <img src="shrek-found.png" alt="shrek-found-user" width=400>
+    <img src="/shrek-found.png" alt="shrek-found-user" width=400>
     <small>Or he found you!</small>
     {#if isDev}
         <div>

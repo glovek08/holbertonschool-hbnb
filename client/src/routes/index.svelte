@@ -36,7 +36,7 @@
   });
 </script>
 
-<section id="welcome-section">
+<section id="welcome-section" aria-label="Welcome to HBNB section">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1400 320"
@@ -76,9 +76,14 @@
   </div>
 </section>
 
-<section id="places-section">
+<section id="places-section" aria-label="Section showing hot offers">
   <div id="places-carousel-container">
     <h2 class="places-section-h2">Hot places</h2>
+    <p class="places-section-p">
+      Discover a curated selection of our top-rated places—these exclusive
+      offers are handpicked to give you the best experience. Explore the
+      carousel above and find your next favorite stay!
+    </p>
     {#if places.length > 0}
       <Carousel
         {particlesToShow}
@@ -94,8 +99,8 @@
             title={place.title}
             description={place.description}
             price={place.price}
-            image={place.image || "template-bnb.jpg"}
             rating={place.rating}
+            image={place.image || "template-bnb.jpg"}
           />
         {/each}
       </Carousel>
@@ -113,11 +118,6 @@
     </div>
   </div>
   <a href="/places/places_catalog"><Button_1 text="See All" /></a>
-  <p>
-    Discover a curated selection of our top-rated places—these exclusive offers
-    are handpicked to give you the best experience. Explore the carousel above
-    and find your next favorite stay!
-  </p>
 </section>
 
 <style>
@@ -220,9 +220,13 @@
     width: 100%;
     margin-left: 30px;
     font-size: 2.5rem;
-    margin: 0 30px 20px 60px;
+    margin: 0 0 0 60px;
   }
-
+  .places-section-p {
+    width: 100%;
+    margin-left: 60px;
+    margin-top: 0;
+  }
   #places-carousel-container {
     background: var(--background-primary);
     border-radius: 10px;
@@ -245,5 +249,16 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  @media screen and (max-width: 600px) {
+    .places-section-h2,
+    .places-section-p {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    #places-carousel-container {
+      width: 100dvw;
+    }
   }
 </style>

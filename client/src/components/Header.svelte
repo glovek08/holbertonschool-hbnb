@@ -46,7 +46,7 @@
 
 <header bind:this={headerElement} class:scrolled={isScrolled}>
   <a id="header-logo-anchor" href="/" title="Back to Home" aria-label="Go Home">
-    <img src="/main_logo.png" alt="HBnB Logo" height="40" />
+    <img src="/main_logo.webp" alt="HBnB Logo" height="40" />
   </a>
   <!-- {#if !isHome} I Couldn't find a way to listen for path changes.
     <a

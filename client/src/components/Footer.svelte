@@ -6,9 +6,10 @@
     <a id="footer-logo-anchor" href="/" title="Home" aria-label="Home">
       <img
         id="footer-logo-img"
-        src="/main_logo.png"
+        src="/main_logo.webp"
         alt="HBnB Logo"
         height="100"
+        width="100"
       /></a
     >
   </div>
