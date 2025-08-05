@@ -25,18 +25,6 @@
 </a>
 
 <style>
-  :root {
-    --card-desc-background: rgba(33, 36, 36, 0.752);
-    --card-font-color: rgb(228, 218, 218);
-    --card-text-shadow: black;
-    --card-hover-background: rgba(63, 61, 60, 0.694);
-  }
-  :root.light {
-    --card-desc-background: rgba(199, 206, 206, 0.39);
-    --card-font-color: rgb(0, 0, 0);
-    --card-text-shadow: rgb(193, 181, 181);
-    --card-hover-background: rgba(232, 224, 224, 0.916);
-  }
   .place-btn {
     /* outline: 1px solid green; */
     font-family: 'Quicksand';

@@ -3,9 +3,11 @@
   import Sidebar from "./Sidebar.svelte";
   import { isAuthenticated, isAdmin } from "../lib/stores/auth";
   import { showSidebar } from "../lib/stores/sidebar";
-  import { writable } from "svelte/store";
+  import { writable, derived } from "svelte/store";
+  import { url } from "@roxi/routify";
 
   const theme = writable(localStorage.getItem("theme") || "dark");
+  // const isHome = derived(url, ($url) => $url === "/");
 
   let sidebarComponent;
   let headerElement; // Ignore this because we need to bind it, trust me bro.
@@ -48,6 +50,14 @@
   <a id="header-logo-anchor" href="/" title="Back to Home" aria-label="Go Home">
     <img src="/main_logo.png" alt="HBnB Logo" height="40" />
   </a>
+  <!-- {#if !$isHome} -->
+    <a
+      href="/"
+      id="header-home-aux"
+      aria-label="Back to Home"
+      title="Back to Home">Home</a
+    >
+  <!-- {/if} -->
   <nav>
     <ul id="header-ul">
       {#if $isAdmin}
@@ -58,7 +68,8 @@
             aria-label="Enter command center"
             on:click={() => (window.location.href = "/command_center")}
           >
-            <i id="admin-command-button-span" class="fa-regular fa-chess-queen"></i>
+            <i id="admin-command-button-span" class="fa-regular fa-chess-queen"
+            ></i>
           </button>
         </li>
       {/if}
@@ -112,6 +123,13 @@
     background: var(--header-background);
     transition: background 400ms ease-out;
     overflow-x: auto;
+  }
+  #header-home-aux {
+    margin-left: 1.5%;
+    margin-right: auto;
+    font-size: 1.5rem;
+    border-left: 2px solid var(--font-primary);
+    padding-left: 1%;
   }
   header.scrolled {
     background: transparent;

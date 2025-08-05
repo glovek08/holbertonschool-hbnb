@@ -1,7 +1,6 @@
 @font-face {
   font-family: "Quicksand";
-  src: url("/fonts/Quicksand-VariableFont_wght.ttf")
-    format("truetype");
+  src: url("/fonts/Quicksand-VariableFont_wght.ttf") format("truetype");
   /* I know i should add woff but fuck it. */
   font-weight: normal;
   font-style: normal;
@@ -26,6 +25,11 @@
   --red: rgb(206, 57, 57);
   --white: rgb(186, 193, 196);
   --gray: rgb(39, 39, 49);
+  /* PLACE CARD  defined here to make them global, we're using the same variables for the place details as well */
+  --card-desc-background: rgba(33, 36, 36, 0.752);
+  --card-font-color: rgb(228, 218, 218);
+  --card-text-shadow: black;
+  --card-hover-background: rgba(63, 61, 60, 0.694);
 }
 :root.light {
   --primary-color: #e0e1ee;
@@ -41,6 +45,11 @@
   --red: rgb(185, 4, 4);
   --white: rgb(218, 232, 236);
   --gray: rgb(205, 209, 212);
+   /* PLACE CARD */
+  --card-desc-background: rgba(199, 206, 206, 0.39);
+  --card-font-color: rgb(0, 0, 0);
+  --card-text-shadow: rgb(193, 181, 181);
+  --card-hover-background: rgba(232, 224, 224, 0.916);
 }
 *,
 *::before,
@@ -100,10 +109,10 @@ a:hover {
   transition: filter 200ms ease-in-out;
 }
 .function-button:hover {
-  filter: brightness(.9);
+  filter: brightness(0.9);
 }
 .function-button:active {
-  filter: brightness(.8);
+  filter: brightness(0.8);
 }
 html {
   background-color: var(--background-primary);
