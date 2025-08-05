@@ -1,6 +1,8 @@
 <script>
   import AuthBox from "../../components/AuthBox.svelte";
   import Button_1 from "../../components/Button-1.svelte";
+  import ReviewCard from "../../components/ReviewCard.svelte";
+  import RatingBox from "../../components/RatingBox.svelte";
   import api from "../../lib/api";
   import { params } from "@roxi/routify";
   import { onMount } from "svelte";
@@ -36,22 +38,28 @@
         <p class="place-description">{place.description}</p>
 
         <div class="renting-info-box">
-          <div class="price">
-            <strong>${place.price}</strong> per Day
+          <div id="place-rating-price-container">
+            <div class="price">
+              <strong>${place.price}</strong> per Day
+            </div>
+            <RatingBox rating={place.rating}></RatingBox>
           </div>
           <Button_1 text="RESERVE" />
         </div>
       </div>
     </section>
+    <h3>HERE, ANOTHER CAROUSEL WILL GO</h3>
+    <small>Said yoda</small>
   {:else}
     <p>Loading place details...</p>
   {/if}
 </AuthBox>
 
-<h3>HERE, ANOTHER CAROUSEL WILL GO</h3>
-<small>Said yoda</small>
-
 <style>
+  #place-details-section :global(.rating-container) {
+    /* outline: 1px solid blue; */
+    width: fit-content;
+  }
   #place-details-section {
     width: 90%;
     max-width: 2000px;
@@ -82,6 +90,13 @@
     flex-direction: column;
     gap: 1rem;
   }
+  #place-rating-price-container {
+    /* outline: 1px solid yellow; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
 
   .place-description {
     line-height: 1.6;
@@ -97,7 +112,9 @@
   }
 
   .price {
+    /* outline: 1px solid red; */
     font-size: 1.5rem;
+    width: fit-content;
   }
   .price strong {
     font-weight: 700;

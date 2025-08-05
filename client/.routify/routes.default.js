@@ -110,17 +110,19 @@ export const routes = {
           "children": []
         },
         {
-          "meta": {},
-          "id": "_default_places_places_catalog_svelte",
-          "name": "places_catalog",
-          "file": {
-            "path": "src/routes/places/places_catalog.svelte",
-            "dir": "src/routes/places",
-            "base": "places_catalog.svelte",
-            "ext": ".svelte",
-            "name": "places_catalog"
+          "meta": {
+            "isDefault": true
           },
-          "asyncModule": () => import('../src/routes/places/places_catalog.svelte'),
+          "id": "_default_places_index_svelte",
+          "name": "index",
+          "file": {
+            "path": "src/routes/places/index.svelte",
+            "dir": "src/routes/places",
+            "base": "index.svelte",
+            "ext": ".svelte",
+            "name": "index"
+          },
+          "asyncModule": () => import('../src/routes/places/index.svelte'),
           "children": []
         }
       ]
@@ -138,6 +140,38 @@ export const routes = {
       },
       "asyncModule": () => import('../src/routes/signup.svelte'),
       "children": []
+    },
+    {
+      "meta": {},
+      "id": "_default_user",
+      "name": "user",
+      "module": false,
+      "file": {
+        "path": "src/routes/user",
+        "dir": "src/routes",
+        "base": "user",
+        "ext": "",
+        "name": "user"
+      },
+      "children": [
+        {
+          "meta": {
+            "dynamic": true,
+            "order": false
+          },
+          "id": "_default_user__user_id__svelte",
+          "name": "[user_id]",
+          "file": {
+            "path": "src/routes/user/[user_id].svelte",
+            "dir": "src/routes/user",
+            "base": "[user_id].svelte",
+            "ext": ".svelte",
+            "name": "[user_id]"
+          },
+          "asyncModule": () => import('../src/routes/user/[user_id].svelte'),
+          "children": []
+        }
+      ]
     }
   ]
 }
