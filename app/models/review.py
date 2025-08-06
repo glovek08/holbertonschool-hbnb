@@ -4,6 +4,9 @@ from app.services import facade
 from sqlalchemy import Float, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
+# from app.models.user import User
+# from app.models.place import Place
+
 
 class Review(BaseModel):
     __tablename__ = "reviews"
@@ -50,15 +53,17 @@ class Review(BaseModel):
     def validate_comment(self, key: str, value: str):
         return self.validate_string(value, "Comment")
 
-    # def to_dict(self):
-    #     data = super().to_dict()
-    #     data.update(
-    #         owner_id=self.owner_id,
-    #         place_id=self.place_id,
-    #         rating=self.rating,
-    #         comment=self.comment,
-    #     )
-    #     return data
+    def to_dict(self):
+        data = super().to_dict()
+        data.update(
+            owner_id=self.owner_id,
+            place_id=self.place_id,
+            rating=self.rating,
+            comment=self.comment,
+            author_first_name=self.user.first_name if self.user else None,
+            author_last_name=self.user.last_name if self.user else None,
+        )
+        return data
 
     def __repr__(self):
         return f"<Review author_id={self.owner_id}>"
