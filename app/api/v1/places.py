@@ -30,6 +30,8 @@ review_model = api.model(
         "owner_id":    fields.String(description="ID of the user who wrote the review"),
         "rating":      fields.Float(description="Rating given by the user"),
         "comment":     fields.String(description="Comment provided by the user"),
+        "author_first_name": fields.String(required=True, description="Review author's first name"),
+        "author_last_name": fields.String(required=True, description="Review author's last name"),
     }
 )
 
