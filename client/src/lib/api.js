@@ -95,7 +95,7 @@ class ApiService {
   }
 
   async getPlaceReviews(placeId) {
-    return this.request(`/reviews/places/${placeId}/reviews/`);
+    return this.request(`/reviews/${placeId}`);
   }
 
   // ******** AUTHENTICATION KINGDOM ********
