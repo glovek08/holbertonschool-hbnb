@@ -36,7 +36,7 @@ Holberton BnB is a comprehensive web application that enables users to discover,
 ![Bcrypt](https://img.shields.io/badge/Bcrypt-Password_Hashing-red?logo=letsencrypt&style=for-the-badge)
 
 ### Frontend
-![Svelte](https://img.shields.io/badge/Svelte-v5.37.2-orange?style=for-the-badge&logo=svelte)
+![Svelte](https://img.shields.io/badge/Svelte-4-orange?style=for-the-badge&logo=svelte)
 ![Routify 3.5](https://img.shields.io/badge/Routify-v3.5.1-blue?style=for-the-badge&logo=roxi)
 ![Vite 6.3.5](https://img.shields.io/badge/Vite-v6.3.5-purple?style=for-the-badge&logo=vite)
 ![Node.js](https://img.shields.io/badge/Node.js-v20.19.4-green?style=for-the-badge&logo=node.js)

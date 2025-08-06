@@ -66,7 +66,7 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     text-shadow: 0 0 10px var(--card-text-shadow);
-    scrollbar-width: thin; /* Makes the scrollbar thinner */
+    scrollbar-width: thin;
     scrollbar-color: rgb(43, 49, 59) transparent;
     display: flex;
     align-items: center;
