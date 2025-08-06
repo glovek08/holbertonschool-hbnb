@@ -32,6 +32,8 @@ response_review_model = api.model(
     {
         "id":       fields.String(required=True, description="ID of the review"),
         "owner_id": fields.String(required=True, description="ID of the user"),
+        "author_first_name": fields.String(required=True, description="Review author's first name"),
+        "author_last_name": fields.String(required=True, description="Review author's last name"),
         "place_id": fields.String(required=True, description="ID of the place"),
         "rating":   fields.Integer(
             required=True, description="Rating of the place (1-5)"
@@ -146,7 +148,7 @@ class ReviewResource(Resource):
         return {"message": "Review deleted successfully"}, 200
 
 
-@api.route("/places/<place_id>/reviews")
+@api.route("/reviews/<place_id>")
 class PlaceReviewList(Resource):
     @api.doc(params={"place_id": "The unique ID of the place to retrieve reviews"})
     @api.response(
