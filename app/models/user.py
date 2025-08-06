@@ -8,6 +8,9 @@ from typing import List
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
+# from app.models.place import Place
+# from app.models.review import Review
+
 
 class User(BaseModel):
     __tablename__ = "users"

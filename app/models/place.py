@@ -3,6 +3,10 @@ from app.models.base_model import BaseModel
 from app.services import facade
 from typing import Optional, List
 
+# from app.models.amenity import Amenity
+# from app.models.review import Review
+# from app.models.user import User
+
 # SQLAlchemy crap.
 from sqlalchemy import Float, String, ForeignKey, Table, Column, Text, Integer
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
