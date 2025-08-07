@@ -23,13 +23,13 @@ VALUES
 (UUID(), 'redrogsoviet@hbnb.io', 'Yamandu', 'Orsi', '$2a$12$mi0ECvslyF3X5Wnen/h4cevTNcYqR9Lkb.2jzS9JR2fJyuXFkjkny', FALSE, NOW(), NOW()); -- password: admin1234
 
 -- @block
-INSERT INTO amenities (id, name, description, created_at, updated_at) VALUES
-(UUID(), 'WiFi', "Fast AF Internet", NOW(), NOW()),
-(UUID(), 'Swimming Pool', "Don't pee in the pool, no sex allowed", NOW(), NOW()),
-(UUID(), 'Air Conditioning', "Doesn't work but we'll charge you for the placebo effect",NOW(), NOW()),
-(UUID(), 'Parking', NULL, NOW(), NOW()),
-(UUID(), 'Gym', NULL, NOW(), NOW()),
-(UUID(), 'Pet Friendly', "No kids allowed, just dogs",NOW(), NOW());
+INSERT INTO amenities (id, name, description, icon, created_at, updated_at) VALUES
+(UUID(), 'WiFi', "Fast AF Internet", 'wifi.svg', NOW(), NOW()),
+(UUID(), 'Swimming Pool', "Don't pee in the pool, no sex allowed", 'pool.svg', NOW(), NOW()),
+(UUID(), 'Air Conditioning', "Doesn't work but we'll charge you for the placebo effect", 'ac.svg', NOW(), NOW()),
+(UUID(), 'Parking', NULL, 'parking.svg', NOW(), NOW()),
+(UUID(), 'Gym', NULL, 'gym.svg', NOW(), NOW()),
+(UUID(), 'Pet Friendly', "No kids allowed, just dogs", 'pet.svg', NOW(), NOW());
 
 -- @block
 INSERT INTO places (id, title, description, price, latitude, longitude, owner_id, created_at, updated_at) VALUES

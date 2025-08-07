@@ -43,7 +43,7 @@
     margin: 5px 0 10px 0;
   }
   #amenities-svgs-container {
-    /* outline: 1px solid blue; */
+    /* outline: 1px solid rgb(12, 12, 122); */
     width: 100%;
     display: flex;
     align-items: center;
