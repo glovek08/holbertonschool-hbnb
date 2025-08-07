@@ -1,7 +1,7 @@
 <script>
   import { onDestroy, onMount } from "svelte";
   import {
-    checkAuth,
+    userName,
     isAuthenticated,
     currentUserId,
     login,
@@ -109,7 +109,7 @@
     {:else}
       <!-- If the user logs in, hide the login form and display this. -->
       <div class="user-section">
-        <h3>Hello [user.name]</h3>
+        <h3 id="sidebar-title">Hello {$userName}</h3>
         <!-- maybe use a rune to display Hello {user.name}! -->
         <ul class="user-menu">
           <li><a href="/user/{$currentUserId}">My Account</a></li>
@@ -221,6 +221,10 @@
   .user-menu li {
     /* outline: 1px solid blue; */
     padding: 10px;
+  }
+  #sidebar-title {
+    align-self:flex-start;
+    margin-left: 20px;
   }
   .logout-btn {
     width: 100%;

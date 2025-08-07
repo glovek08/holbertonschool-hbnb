@@ -3,6 +3,7 @@ import { writable } from "svelte/store";
 export const isAuthenticated = writable(false);
 export const isAdmin = writable(false);
 export const currentUserId = writable(null);
+export const userName = writable("n/a");
 
 
 export async function login(email, password, stay_logged) {
@@ -30,6 +31,7 @@ export async function login(email, password, stay_logged) {
         const user_data = await user_response.json();
         isAuthenticated.set(true);
         currentUserId.set(data.id);
+        userName.set(user_data.first_name);
         if (user_data.is_admin === true) {
           console.log("User is an admin ");
           isAdmin.set(true);
@@ -45,11 +47,13 @@ export async function login(email, password, stay_logged) {
     } else {
       isAuthenticated.set(false);
       isAdmin.set(false);
+      userName.set('n/a');
       return { success: false, error: data.error };
     }
   } catch (error) {
     isAuthenticated.set(false);
     isAdmin.set(false);
+    userName.set('n/a');
     return { success: false, error: "Something bad happened." };
   }
 }
@@ -65,6 +69,7 @@ export async function logout() {
     if (requestLogout.ok) {
       isAuthenticated.set(false);
       isAdmin.set(false);
+      userName.set('n/a');
       return { success: true, msg: "Log Out Successful CYA!" };
     } else {
       isAuthenticated.set(false);
@@ -75,6 +80,7 @@ export async function logout() {
     isAuthenticated.set(false);
     isAdmin.set(false);
     currentUserId.set(null);
+    userName.set('n/a');
     return { error: `Error in fetching session logout: ${error}` };
   }
 }
@@ -97,6 +103,7 @@ export async function checkAuth() {
 
       if (user_response.ok) {
         const user_data = await user_response.json();
+        userName.set(user_data.first_name);
         if (user_data.is_admin === true) {
           isAdmin.set(true);
         } else {
@@ -113,6 +120,7 @@ export async function checkAuth() {
     } else if (response.status === 401) {
       isAuthenticated.set(false);
       isAdmin.set(false);
+      userName.set(`n/a`);
       return { success: false, error: "User is not authenticated" };
     } else {
       isAuthenticated.set(false);
@@ -123,6 +131,7 @@ export async function checkAuth() {
     isAuthenticated.set(false);
     isAdmin.set(false);
     currentUserId.set(null);
+    userName.set(`n/a`);
     console.error(`Error in checking authentication: ${error}`);
     return { error: `Error in checking authentication: ${error}` };
   }
