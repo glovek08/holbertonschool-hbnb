@@ -27,7 +27,7 @@
       );
       place_amenities = place.amenities;
       console.log(
-        "Fetches place amenities: " + JSON.stringify(place.reviews, null, 2)
+        "Fetches place amenities: " + JSON.stringify(place.amenities, null, 2)
       );
     } catch (error) {
       console.error(`Error fetching place: ${error}`);

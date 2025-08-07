@@ -27,7 +27,6 @@
   {#if currentUser}
     <div id="user-dashboard">
       <h1 id="user-dashboard-title">Welcome {currentUser.first_name}</h1>
-      <hr />
       <div id="user-menu">
         <aside id="user-anchors-container">
           <img
@@ -39,7 +38,7 @@
             height="150"
           />
           <ul class="user-ul">
-            <li class="user-ul-li">
+            <li class="user-ul-li selected">
               <a
                 href="/users/reserves"
                 class="user-anchor"
@@ -76,6 +75,12 @@
 </AuthBox>
 
 <style>
+  :root {
+    --selected: rgb(72, 73, 75);
+  }
+  :root.light {
+    --selected: rgb(164, 172, 183);
+  }
   #user-dashboard {
     /* outline: 1px solid red; */
     background: var(--background-primary);
@@ -91,13 +96,15 @@
     /* outline: 1px solid red; */
     width: 90%;
     height: 100%;
-    padding: 20px;
-    margin-top: 10px;
+
+    margin-top: 10px 10px 20px 10px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: row;
     gap: 20px;
+    border: 2px solid var(--gray);
+    border-radius: 10px;
   }
   #user-dashboard-title {
     font-size: 2rem;
@@ -105,33 +112,34 @@
     margin: 40px 30px 20px 50px;
     align-self: flex-start;
   }
-  #user-dashboard hr {
-    border-color: var(--gray);
-    border: 1px solid var(--gray);
-    margin: 0 auto;
-    width: 90%;
-  }
   #user-anchors-container {
     /* outline: 1px solid blue; */
     align-self: flex-start;
-    min-height: 500px;
+    min-height: 600px;
     width: 30%;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
     border-right: 2px solid var(--gray);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .user-ul {
     /* outline: 1px solid blue; */
     width: 100%;
     text-align: center;
     margin: 20px 10px;
-    padding: 10px;
+    padding: 0;
   }
   .user-ul-li {
-    margin: 15px 0;
+    margin: 0 0;
     font-size: 1.3rem;
+    padding: 20px;
+  }
+  .user-ul-li.selected {
+    background: var(--selected);
   }
   #user-profile-picture {
     width: 80%;
@@ -146,7 +154,7 @@
 
   .user-menu-item {
     /* outline: 1px solid green; */
-    min-height: 500px;
+    min-height: 600px;
     width: 100%;
   }
 </style>
