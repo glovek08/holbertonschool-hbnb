@@ -81,6 +81,9 @@ class ApiService {
       body: JSON.stringify(amenityData),
     });
   }
+  async getAmenityById(amenityId){
+    return this.request(`/amenities/${amenityId}`);
+  }
 
   // ******** REVIEWS KINGDOM ********
   async getReviews() {

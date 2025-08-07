@@ -7,10 +7,12 @@
   import RatingBox from "../../components/RatingBox.svelte";
   import api from "../../lib/api";
   import { isAuthenticated } from "../../lib/stores/auth";
+  import AmenitiesBox from "../../components/AmenitiesBox.svelte";
 
   let place;
   let place_id;
   let place_reviews;
+  let place_amenities;
 
   $: place_id = $params.place_id; // <- Can update to Svelte5 run'es once routify 4 releases.
 
@@ -22,6 +24,10 @@
       place_reviews = place.reviews;
       console.log(
         "Fetches place reviews: " + JSON.stringify(place.reviews, null, 2)
+      );
+      place_amenities = place.amenities;
+      console.log(
+        "Fetches place amenities: " + JSON.stringify(place.reviews, null, 2)
       );
     } catch (error) {
       console.error(`Error fetching place: ${error}`);
@@ -68,22 +74,7 @@
           </div>
         </div>
         {#if place.amenities}
-          <div
-            id="place-amenities-box"
-            class="place-information-container-item"
-          >
-            <h3>Amenities included:</h3>
-            <div id="amenities-svgs-container">
-              <img
-                src="/src/assets/svgs/gym.svg"
-                class="place-amentiy-svg"
-                alt="Place Amentiy"
-                width="30"
-                height="30"
-                title="Gym"
-              />
-            </div>
-          </div>
+          <AmenitiesBox amenitiesID={place_amenities}/>
         {/if}
       </div>
     </section>
@@ -106,12 +97,21 @@
 </AuthBox>
 
 <style>
+  :global(.place-information-container-item) {
+    /* This affects both cards in place description */
+    background: var(--card-desc-background);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.385);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 450px;
+  }
   #place-details-section :global(.rating-container) {
     /* outline: 1px solid blue; */
     width: fit-content;
   }
   #place-details-section {
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     width: 90%;
     max-width: 2000px;
     min-height: 700px;
@@ -129,7 +129,7 @@
     transition: 1200ms;
   }
   #place-information-container {
-    outline: 1px solid yellow;
+    /* outline: 1px solid yellow; */
     padding: 10px;
     gap: 20px;
     display: flex;
@@ -137,46 +137,15 @@
     justify-content: center;
     flex-direction: column;
   }
-  .place-information-container-item {
-    background: var(--card-desc-background);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.385);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    width: 100%;
-    max-width: 450px;
-  }
+
   #place-details-card {
-    outline: 1px solid green;
+    /* outline: 1px solid green; */
     padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
-  #place-amenities-box {
-    padding: 10px 20px;
-  }
-  #place-amenities-box h3 {
-    margin: 5px 0 10px 0;
-  }
-  #amenities-svgs-container {
-    /* outline: 1px solid blue; */
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    padding: 2px 10px 10px 10px;
-  }
-  :root {
-    #amenities-svgs-container {
-      filter: invert(1);
-    }
-  }
-  :root.light {
-    #amenities-svgs-container {
-      filter: invert(0);
-    }
-  }
+
   #place-rating-price-container {
     /* outline: 1px solid yellow; */
     display: flex;
@@ -222,8 +191,6 @@
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--accent) transparent;
-  }
-  #reviews-section h2 {
   }
   #reviews-section::-webkit-scrollbar {
     width: 6px;
