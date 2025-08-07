@@ -15,7 +15,7 @@ class Amenity(BaseModel):
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
-
+    icon: Mapped[str] = mapped_column(String(100), nullable=True)
     places: Mapped[List["Place"]] = relationship(
         "Place",
         secondary=place_amenities,

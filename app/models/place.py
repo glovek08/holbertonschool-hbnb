@@ -24,7 +24,6 @@ place_amenities = Table(
     Column("amenity_id", ForeignKey("amenities.id"), primary_key=True)
 )
 
-
 class Place(BaseModel):
     __tablename__ = "places"
 

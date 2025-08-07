@@ -27,7 +27,6 @@ response_user_model = api.model(
             required=True, description="First name of the user"
         ),
         "last_name":    fields.String(required=True, description="Last name of the user"),
-        # "email":        fields.String(required=True, description="Email of the user"),
         "is_admin":     fields.Boolean(required=True, description="Verifies if the user is administrator"),
     },
 )
@@ -47,7 +46,6 @@ class UserList(Resource):
         # is_admin = claims.get("is_admin", False)
 
         # if "is_admin" in user_data and not is_admin: # this prevents manual is_admin injection
-        #     print("You can't do that boy")
         #     return {"error": "You can't do that boy."}, 403
 
         if "is_admin" in user_data:

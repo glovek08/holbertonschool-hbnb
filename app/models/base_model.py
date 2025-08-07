@@ -44,8 +44,15 @@ class BaseModel(db.Model):
                     print(f"{self.to_dict} Updated")
 
     def to_dict(self):
-        """Serialize the model to a dictionary."""
-        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+        """Serialize the model to a dictionary, converting datetimes to ISO strings."""
+        result = {}
+        for column_attr in inspect(self).mapper.column_attrs:
+            value = getattr(self, column_attr.key)
+            if isinstance(value, datetime):
+                result[column_attr.key] = value.isoformat()
+            else:
+                result[column_attr.key] = value
+        return result
 
     def __repr__(self):
         return f"<{self.__class__.__name__} id={self.id}>"
