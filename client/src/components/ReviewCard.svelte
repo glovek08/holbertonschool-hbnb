@@ -35,7 +35,7 @@
     background: var(--review-background);
     min-width: 300px;
     max-width: 800px;
-    padding: 20px 40px;
+    padding: 20px 30px 10px 30px;
     box-shadow: 5px 5px 7px var(--review-shadow);
   }
 </style>

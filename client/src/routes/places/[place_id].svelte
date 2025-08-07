@@ -6,6 +6,7 @@
   import ReviewCard from "../../components/ReviewCard.svelte";
   import RatingBox from "../../components/RatingBox.svelte";
   import api from "../../lib/api";
+  import { isAuthenticated } from "../../lib/stores/auth";
 
   let place;
   let place_id;
@@ -38,8 +39,10 @@
   //   }
   // }
   $: if (place_id) {
-    fetchPlace();
-    // fetchReviews();
+    if ($isAuthenticated) {
+      fetchPlace();
+      // fetchReviews();
+    }
   }
 </script>
 
@@ -49,19 +52,39 @@
       id="place-details-section"
       style="background-image: url({place.image || '/template-bnb.jpg'});"
     >
-      <div id="place-details-card">
-        <h1>{place.title}</h1>
-        <p class="place-description">{place.description}</p>
+      <div id="place-information-container">
+        <div id="place-details-card" class="place-information-container-item">
+          <h1>{place.title}</h1>
+          <p class="place-description">{place.description}</p>
 
-        <div class="renting-info-box">
-          <div id="place-rating-price-container">
-            <div class="price">
-              <strong>${place.price}</strong> per Day
+          <div class="renting-info-box">
+            <div id="place-rating-price-container">
+              <div class="price">
+                <strong>${place.price}</strong> per Day
+              </div>
+              <RatingBox rating={place.rating}></RatingBox>
             </div>
-            <RatingBox rating={place.rating}></RatingBox>
+            <Button_1 text="RESERVE" />
           </div>
-          <Button_1 text="RESERVE" />
         </div>
+        {#if place.amenities}
+          <div
+            id="place-amenities-box"
+            class="place-information-container-item"
+          >
+            <h3>Amenities included:</h3>
+            <div id="amenities-svgs-container">
+              <img
+                src="/src/assets/svgs/gym.svg"
+                class="place-amentiy-svg"
+                alt="Place Amentiy"
+                width="30"
+                height="30"
+                title="Gym"
+              />
+            </div>
+          </div>
+        {/if}
       </div>
     </section>
     <section id="reviews-section">
@@ -88,6 +111,7 @@
     width: fit-content;
   }
   #place-details-section {
+    outline: 1px solid red;
     width: 90%;
     max-width: 2000px;
     min-height: 700px;
@@ -104,18 +128,54 @@
     box-shadow: inset 0 0 120px black;
     transition: 1200ms;
   }
-
-  #place-details-card {
+  #place-information-container {
+    outline: 1px solid yellow;
+    padding: 10px;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .place-information-container-item {
     background: var(--card-desc-background);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.385);
     backdrop-filter: blur(10px);
-    border-radius: 5px;
-    padding: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
     width: 100%;
     max-width: 450px;
+  }
+  #place-details-card {
+    outline: 1px solid green;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+  #place-amenities-box {
+    padding: 10px 20px;
+  }
+  #place-amenities-box h3 {
+    margin: 5px 0 10px 0;
+  }
+  #amenities-svgs-container {
+    /* outline: 1px solid blue; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 2px 10px 10px 10px;
+  }
+  :root {
+    #amenities-svgs-container {
+      filter: invert(1);
+    }
+  }
+  :root.light {
+    #amenities-svgs-container {
+      filter: invert(0);
+    }
   }
   #place-rating-price-container {
     /* outline: 1px solid yellow; */
@@ -152,9 +212,8 @@
     /* outline: 1px solid red; */
     width: 90%;
     max-width: 2000px;
-    min-height: 700px;
+    min-height: 400px;
     max-height: 1000px;
-    height: 100px;
     overflow-y: scroll;
     display: flex;
     align-items: center;
@@ -165,8 +224,6 @@
     scrollbar-color: var(--accent) transparent;
   }
   #reviews-section h2 {
-    align-self: flex-start;
-    margin-left: 20px;
   }
   #reviews-section::-webkit-scrollbar {
     width: 6px;

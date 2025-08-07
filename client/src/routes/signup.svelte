@@ -68,11 +68,14 @@
     background-color: var(--gray);
     width: clamp(260px, 35vw, 420px);
     padding: 2rem 1.5rem;
+    margin-top: 7em;
+    margin-bottom: auto;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    align-self: center;
     box-shadow: 10px 10px 20px var(--shadow-primary);
   }
   .signup-container h2 {
@@ -109,5 +112,19 @@
   .signup-container .success {
     color: var(--green);
     font-weight: bold;
+  }
+
+  @media (max-width: 600px) {
+    .signup-container {
+      width: 100vw;
+      min-height: 100vh;
+      margin-top: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 2rem 1rem;
+    }
+    .signup-container input {
+      width: 80%;
+    }
   }
 </style>
