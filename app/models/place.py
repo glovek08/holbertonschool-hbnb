@@ -1,17 +1,44 @@
 # fmt: off
+from app.extensions import db
 from app.models.base_model import BaseModel
 from app.services import facade
-from typing import Optional, List
-
+# If problems arise, try importing models.
 # from app.models.amenity import Amenity
 # from app.models.review import Review
 # from app.models.user import User
-
-# SQLAlchemy crap.
+from typing import Optional, List
 from sqlalchemy import Float, String, ForeignKey, Table, Column, Text, Integer
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
-from app.extensions import db
+"""
+August 8, 2025.
+SQLAlchemy model for the Place entity in the HBnB application.
+
+Represents a rental place with attributes such as title, image, description, price,
+location (latitude and longitude), and relationships to amenities, reviews, and owner.
+
+Relationships:
+    - Many-to-many with Amenity via place_amenities association table.
+    - One-to-many with Review.
+    - Many-to-one with User (owner).
+
+Includes validation for all fields and a property for calculating the average rating.
+
+Attributes:
+    owner_id (str): ID of the user who owns the place.
+    title (str): Title of the place.
+    image (str): URL of the place's image.
+    image_author (str): Author of the image.
+    description (str): Description of the place.
+    price (float): Price per day.
+    latitude (float): Latitude coordinate.
+    longitude (float): Longitude coordinate.
+    amenities (List[Amenity]): Amenities available at the place.
+    reviews (List[Review]): Reviews for the place.
+    owner (User): The user who owns the place.
+
+Author: Federico Paganini, Gabriel Barn.
+"""
 
 
 # Table Many-to-many relationship.

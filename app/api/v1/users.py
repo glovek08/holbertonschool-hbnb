@@ -5,6 +5,22 @@ from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt, create_access_token
 from app.utils import check_api_payload
 
+"""
+August 8, 2025.
+API endpoints for managing users in the HBnB application.
+
+This module provides endpoints to:
+- Register a new user.
+- Retrieve all users.
+- Retrieve, update, or get details for a specific user by ID.
+
+Endpoints:
+    POST   /api/v1/users/           - Register a new user
+    GET    /api/v1/users/           - Get all users
+    GET    /api/v1/users/<user_id>  - Get user details by ID
+    PUT    /api/v1/users/<user_id>  - Update user information by ID
+"""
+
 api = Namespace("users", description="User operations")
 
 user_model = api.model(

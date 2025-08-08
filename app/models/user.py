@@ -2,15 +2,34 @@
 from email_validator import validate_email, EmailNotValidError
 from app.models.base_model import BaseModel
 from app.extensions import bcrypt
-from typing import List
 
-# SQLAlchemy stuff
+from typing import List
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
-# from app.models.place import Place
-# from app.models.review import Review
+"""
+August 8, 2025.
+SQLAlchemy model for the User entity in the HBnB application.
 
+Represents a user of the platform, including authentication and profile information.
+Includes validation for all fields, password hashing and verification, and relationships
+to places and reviews.
+
+Relationships:
+    - One-to-many with Place (places owned by the user).
+    - One-to-many with Review (reviews written by the user).
+
+Attributes:
+    first_name (str): The user's first name.
+    last_name (str): The user's last name.
+    email (str): The user's email address (unique).
+    password (str): The user's hashed password.
+    is_admin (bool): Whether the user has admin privileges.
+    places (List[Place]): List of places owned by the user.
+    reviews (List[Review]): List of reviews written by the user.
+
+Author: Federico Paganini, Gabriel Barn.
+"""
 
 class User(BaseModel):
     __tablename__ = "users"

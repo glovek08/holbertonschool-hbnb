@@ -2,6 +2,7 @@ from urllib import response
 from app.services import facade
 from flask_restx import Namespace, Resource, fields
 from datetime import timedelta
+from flask import make_response
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
@@ -10,7 +11,21 @@ from flask_jwt_extended import (
     get_jwt_identity,
 )
 
-from flask import make_response
+"""
+August 8, 2025.
+API endpoints for authentication in the HBnB application.
+
+This module provides endpoints to:
+- Log in a user and set a JWT token in an HttpOnly cookie.
+- Log out a user and clear authentication cookies.
+- Check if a user is currently authenticated.
+
+Endpoints:
+    POST   /api/v1/auth/login         - Authenticate user and set JWT cookie
+    POST   /api/v1/auth/logout        - Log out user and clear cookies
+    POST   /api/v1/auth/check_status  - Check if user is authenticated
+"""
+
 
 api = Namespace("auth", description="Authentication operations")
 

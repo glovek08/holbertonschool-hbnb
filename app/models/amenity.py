@@ -1,12 +1,28 @@
 from app.models.base_model import BaseModel
 from app.services import facade
-
 from typing import List
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
 # If circular import arises, import places inside Amenity.
 from app.models.place import place_amenities
+
+"""
+August 8, 2025.
+SQLAlchemy model for the Amenity entity in the HBnB application.
+
+Represents an amenity that can be associated with one or more places.
+Includes validation for name and description fields, and supports a many-to-many
+relationship with the Place model via the place_amenities association table.
+
+Attributes:
+    name (str): The name of the amenity (unique, required).
+    description (str): A description of the amenity (optional).
+    icon (str): An optional icon representing the amenity.
+    places (List[Place]): List of places associated with this amenity.
+
+Author: Federico Paganini, Gabriel Barn
+"""
 
 
 class Amenity(BaseModel):

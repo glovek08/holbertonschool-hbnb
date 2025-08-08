@@ -2,6 +2,22 @@ from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
+"""
+August 8, 2025.
+API endpoints for managing amenities in the HBnB application.
+
+This module provides endpoints to:
+- Create a new amenity (admin only).
+- Retrieve a list of all amenities.
+- Retrieve, update, or get details for a specific amenity by ID (admin required for update).
+
+Endpoints:
+    POST   /api/v1/amenities/             - Register a new amenity (admin only)
+    GET    /api/v1/amenities/             - List all amenities
+    GET    /api/v1/amenities/<amenity_id> - Get amenity details by ID
+    PUT    /api/v1/amenities/<amenity_id> - Update amenity information by ID (admin only)
+"""
+
 api = Namespace("amenities", description="Amenity operations")
 
 amenity_model = api.model(

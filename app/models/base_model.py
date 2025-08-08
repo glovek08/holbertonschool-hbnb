@@ -9,6 +9,23 @@ from sqlalchemy.inspection import inspect
 from app.extensions import db
 
 
+"""
+August 8, 2025.
+Base SQLAlchemy model for the HBnB application.
+
+This abstract class provides common fields and utility methods for all models:
+- UUID primary key (`id`)
+- Timestamps for creation and update (`created_at`, `updated_at`)
+- String and number validation helpers
+- Generic update method for model attributes
+- Serialization to dictionary with ISO-formatted datetimes
+
+All other models in the application should inherit from this class.
+
+Author: Federico Paganini, Gabriel Barn.
+"""
+
+
 @as_declarative()
 class BaseModel(db.Model):
     __abstract__ = True

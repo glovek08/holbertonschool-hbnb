@@ -4,8 +4,28 @@ from app.services import facade
 from sqlalchemy import Float, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
-# from app.models.user import User
-# from app.models.place import Place
+
+"""
+August 8, 2025.
+SQLAlchemy model for the Review entity in the HBnB application.
+
+Represents a review left by a user for a specific place, including a rating and comment.
+Includes validation for all fields and relationships to the User and Place models.
+
+Relationships:
+    - Many-to-one with User (owner/author of the review).
+    - Many-to-one with Place (the place being reviewed).
+
+Attributes:
+    owner_id (str): ID of the user who wrote the review.
+    place_id (str): ID of the place being reviewed.
+    rating (float): Rating given to the place (0-5).
+    comment (str): Text comment for the review.
+    user (User): The user who wrote the review.
+    place (Place): The place being reviewed.
+
+Author: Federico Paganini, Gabriel Barn
+"""
 
 
 class Review(BaseModel):

@@ -6,6 +6,23 @@ from app.utils import check_api_payload
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
+"""
+August 8, 2025.
+API endpoints for managing places in the HBnB application.
+
+This module provides endpoints to:
+- Create, retrieve, update, and delete places.
+- List all places, including their reviews and amenities.
+- Retrieve details for a specific place.
+
+Endpoints:
+    POST   /api/v1/places/           - Create a new place
+    GET    /api/v1/places/           - List all places (with reviews and amenities)
+    GET    /api/v1/places/<place_id> - Get details for a specific place
+    PUT    /api/v1/places/<place_id> - Update a place by ID
+    DELETE /api/v1/places/<place_id> - Delete a place by ID
+"""
+
 api = Namespace("places", description="Place operations")
 
 
