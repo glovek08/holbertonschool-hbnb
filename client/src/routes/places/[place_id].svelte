@@ -58,6 +58,12 @@
       id="place-details-section"
       style="background-image: url({place.image || '/template-bnb.jpg'});"
     >
+      <div id="image-credit">
+        Photo by {place.image_author} on
+        <a href="http://unsplash" target="_blank" rel="noopener noreferrer"
+          >Unsplash</a
+        >
+      </div>
       <div id="place-information-container">
         <div id="place-details-card" class="place-information-container-item">
           <h1>{place.title}</h1>
@@ -74,7 +80,7 @@
           </div>
         </div>
         {#if place.amenities}
-          <AmenitiesBox amenitiesID={place_amenities}/>
+          <AmenitiesBox amenitiesID={place_amenities} />
         {/if}
       </div>
     </section>
@@ -127,6 +133,13 @@
     color: var(--card-font-color);
     box-shadow: inset 0 0 120px black;
     transition: 1200ms;
+  }
+  #image-credit {
+    align-self: flex-end;
+    margin-left: 0;
+    margin-right: auto;
+    font-size: 0.8rem;
+    text-shadow: 0 0 2px rgb(0, 0, 0);
   }
   #place-information-container {
     /* outline: 1px solid yellow; */

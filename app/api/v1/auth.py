@@ -36,7 +36,7 @@ class Login(Resource):
         credentials = api.payload
         user = facade.get_user_by_email(credentials["email"])
         if not user or not user.verify_password(credentials["password"]):
-            return {"error": "Invalid credentials"}, 401
+            return {"error": "INVALID CREDENTIALS"}, 401
 
         if credentials.get("stay_logged"):
             expires = timedelta(days=30)

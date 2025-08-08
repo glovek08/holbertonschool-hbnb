@@ -13,7 +13,7 @@
 
   const fetchPlaces = async () => {
     try {
-      places = await api.getPlaces(9); // Calling with 9. TODO: Randomize them!
+      places = await api.getPlaces(9); //find way to randomize or get next 9.
       console.log("Fetched places:", places);
     } catch (error) {
       console.error("Error fetching places:", error);
@@ -226,7 +226,7 @@
   }
   .places-section-p {
     width: 100%;
-    margin-left: 60px;
+    padding: 10px 40px;
     margin-top: 0;
   }
   #places-carousel-container {
