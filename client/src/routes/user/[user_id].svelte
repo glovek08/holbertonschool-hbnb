@@ -1,12 +1,20 @@
 <script>
   import { onMount } from "svelte";
   import api from "../../lib/api";
-  import { currentUserId } from "../../lib/stores/auth";
+  import { currentUserId, userName } from "../../lib/stores/auth";
   import { params } from "@roxi/routify";
   import AuthBox from "../../components/AuthBox.svelte";
 
   let currentUser;
   let loading = false;
+  let selectedItem = "reserves";
+  let userReviews = [];
+  let userPlaces = [];
+  let userReserves = [];
+
+  async function fetchUserReviews() {
+    userReviews = await api.getReviews();
+  }
 
   async function getCurrentUser(userId) {
     loading = true;
@@ -26,7 +34,7 @@
 <AuthBox>
   {#if currentUser}
     <div id="user-dashboard">
-      <h1 id="user-dashboard-title">Welcome {currentUser.first_name}</h1>
+      <h1 id="user-dashboard-title">Welcome {$userName}</h1>
       <div id="user-menu">
         <aside id="user-anchors-container">
           <img
@@ -38,33 +46,74 @@
             height="150"
           />
           <ul class="user-ul">
-            <li class="user-ul-li selected">
-              <a
-                href="/users/reserves"
-                class="user-anchor"
+            <li
+              class="user-ul-li {selectedItem === 'reserves' ? 'selected' : ''}"
+            >
+              <button
+                type="button"
+                class="user-button"
                 aria-label="My Reserves"
-                title="My Reserves">My Reserves</a
+                title="My Reserves"
+                on:click={() => (selectedItem = "reserves")}>My Reserves</button
               >
             </li>
-            <li class="user-ul-li">
-              <a
-                href="/users/reviews"
-                class="user-anchor"
+            <li
+              class="user-ul-li {selectedItem === 'reviews' ? 'selected' : ''}"
+            >
+              <button
+                type="button"
+                class="user-button"
                 aria-label="My Reviews"
-                title="My Reviews">My Reviews</a
+                title="My Reviews"
+                on:click={() => (selectedItem = "reviews")}>My Reviews</button
               >
             </li>
-            <li class="user-ul-li">
-              <a
-                href="/users/places"
-                class="user-anchor"
+            <li
+              class="user-ul-li {selectedItem === 'places' ? 'selected' : ''}"
+            >
+              <button
+                type="button"
+                class="user-button"
                 aria-label="My Places"
-                title="My Places">My Places</a
+                title="My Places"
+                on:click={() => (selectedItem = "places")}>My Places</button
               >
             </li>
           </ul>
         </aside>
-        <div class="user-menu-item"></div>
+        <div id="user-menu-deployer" class="user-menu-item">
+          {#if selectedItem === "reserves"}
+            <h2>My Reserves</h2>
+            {#if userReserves.length > 0}
+              Hee
+            {:else}
+              <p>No reserves found.</p>
+            {/if}
+          {/if}
+          {#if selectedItem === "reviews"}
+            <h2>My Reviews</h2>
+            {#if userReviews.length > 0}
+              <ul>
+                {#each userReviews as review}
+                  <li>
+                    <strong>{review.place_title}</strong>: {review.comment} (Rating:
+                    {review.rating})
+                  </li>
+                {/each}
+              </ul>
+            {:else}
+              <p>No reviews found.</p>
+            {/if}
+          {/if}
+          {#if selectedItem === "places"}
+            <h2>My Places</h2>
+            {#if userPlaces.length > 0}
+              Hee
+            {:else}
+              <p>No places found.</p>
+            {/if}
+          {/if}
+        </div>
       </div>
     </div>
   {:else if loading}
@@ -85,6 +134,7 @@
     /* outline: 1px solid red; */
     background: var(--background-primary);
     width: 90%;
+    max-width: 2000px;
     min-height: 800px;
     display: flex;
     align-items: center;
@@ -136,10 +186,25 @@
   .user-ul-li {
     margin: 0 0;
     font-size: 1.3rem;
-    padding: 20px;
   }
   .user-ul-li.selected {
     background: var(--selected);
+  }
+  .user-button {
+    background: none;
+    color: var(--font-primary);
+    font-size: 1.3rem;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 20px;
+    transition:
+      300ms color ease-in-out,
+      300ms background ease-in-out;
+  }
+  .user-button:hover {
+    color: var(--white);
+    background: var(--accent);
   }
   #user-profile-picture {
     width: 80%;
@@ -156,5 +221,51 @@
     /* outline: 1px solid green; */
     min-height: 600px;
     width: 100%;
+  }
+  @media (max-width: 700px) {
+    #user-profile-picture {
+      display: none;
+    }
+    #user-menu {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    #user-anchors-container {
+      width: 100%;
+      min-height: unset;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      border-right: none;
+      border-bottom: 2px solid var(--gray);
+      padding: 0 0 10px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    .user-ul {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 0;
+    }
+
+    .user-ul-li {
+      min-width: 140px;
+      flex: 0 0 auto;
+    }
+
+    .user-button {
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .user-menu-item {
+      min-height: unset;
+      width: 100%;
+    }
   }
 </style>
