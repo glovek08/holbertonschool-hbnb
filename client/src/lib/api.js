@@ -17,12 +17,18 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // if backend sent an error message, throw it
+        const errorMsg =
+          data && data.error
+            ? data.error
+            : `HTTP error! status: ${response.status}`;
+        throw new Error(errorMsg);
       }
 
-      return await response.json();
+      return data;
     } catch (error) {
       console.error("API request failed:", error);
       throw error;
@@ -81,7 +87,7 @@ class ApiService {
       body: JSON.stringify(amenityData),
     });
   }
-  async getAmenityById(amenityId){
+  async getAmenityById(amenityId) {
     return this.request(`/amenities/${amenityId}`);
   }
 
@@ -97,11 +103,14 @@ class ApiService {
     });
   }
   async getUserReviews(userId) {
-    return this.request(`/reviews/${userId}`)
+    return this.request(`/reviews/user/${userId}`, {
+      method: "GET",
+      credentials: "include",
+    });
   }
 
   async getPlaceReviews(placeId) {
-    return this.request(`/reviews/${placeId}`);
+    return this.request(`/reviews/place/${placeId}`);
   }
 
   // ******** AUTHENTICATION KINGDOM ********
@@ -113,7 +122,7 @@ class ApiService {
   //     body: JSON.stringify(credentials),
   //   });
   // }
-    async fetchUnsplashPhoto(query) {
+  async fetchUnsplashPhoto(query) {
     const response = await fetch(
       `/api/v1/unsplash/photo?query=${encodeURIComponent(query)}`
     );
@@ -122,6 +131,5 @@ class ApiService {
     return data.url;
   }
 }
-
 
 export default new ApiService();

@@ -98,6 +98,10 @@ class HBnBFacade:
         reviews = self.review_repo.get_reviews_by_place(place_id)
         return reviews
 
+    def get_reviews_by_author(self, user_id):
+        reviews = self.review_repo.get_reviews_by_author(user_id)
+        return reviews
+
     def update_review(self, review_id, review_data):
         self.review_repo.update(review_id, review_data)
 

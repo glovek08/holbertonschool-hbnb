@@ -4,6 +4,7 @@
   import { currentUserId, userName } from "../../lib/stores/auth";
   import { params } from "@roxi/routify";
   import AuthBox from "../../components/AuthBox.svelte";
+  import ReviewCard from "../../components/ReviewCard.svelte";
 
   let currentUser;
   let loading = false;
@@ -12,8 +13,21 @@
   let userPlaces = [];
   let userReserves = [];
 
-  async function fetchUserReviews() {
-    userReviews = await api.getReviews();
+  async function fetchUserReviews(userId) {
+    // TODO: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
+    // Although if we need to check if the local storage has already a review list by another author, it's broken.
+    // remember to clear local storage. Or find better way to do it.
+    loading = true;
+    console.log("Fetching user reviews with ID:", userId);
+    try {
+      userReviews = await api.getUserReviews(userId);
+      console.log(
+        "User reviews fetched!" + JSON.stringify(userReviews, null, 2)
+      );
+    } catch (error) {
+      console.warn(error);
+    }
+    loading = false;
   }
 
   async function getCurrentUser(userId) {
@@ -65,7 +79,10 @@
                 class="user-button"
                 aria-label="My Reviews"
                 title="My Reviews"
-                on:click={() => (selectedItem = "reviews")}>My Reviews</button
+                on:click={() => {
+                  selectedItem = "reviews";
+                  fetchUserReviews($params.user_id);
+                }}>My Reviews</button
               >
             </li>
             <li
@@ -91,13 +108,17 @@
             {/if}
           {/if}
           {#if selectedItem === "reviews"}
-            <h2>My Reviews</h2>
+            <h2 class="deployer-title">My Reviews</h2>
             {#if userReviews.length > 0}
-              <ul>
+              <ul class="user-review-ul">
                 {#each userReviews as review}
                   <li>
-                    <strong>{review.place_title}</strong>: {review.comment} (Rating:
-                    {review.rating})
+                    <ReviewCard
+                      authorFirstName={review.author_first_name}
+                      authorLastName={review.author_last_name}
+                      rating={review.rating}
+                      comment={review.comment}
+                    />
                   </li>
                 {/each}
               </ul>
@@ -162,6 +183,14 @@
     justify-content: center;
     flex-direction: column;
   }
+  .user-review-ul {
+    width: 100%;
+    padding: 20px;
+  }
+  .user-review-ul li {
+    padding: 0;
+    margin: 0;
+  }
   #user-dashboard-title {
     font-size: 2rem;
     padding: 10px;
@@ -209,7 +238,7 @@
       300ms background ease-in-out;
   }
   .user-button:hover {
-    color: var(--white);
+    color: var(--font-secondary);
     background: var(--accent);
   }
   #user-profile-picture {

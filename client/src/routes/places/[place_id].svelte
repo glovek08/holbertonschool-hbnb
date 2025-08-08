@@ -177,7 +177,7 @@
     min-height: 600px;
     background-size: cover;
     background-position: center top;
-    animation: pan-bg 30s linear infinite alternate;
+    animation: pan-bg 30s ease-out infinite alternate;
     border: none;
     box-shadow: 0px 0px 200px var(--shadow-primary);
     min-width: 400px;

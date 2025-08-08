@@ -5,6 +5,25 @@ from http import HTTPStatus
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.utils import check_api_payload
 
+"""
+August 8, 2025.
+API endpoints for managing reviews in the HBnB application.
+
+This module provides endpoints to:
+- Create, retrieve, update, and delete reviews.
+- List all reviews.
+- List all reviews for a specific place.
+
+Endpoints:
+    POST   /api/v1/reviews/           - Create a new review
+    GET    /api/v1/reviews/           - List all reviews
+    GET    /api/v1/reviews/<id>       - Get a review by ID
+    GET    /api/v1/reviews/<user_id>  - Get all reviews made by a user.
+    PUT    /api/v1/reviews/<id>       - Update a review by ID
+    DELETE /api/v1/reviews/<id>       - Delete a review by ID
+    GET    /api/v1/reviews/reviews/<place_id> - List all reviews for a place
+"""
+
 api = Namespace("reviews", description="Review operations")
 
 review_model = api.model(
@@ -147,8 +166,22 @@ class ReviewResource(Resource):
 
         return {"message": "Review deleted successfully"}, 200
 
+@api.route("/user/<user_id>")
+class ReviewsList(Resource):
+    @api.doc(params={"user_id": "The ID of the user who authored the review"})
+    @api.response(200, "List of reviews retrieved successfuly", [response_review_model],)
+    @api.response(404, "User not found")
+    @jwt_required()
+    # @api.response(400, "Invalid User ID Format")
+    def get(self, user_id):
+        """Get all reviews made by one user"""
+        user = facade.get_user(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+        reviews = facade.get_reviews_by_author(user_id)
+        return [review.to_dict() for review in reviews], 200
 
-@api.route("/reviews/<place_id>")
+@api.route("/place/<place_id>")
 class PlaceReviewList(Resource):
     @api.doc(params={"place_id": "The unique ID of the place to retrieve reviews"})
     @api.response(

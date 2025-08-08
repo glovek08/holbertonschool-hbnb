@@ -94,16 +94,17 @@
     text-align: right;
   }
   .place-title {
+    /* outline: 1px solid red; */
     font-weight: bolder;
     font-size: 1.3rem;
     padding: 0;
     margin-top: 0;
     margin-bottom: 5px;
     width: 100%;
-    height: 1.5em; /* Set a fixed height (adjust based on font size) */
-    line-height: 1.5em; /* Match the height to ensure proper alignment */
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide overflowing text */
+    min-height: 1.5em;
+    line-height: 1.5em;
+    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
   }
   .place-title,
@@ -111,11 +112,9 @@
     width: 100%;
     text-shadow: 2px 2px 10px var(--shadow-primary);
   }
-  .place-title {
-    min-height: fit-content;
-  }
   .place-description {
     font-size: 1.2rem;
+    margin-top: 0;
   }
   .price-span {
     font-size: 1.5rem;

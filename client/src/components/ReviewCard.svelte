@@ -33,8 +33,7 @@
     /* outline: 1px solid red; */
     border-radius: 20px;
     background: var(--review-background);
-    min-width: 300px;
-    max-width: 800px;
+    width: clamp(300px, 100%, 800px);
     padding: 25px 30px 10px 30px;
     box-shadow: 5px 5px 9px var(--review-shadow);
   }
