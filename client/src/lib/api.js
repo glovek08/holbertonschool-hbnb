@@ -96,6 +96,9 @@ class ApiService {
       body: JSON.stringify(reviewData),
     });
   }
+  async getUserReviews(userId) {
+    return this.request(`/reviews/${userId}`)
+  }
 
   async getPlaceReviews(placeId) {
     return this.request(`/reviews/${placeId}`);
@@ -110,6 +113,15 @@ class ApiService {
   //     body: JSON.stringify(credentials),
   //   });
   // }
+    async fetchUnsplashPhoto(query) {
+    const response = await fetch(
+      `/api/v1/unsplash/photo?query=${encodeURIComponent(query)}`
+    );
+    if (!response.ok) throw new Error("Failed to fetch Unsplash image");
+    const data = await response.json();
+    return data.url;
+  }
 }
+
 
 export default new ApiService();
