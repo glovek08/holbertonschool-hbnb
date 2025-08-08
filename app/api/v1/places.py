@@ -40,6 +40,8 @@ place_model = api.model(
     "Place",
     {
         "title":        fields.String(required=True, description="Title of the place"),
+        "image":        fields.String(required=False, desription="Place image URL"),
+        "image_author":  fields.String(required=False, description="Unsplash image author"),
         "description":  fields.String(description="Description of the place"),
         "price":        fields.Float(required=True, description="Price per night"),
         "latitude":     fields.Float(required=True, description="Latitude of the place"),
@@ -57,6 +59,8 @@ place_response_model = api.model(
     {
         "id":           fields.String(required=True, description="Unique ID of the place"),
         "title":        fields.String(required=True, description="Title of the place"),
+        "image":        fields.String(required=True, desription="Place image URL"),
+        "image_author":  fields.String(required=False, description="Unsplash image author"),
         "description":  fields.String(description="Description of the place"),
         "price":        fields.Float(required=True, description="Price per night"),
         "latitude":     fields.Float(required=True, description="Latitude of the place"),

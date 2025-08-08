@@ -31,6 +31,8 @@ class Place(BaseModel):
         String(36), ForeignKey("users.id"), nullable=False
     )
     title:       Mapped[str] = mapped_column(String(100), nullable=False)
+    image:       Mapped[str] = mapped_column(String(300), nullable=False)
+    image_author: Mapped[str] = mapped_column(String(45), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     price:       Mapped[float] = mapped_column(Float, nullable=False)
     latitude:    Mapped[float] = mapped_column(Float, nullable=False)
@@ -73,6 +75,13 @@ class Place(BaseModel):
             raise ValueError(f"Title must not exceed 100 characters.")
         return value
 
+    # PLACE IMAGE
+    @validates("image")
+    def validate_image(self, key: str, value: str):
+        value = super().validate_string(value, "Image")
+        if len(value) > 300:
+            raise ValueError(f"Image source must not exceed 300 characters.")
+        return value
 
     # DESCRIPTION
     @validates("description")
@@ -125,6 +134,7 @@ class Place(BaseModel):
                 "last_name": self.owner.last_name
             } if self.owner else None,
             title=self.title,
+            image=self.image,
             description=self.description,
             price=self.price,
             latitude=self.latitude,
