@@ -6,11 +6,13 @@
 
 <script>
   export let text = "Replace This Text";
+  export let title = "Button";
+  export let ariaLabel = "Button";
   export const type = "";
 
 </script>
 
-<button class="button-1" on:click>{text}</button>
+<button class="button-1" title={title} aria-label="{ariaLabel}" on:click>{text}</button>
 
 <style>
   .button-1 {

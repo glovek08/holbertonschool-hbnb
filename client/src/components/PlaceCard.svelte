@@ -10,7 +10,12 @@
 </script>
 
 <a href={`/places/${place_id}`}>
-  <button class="place-btn" aria-label="Link to place details" style="background-image: url({image || "/template-bnb.jpg"}); background-size: cover; background-position: center;">
+  <button
+    class="place-btn"
+    aria-label="Link to place details"
+    style="background-image: url({image ||
+      '/template-bnb.jpg'}); background-size: cover; background-position: center;"
+  >
     <div class="place-card-data-container">
       <div class="place-card-infobox">
         <RatingBox {rating} />
@@ -27,9 +32,10 @@
 <style>
   .place-btn {
     /* outline: 1px solid green; */
-    font-family: 'Quicksand';
+    font-family: "Quicksand";
     padding: 0;
     background: var(--white);
+    box-shadow: 5px 5px 15px var(--shadow-primary);
     color: var(--card-font-color);
     transition: 300ms ease-in-out;
     border: none;
@@ -43,10 +49,12 @@
     z-index: 1;
     transition:
       transform 300ms ease-in-out,
+      box-shadow 300ms ease-in-out,
       z-index 0ms ease-in-out;
   }
   .place-btn:hover {
     z-index: 10;
+    box-shadow: 10px 10px 30px var(--shadow-primary);
     transform: scale(1.02);
     .place-card-data-container {
       background: var(--card-hover-background);
@@ -101,6 +109,13 @@
   .place-title,
   .place-description {
     width: 100%;
+    text-shadow: 2px 2px 10px var(--shadow-primary);
+  }
+  .place-title {
+    min-height: fit-content;
+  }
+  .place-description {
+    font-size: 1.2rem;
   }
   .price-span {
     font-size: 1.5rem;

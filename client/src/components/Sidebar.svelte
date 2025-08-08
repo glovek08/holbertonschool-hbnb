@@ -8,7 +8,7 @@
     logout,
   } from "../lib/stores/auth";
   import Checkbox from "./Checkbox.svelte";
-  import { showSidebar } from "../lib/stores/sidebar"; 
+  import { showSidebar } from "../lib/stores/sidebar";
 
   // The sidebar is being mounter in the header.
   // ********************** SIDEBAR *********************************
@@ -34,7 +34,7 @@
     if (!logged.success) {
       errorMessage = logged.error;
     } else {
-      console.log("Logging in: "+logged.msg);
+      console.log("Logging in: " + logged.msg);
     }
   }
   /* ************************* LOG OUT *****************************/
@@ -111,7 +111,7 @@
       <div class="user-section">
         <h3 id="sidebar-title">Hello {$userName}</h3>
         <!-- maybe use a rune to display Hello {user.name}! -->
-        <ul class="user-menu">
+        <ul class="user-menu-ul">
           <li><a href="/user/{$currentUserId}">My Account</a></li>
           <li><a href="/asdaks">Another option</a></li>
           <li><a href="/support">Support</a></li>
@@ -206,6 +206,10 @@
   #login-div-heading {
     font-size: 1.5rem;
   }
+  #sidebar-title {
+    width: 100%;
+    text-align: center;
+  }
   .user-section {
     /* outline: 1px solid red; */
     width: 100%;
@@ -214,22 +218,23 @@
     justify-content: center;
     flex-direction: column;
   }
-  .user-menu {
+  .user-menu-ul {
     /* outline: 1px solid yellow; */
+    margin: 0;
     padding: 5px;
+    text-align: center
   }
-  .user-menu li {
+  .user-menu-ul li {
     /* outline: 1px solid blue; */
     padding: 10px;
+    margin: 10px;
   }
-  #sidebar-title {
-    align-self:flex-start;
-    margin-left: 20px;
-  }
+
   .logout-btn {
     width: 100%;
     background-color: var(--red);
     padding: 10px 30px;
+    align-self: bottom;
   }
   .logout-btn:hover {
     filter: brightness(0.9);

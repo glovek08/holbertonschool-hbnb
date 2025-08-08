@@ -25,7 +25,7 @@
   --font-secondary: black;
   --header-background: #4b0721;
   --green: rgb(75, 133, 75);
-  --red: rgb(247, 115, 115);
+  --red: rgb(196, 28, 28);
   --white: rgb(186, 193, 196);
   --gray: rgb(39, 39, 49);
   /* PLACE CARD  defined here to make them global, we're using the same variables for the place details as well */
@@ -45,7 +45,7 @@
   --font-secondary: rgb(221, 211, 211);
   --header-background: #9dc9e7;
   --green: rgb(57, 122, 57);
-  --red: rgb(185, 4, 4);
+  --red: rgb(225, 42, 42);
   --white: rgb(218, 232, 236);
   --gray: rgb(228, 233, 237);
    /* PLACE CARD */

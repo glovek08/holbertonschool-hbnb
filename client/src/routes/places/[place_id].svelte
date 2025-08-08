@@ -64,6 +64,13 @@
           >Unsplash</a
         >
       </div>
+      <!-- This button will link to this place's gallery -->
+      <button
+        id="place-gallery-btn"
+        aria-label="Place Gallery"
+        title="Place Gallery"
+        style="background-image: url({place.image || '/template-bnb.jpg'});"
+      ></button>
       <div id="place-information-container">
         <div id="place-details-card" class="place-information-container-item">
           <h1>{place.title}</h1>
@@ -76,7 +83,11 @@
               </div>
               <RatingBox rating={place.rating}></RatingBox>
             </div>
-            <Button_1 text="RESERVE" />
+            <Button_1
+              text="RESERVE"
+              title="Reserve this place"
+              ariaLabel="Reserve this place"
+            />
           </div>
         </div>
         {#if place.amenities}
@@ -133,13 +144,51 @@
     color: var(--card-font-color);
     box-shadow: inset 0 0 120px black;
     transition: 1200ms;
+    position: relative;
+    overflow: hidden;
+  }
+  #place-details-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: inherit; /* or set the same background-image as the parent */
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px); /* Adjust blur as needed */
+    pointer-events: none;
+  }
+  #place-details-section > * {
+    position: relative;
+    z-index: 1;
   }
   #image-credit {
+    position: absolute;
+    left: 10dvw;
     align-self: flex-end;
+    color: white;
     margin-left: 0;
     margin-right: auto;
     font-size: 0.8rem;
     text-shadow: 0 0 2px rgb(0, 0, 0);
+  }
+  #place-gallery-btn {
+    /* outline: 1px solid green; */
+    min-height: 600px;
+    background-size: cover;
+    background-position: center top;
+    animation: pan-bg 30s linear infinite alternate;
+    border: none;
+    box-shadow: 0px 0px 200px var(--shadow-primary);
+    min-width: 400px;
+    width: 50%;
+    margin-right: 5%;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: transform 1500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #place-gallery-btn:hover {
+    transform: scale(1.05);
   }
   #place-information-container {
     /* outline: 1px solid yellow; */
@@ -221,15 +270,52 @@
   #reviews-section::-webkit-scrollbar-track {
     background: transparent;
   }
-  @media (max-width: 768px) {
+  @media (min-width: 1800px) {
+    #image-credit {
+      left: 50%;
+    }
+  }
+  @media (max-width: 900px) {
     #place-details-section {
+      height: fit-content;
       justify-content: center;
       padding: 1rem;
       min-height: 80vh;
+      height: auto;
+      flex-direction: column;
+      max-height: 3000px;
     }
-
+    #place-information-container {
+      order: 1;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      margin-top: 100px;
+    }
+    #place-gallery-btn {
+      order: 2;
+      width: 100%;
+      min-width: unset;
+      margin-right: 0;
+      min-height: 300px;
+      margin-top: 20px;
+    }
     #place-details-card {
       max-width: 100%;
+    }
+    #reviews-section {
+      margin-top: 150px;
+    }
+    #image-credit {
+      top: 140px;
+    }
+  }
+  @keyframes pan-bg {
+    from {
+      background-position: center top;
+    }
+    to {
+      background-position: center bottom;
     }
   }
 </style>
