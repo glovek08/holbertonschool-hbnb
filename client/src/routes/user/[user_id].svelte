@@ -12,19 +12,29 @@
   let userReviews = [];
   let userPlaces = [];
   let userReserves = [];
+  let tokenExpired = false;
+  let errorMsg = "";
 
   async function fetchUserReviews(userId) {
     // TODO: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
     // Although if we need to check if the local storage has already a review list by another author, it's broken.
     // remember to clear local storage. Or find better way to do it.
     loading = true;
-    console.log("Fetching user reviews with ID:", userId);
+    tokenExpired = false;
+    errorMsg = "";
     try {
       userReviews = await api.getUserReviews(userId);
       console.log(
         "User reviews fetched!" + JSON.stringify(userReviews, null, 2)
       );
     } catch (error) {
+      if (error.message && error.message.includes("Token has expired")) {
+        tokenExpired = true;
+        errorMsg = "Your session has expired. Please log in again.";
+        userReviews = [];
+      } else {
+        errorMsg = error.message || "An error occurred while fetching reviews.";
+      }
       console.warn(error);
     }
     loading = false;
@@ -108,6 +118,13 @@
             {/if}
           {/if}
           {#if selectedItem === "reviews"}
+            {#if tokenExpired}
+              <div class="warning">
+                {errorMsg}
+              </div>
+            {:else if errorMsg}
+              <div class="warning">{errorMsg}</div>
+            {/if}
             <h2 class="deployer-title">My Reviews</h2>
             {#if userReviews.length > 0}
               <ul class="user-review-ul">
