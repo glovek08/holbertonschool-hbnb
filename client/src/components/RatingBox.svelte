@@ -32,4 +32,9 @@
     margin-right: 5px;
     transition: color 0.2s ease-in-out;
   }
+    @media screen and (max-width: 800px) {
+      .star {
+        font-size: 1dvw;
+      }
+    }
 </style>

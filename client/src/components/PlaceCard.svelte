@@ -166,4 +166,20 @@
     filter: saturate(0);
     transition: filter 300ms ease-in-out;
   } */
+  @media screen and (max-width: 800px) {
+    .place-btn {
+      width: 25dvw;
+      height: 40dvw;
+      font-size: 1.5dvw;
+    }
+    .place-card-data-container {
+      padding: 1.2dvw;
+    }
+    .place-title,
+    .place-description,
+    .place-price,
+    .price-span {
+      font-size: 1.6dvw;
+    }
+  }
 </style>

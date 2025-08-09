@@ -24,7 +24,16 @@
   const calculateParticlesToShow = () => {
     const containerWidth =
       document.getElementById("places-carousel-container")?.offsetWidth || 0;
-    particlesToShow = Math.floor(containerWidth / 340); // 300 width + 60px left/right padding
+
+    // Use 25dvw for card width on small screens, else 340px as before
+    let cardWidth;
+    if (window.innerWidth < 800) { // Check media queries for PlaceCard, PlaceCatalog and RatingBox
+      cardWidth = window.innerWidth * 0.25;
+    } else {
+      cardWidth = 340; // 300 width + 60px left/right padding
+    }
+
+    particlesToShow = Math.max(1, Math.floor(containerWidth / cardWidth));
   };
   const shuffleCards = () => {
     console.log("Cards are shuffled, trust me bro.");

@@ -60,7 +60,6 @@
         price={place.price}
         image={place.image || "template-bnb.jpg"}
         rating={place.rating}
-        
       />
     {/each}
   </div>
@@ -68,6 +67,7 @@
 
 <style>
   #places-grid-section {
+    outline: 1px solid red;
     background: var(--background-primary);
     border-radius: 10px;
     width: 90%;
@@ -132,7 +132,7 @@
     padding: 40px;
     overflow-y: scroll;
     /* Scrollbar styles */
-    scrollbar-width:auto;
+    scrollbar-width: auto;
     scrollbar-color: var(--font-primary) var(--background-primary);
     max-height: 2300px;
   }
@@ -146,5 +146,25 @@
   #places-grid-container::-webkit-scrollbar-track {
     background: var(--font-primary);
     border-radius: 8px;
+  }
+  @media screen and (max-width: 800px) {
+    #places-grid-section {
+      width: 100%;
+      border-radius: 0;
+    }
+    .places-toolbox-btn {
+      border-radius: 0;
+    }
+    #places-toolbox-search {
+      border-radius: 0;
+    }
+    #places-grid-toolbox {
+      border-radius: 0;
+    }
+    #places-grid-container {
+      grid-template-columns: repeat(auto-fit, minmax(26.4dvw, 1fr));
+      row-gap: 10px;
+      overflow-y: auto;
+    }
   }
 </style>
