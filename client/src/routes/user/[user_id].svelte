@@ -1,31 +1,35 @@
 <script>
   import { onMount } from "svelte";
   import api from "../../lib/api";
-  import { currentUserId, userName } from "../../lib/stores/auth";
+  import { userName } from "../../lib/stores/auth";
   import { params } from "@roxi/routify";
   import AuthBox from "../../components/AuthBox.svelte";
-  import ReviewCard from "../../components/ReviewCard.svelte";
+  import UserReserves from "../../components/UserReserves.svelte";
+  import UserReviews from "../../components/UserReviews.svelte";
+  import UserPlaces from "../../components/UserPlaces.svelte";
 
   let currentUser;
   let loading = false;
   let selectedItem = "reserves";
-  let userReviews = [];
-  let userPlaces = [];
-  let userReserves = [];
   let tokenExpired = false;
   let errorMsg = "";
+  let userReviews = ["empty"];
 
   async function fetchUserReviews(userId) {
     // TODO: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
     // Although if we need to check if the local storage has already a review list by another author, it's broken.
     // remember to clear local storage. Or find better way to do it.
+    if (!userReviews.includes("empty")) {
+      console.log("userReviews already fetched, Aborting...");
+      return;
+    }
     loading = true;
     tokenExpired = false;
     errorMsg = "";
     try {
       userReviews = await api.getUserReviews(userId);
       console.log(
-        "User reviews fetched!" + JSON.stringify(userReviews, null, 2)
+        "User reviews fetched!: " + JSON.stringify(userReviews, null, 2)
       );
     } catch (error) {
       if (error.message && error.message.includes("Token has expired")) {
@@ -110,14 +114,6 @@
         </aside>
         <div id="user-menu-deployer" class="user-menu-item">
           {#if selectedItem === "reserves"}
-            <h2>My Reserves</h2>
-            {#if userReserves.length > 0}
-              Hee
-            {:else}
-              <p>No reserves found.</p>
-            {/if}
-          {/if}
-          {#if selectedItem === "reviews"}
             {#if tokenExpired}
               <div class="warning">
                 {errorMsg}
@@ -126,30 +122,13 @@
               <div class="warning">{errorMsg}</div>
             {/if}
             <h2 class="deployer-title">My Reviews</h2>
-            {#if userReviews.length > 0}
-              <ul class="user-review-ul">
-                {#each userReviews as review}
-                  <li>
-                    <ReviewCard
-                      authorFirstName={review.author_first_name}
-                      authorLastName={review.author_last_name}
-                      rating={review.rating}
-                      comment={review.comment}
-                    />
-                  </li>
-                {/each}
-              </ul>
-            {:else}
-              <p>No reviews found.</p>
-            {/if}
+            <UserReserves />
+          {/if}
+          {#if selectedItem === "reviews"}
+            <UserReviews userReviews={userReviews} />
           {/if}
           {#if selectedItem === "places"}
-            <h2>My Places</h2>
-            {#if userPlaces.length > 0}
-              Hee
-            {:else}
-              <p>No places found.</p>
-            {/if}
+            <UserPlaces />
           {/if}
         </div>
       </div>
@@ -199,14 +178,6 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  }
-  .user-review-ul {
-    width: 100%;
-    padding: 20px;
-  }
-  .user-review-ul li {
-    padding: 0;
-    margin: 0;
   }
   #user-dashboard-title {
     font-size: 2rem;
