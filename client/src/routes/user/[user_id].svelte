@@ -19,7 +19,7 @@
   console.clear();
 
   async function fetchUserReviews(userId) {
-    // TODO: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
+    // FUTURE: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
     // Although if we need to check if the local storage has already a review list by another author, it's broken.
     // remember to clear local storage. Or find better way to do it.
     if (!userReviews.includes("empty")) {
@@ -62,7 +62,7 @@
       if (error.message && error.message.includes("Token has expired")) {
         tokenExpired = true;
         errorMsg = "Your session has expired. Please log in again.";
-        userPlaces = []; // ✅ Clear the right variable
+        userPlaces = [];
       } else {
         errorMsg = error.message || "An error occurred while fetching places."; // ✅ Correct message
       }
@@ -142,23 +142,27 @@
             </li>
           </ul>
         </aside>
+
         <div id="user-menu-deployer" class="user-menu-item">
-          {#if selectedItem === "reserves"}
+          <!-- REVIEWS -->
+          {#if selectedItem === "reviews"}
             {#if tokenExpired}
-              <div class="warning">
-                {errorMsg}
-              </div>
+              <div class="warning">{errorMsg}</div>
             {:else if errorMsg}
               <div class="warning">{errorMsg}</div>
+            {:else}
+              <UserReviews {userReviews} />
             {/if}
-            <h2 class="deployer-title">My Reviews</h2>
-            <UserReserves />
           {/if}
-          {#if selectedItem === "reviews"}
-            <UserReviews {userReviews} />
-          {/if}
+          <!-- PLACES -->
           {#if selectedItem === "places"}
-            <UserPlaces />
+            {#if tokenExpired}
+              <div class="warning">{errorMsg}</div>
+            {:else if errorMsg}
+              <div class="warning">{errorMsg}</div>
+            {:else}
+              <UserPlaces {userPlaces} />
+            {/if}
           {/if}
         </div>
       </div>
