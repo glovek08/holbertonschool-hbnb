@@ -1,16 +1,16 @@
 @font-face {
   font-family: "Quicksand";
   src: url("/fonts/Quicksand-VariableFont_wght.woff2") format("woff2"),
-       url("/fonts/Quicksand-VariableFont_wght.woff") format("woff"),
-       url("/fonts/Quicksand-VariableFont_wght.ttf") format("truetype");
+    url("/fonts/Quicksand-VariableFont_wght.woff") format("woff"),
+    url("/fonts/Quicksand-VariableFont_wght.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Playwrite";
-  src:  url("/fonts/PlaywriteAUQLD-Regular.woff2") format("woff2"),
-        url("/fonts/PlaywriteAUQLD-Regular.woff") format("woff"),
-        url("/fonts/PlaywriteAUQLD-Regular.ttf") format("truetype");
+  src: url("/fonts/PlaywriteAUQLD-Regular.woff2") format("woff2"),
+    url("/fonts/PlaywriteAUQLD-Regular.woff") format("woff"),
+    url("/fonts/PlaywriteAUQLD-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -33,6 +33,9 @@
   --card-font-color: rgb(228, 218, 218);
   --card-text-shadow: black;
   --card-hover-background: rgba(63, 61, 60, 0.694);
+  /* USER DASHBOARD CARDS */
+  --user-dashboard-card-bg: rgba(48, 48, 51, 0.712);
+  --user-dashboard-card-shadow: rgba(0, 0, 0, 0.5);
 }
 :root.light {
   --primary-color: #e0e1ee;
@@ -48,11 +51,14 @@
   --red: rgb(225, 42, 42);
   --white: rgb(218, 232, 236);
   --gray: rgb(228, 233, 237);
-   /* PLACE CARD */
+  /* PLACE CARD */
   --card-desc-background: rgba(199, 206, 206, 0.39);
   --card-font-color: rgb(0, 0, 0);
   --card-text-shadow: rgb(193, 181, 181);
   --card-hover-background: rgba(232, 224, 224, 0.916);
+  /* USER DASHBOARD CARDS */
+  --user-dashboard-card-bg: white;
+  --user-dashboard-card-shadow: rgba(0, 0, 0, 0.24);
 }
 *,
 *::before,
