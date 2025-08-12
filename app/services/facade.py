@@ -55,6 +55,9 @@ class HBnBFacade:
     def get_all_places(self, limit=None):
         return self.place_repo.get_all(limit=limit)
 
+    def get_places_by_user_id(self, user_id):
+        return self.place_repo.get_by_user_id(user_id)
+
     def update_place(self, place_id, place_data):
         self.place_repo.update(place_id, place_data)
 

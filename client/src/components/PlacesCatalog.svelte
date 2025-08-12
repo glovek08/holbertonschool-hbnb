@@ -67,7 +67,7 @@
 
 <style>
   #places-grid-section {
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     background: var(--background-primary);
     border-radius: 10px;
     width: 90%;
@@ -150,12 +150,6 @@
   @media screen and (max-width: 800px) {
     #places-grid-section {
       width: 100%;
-      border-radius: 0;
-    }
-    .places-toolbox-btn {
-      border-radius: 0;
-    }
-    #places-toolbox-search {
       border-radius: 0;
     }
     #places-grid-toolbox {

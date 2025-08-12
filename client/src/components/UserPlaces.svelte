@@ -1,4 +1,7 @@
-<!-- <script>
+<script>
+  export let userPlaces = [];
+
+
 </script>
 
 <h2>My Places</h2>
@@ -6,4 +9,4 @@
   Hee
 {:else}
   <p>No places found.</p>
-{/if} -->
+{/if}

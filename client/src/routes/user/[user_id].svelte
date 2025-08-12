@@ -14,6 +14,9 @@
   let tokenExpired = false;
   let errorMsg = "";
   let userReviews = ["empty"];
+  let userPlaces = ["empty"];
+
+  console.clear();
 
   async function fetchUserReviews(userId) {
     // TODO: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
@@ -38,6 +41,30 @@
         userReviews = [];
       } else {
         errorMsg = error.message || "An error occurred while fetching reviews.";
+      }
+      console.warn(error);
+    }
+    loading = false;
+  }
+
+  async function fetchUserPlaces(userId) {
+    if (!userPlaces.includes("empty")) {
+      console.log("userPlaces already fetched, Aborting...");
+      return;
+    }
+    loading = true;
+    tokenExpired = false;
+    errorMsg = "";
+    try {
+      userPlaces = await api.getPlacesByUserId(userId);
+      console.log("User Places:", userPlaces);
+    } catch (error) {
+      if (error.message && error.message.includes("Token has expired")) {
+        tokenExpired = true;
+        errorMsg = "Your session has expired. Please log in again.";
+        userPlaces = []; // ✅ Clear the right variable
+      } else {
+        errorMsg = error.message || "An error occurred while fetching places."; // ✅ Correct message
       }
       console.warn(error);
     }
@@ -107,7 +134,10 @@
                 class="user-button"
                 aria-label="My Places"
                 title="My Places"
-                on:click={() => (selectedItem = "places")}>My Places</button
+                on:click={() => {
+                  selectedItem = "places";
+                  fetchUserPlaces($params.user_id);
+                }}>My Places</button
               >
             </li>
           </ul>
@@ -125,7 +155,7 @@
             <UserReserves />
           {/if}
           {#if selectedItem === "reviews"}
-            <UserReviews userReviews={userReviews} />
+            <UserReviews {userReviews} />
           {/if}
           {#if selectedItem === "places"}
             <UserPlaces />

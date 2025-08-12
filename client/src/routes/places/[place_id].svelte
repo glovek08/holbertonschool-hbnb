@@ -9,6 +9,8 @@
   import { isAuthenticated } from "../../lib/stores/auth";
   import AmenitiesBox from "../../components/AmenitiesBox.svelte";
 
+  console.clear();
+
   let place;
   let place_id;
   let place_reviews;

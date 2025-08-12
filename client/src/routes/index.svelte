@@ -6,6 +6,8 @@
   import { onMount } from "svelte";
   import api from "../lib/api";
   import { currentUserId } from "../lib/stores/auth";
+
+  console.clear();
   console.log(`Current User: ${$currentUserId}`);
 
   let particlesToShow = 3; /* For the Carousel, base cards to show */
@@ -27,7 +29,8 @@
 
     // Use 25dvw for card width on small screens, else 340px as before
     let cardWidth;
-    if (window.innerWidth < 800) { // Check media queries for PlaceCard, PlaceCatalog and RatingBox
+    if (window.innerWidth < 800) {
+      // Check media queries for PlaceCard, PlaceCatalog and RatingBox
       cardWidth = window.innerWidth * 0.25;
     } else {
       cardWidth = 340; // 300 width + 60px left/right padding

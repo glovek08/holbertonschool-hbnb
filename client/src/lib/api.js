@@ -65,6 +65,13 @@ class ApiService {
     });
   }
 
+  async getPlacesByUserId(user_id) {
+    return this.request(`/places/user/${user_id}`, {
+      method: "GET",
+      credentials: "include",
+    });
+  }
+
   async createPlace(placeData) {
     return this.request("/places/", {
       method: "POST",

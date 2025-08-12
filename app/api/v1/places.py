@@ -16,11 +16,12 @@ This module provides endpoints to:
 - Retrieve details for a specific place.
 
 Endpoints:
-    POST   /api/v1/places/           - Create a new place
-    GET    /api/v1/places/           - List all places (with reviews and amenities)
-    GET    /api/v1/places/<place_id> - Get details for a specific place
-    PUT    /api/v1/places/<place_id> - Update a place by ID
-    DELETE /api/v1/places/<place_id> - Delete a place by ID
+    POST   /api/v1/places/               - Create a new place
+    GET    /api/v1/places/               - List all places (with reviews and amenities)
+    GET    /api/v1/places/<place_id>     - Get details for a specific place
+    PUT    /api/v1/places/<place_id>     - Update a place by ID
+    DELETE /api/v1/places/<place_id>     - Delete a place by ID
+    GET    /api/v1/places/user/<user_id> - Get all places of the given owner.
 """
 
 api = Namespace("places", description="Place operations")
@@ -211,4 +212,26 @@ class PlaceResource(Resource):
 
         facade.delete_place(place_id)
 
-        return {"message": "Place deleted successfully"}, 200
+        return {"message": "Place deleted successfully"}, 200\
+
+@api.route("/user/<user_id>")
+class UserPlaceList(Resource):
+    @api.doc(params={"user_id": "The unique ID of the place owner"})
+    @api.marshal_with(place_response_model, as_list=True)
+    @api.response(200, "List of places retrieved successfully")
+    @api.response(404, "User not found")
+    @jwt_required()
+    def get(self, user_id):
+        """Get all places owned by a specific user"""
+        user = facade.get_user(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+        
+        places = facade.get_places_by_user_id(user_id)
+        places_list = []
+        for place in places:
+            place_dict = place.to_dict()
+            reviews = facade.get_reviews_by_place(place.id)
+            place_dict["reviews"] = [review.to_dict() for review in reviews]
+            places_list.append(place_dict)
+        return places_list, 200

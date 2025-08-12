@@ -11,3 +11,7 @@ class PlaceRepository(SQLAlchemyRepository):
         if limit:
             query = query.limit(limit)
         return query.all()
+
+    def get_by_user_id(self, user_id):
+        """Get all places owned by a specific user"""
+        return self.model.query.filter(Place.owner_id == user_id).all()
