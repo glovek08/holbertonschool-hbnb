@@ -41,13 +41,14 @@
     margin-bottom: 10px;
   }
   .review-header {
+    /* outline: 1px solid red; */
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   .user-name-title {
-    margin-top: 5px;
+    margin: 0;
   }
   .user-name-title a {
     text-decoration: none;

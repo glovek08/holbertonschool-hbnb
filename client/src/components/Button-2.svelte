@@ -1,32 +1,42 @@
 <!-- 
-  This is a functional button, uses: functions xD
-  As a function button, it shouldn't shine so it doesn't messes with the site flow.
-  BY: andrew-demchenk0.
+  Functional utility button.
+  Icons vary by btnType: "refresh" | "add"
 -->
 
 <script>
-  export let text = "Replace This Text";
-  export let title = "Title not set";
+  export let text = "Replace This Text"; // Visible text label shown to the right of the icon.
+  export let title = "Title not set"; // Accessible title/tooltip for the button, Also used as aria-label.
+  export let btnType = "refresh"; //Determines which icon is rendered:
+  export let disabled = false; // disables interaction when true.
 </script>
-<button class="button-2" title={title} on:click>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    viewBox="0 0 20 20"
-    height="20"
-    fill="none"
-    class="svg-icon"
-  >
-    <g stroke-width="1.5" stroke-linecap="round" stroke="var(--font-secondary)">
-      <path
-        d="m3.33337 10.8333c0 3.6819 2.98477 6.6667 6.66663 6.6667 3.682 0 6.6667-2.9848 6.6667-6.6667 0-3.68188-2.9847-6.66664-6.6667-6.66664-1.29938 0-2.51191.37174-3.5371 1.01468"
-      ></path>
-      <path
-        d="m7.69867 1.58163-1.44987 3.28435c-.18587.42104.00478.91303.42582 1.0989l3.28438 1.44986"
-      ></path>
-    </g>
-  </svg>
-  <span class="lable">{text}</span>
+
+<button class="button-2" {title} aria-label={title} {disabled} on:click>
+  {#if btnType === "refresh"}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      viewBox="0 0 20 20"
+      height="20"
+      fill="none"
+      class="icon svg-icon-refresh"
+    >
+      <g
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke="var(--font-secondary)"
+      >
+        <path
+          d="m3.33337 10.8333c0 3.6819 2.98477 6.6667 6.66663 6.6667 3.682 0 6.6667-2.9848 6.6667-6.6667 0-3.68188-2.9847-6.66664-6.6667-6.66664-1.29938 0-2.51191.37174-3.5371 1.01468"
+        />
+        <path
+          d="m7.69867 1.58163-1.44987 3.28435c-.18587.42104.00478.91303.42582 1.0989l3.28438 1.44986"
+        />
+      </g>
+    </svg>
+  {:else if btnType === "add"}
+    <i class="fa-solid fa-plus icon svg-icon-add" aria-hidden="true"></i>
+  {/if}
+  <span class="label">{text}</span>
 </button>
 
 <style>
@@ -37,34 +47,40 @@
     padding: 6px 12px;
     gap: 8px;
     height: 34px;
-    width: 112px;
+    width: max-content;
     border: none;
     background: var(--background-secondary);
+    color: var(--font-secondary);
     border-radius: 20px;
     cursor: pointer;
+    transition:
+      background 0.25s,
+      color 0.2s ease-in-out;
   }
-
-  .lable {
+  .button-2:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .icon {
+    display: inline-flex;
+  }
+  .label {
     line-height: 20px;
-    font-size: 17px;
-    color: var(--font-secondary);
-    letter-spacing: 1px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
   }
-
-  .button-2:hover {
+  .button-2:hover:not(:disabled) {
     background: var(--accent);
   }
-
-  .button-2:hover .svg-icon {
+  .button-2:hover:not(:disabled) .svg-icon-refresh {
     animation: spin 2s linear infinite;
   }
-
+  .svg-icon-add {
+    font-size: 1.2rem;
+  }
   @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
+    to {
       transform: rotate(-360deg);
     }
   }
