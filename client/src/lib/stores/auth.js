@@ -1,10 +1,18 @@
 import { writable } from "svelte/store";
 
-export const isAuthenticated = writable(false);
-export const isAdmin = writable(false);
-export const currentUserId = writable(null);
-export const userName = writable("n/a");
-
+export const isAuthenticated = writable(false); // true after successful login/checkAuth, reset to false on logout or failures.
+export const isAdmin = writable(false); // whether current user has admin privileges.
+export const currentUserId = writable(null); //UUID (string) of the currently authenticated user.
+export const userName = writable("n/a"); //First name (display name) of the authenticated user.
+/**
+ * Attempt to authenticate with credentials.
+ * On success: fetch full user resource and populate auth stores.
+ *
+ * @param {string} email
+ * @param {string} password
+ * @param {boolean} stay_logged - if true session last 30 days.
+ * @returns {Promise<{success: boolean, msg?: string, error?: string}>}
+ */
 export async function login(email, password, stay_logged) {
   try {
     const response = await fetch("/api/v1/auth/login", {
@@ -39,7 +47,11 @@ export async function login(email, password, stay_logged) {
     return { success: false, error: "Something bad happened." };
   }
 }
-
+/**
+ * Terminate current session (server + local stores).
+ *
+ * @returns {Promise<{success?: boolean, msg?: string, error?: string}>}
+ */
 export async function logout() {
   try {
     const requestLogout = await fetch("/api/v1/auth/logout", {
@@ -59,7 +71,12 @@ export async function logout() {
     return { error: `Error in fetching session logout: ${error}` };
   }
 }
-
+/**
+ * Validates current access_token in cookies.
+ * Refreshes auth stores if valid; clears them if not.
+ *
+ * @returns {Promise<{success: boolean, msg?: string, error?: string}>}
+ */
 export async function checkAuth() {
   try {
     const response = await fetch("/api/v1/auth/check_status", {
@@ -91,10 +108,16 @@ export async function checkAuth() {
     }
   } catch (error) {
     clearAuth();
-    return { error: `Error in checking authentication: ${error}` };
+    return { success: false, error: `Error in checking authentication: ${error}` };
   }
 }
 
+/**
+ * Internal helper: populate auth-related stores.
+ *
+ * @param {Object} user - User object returned by API.
+ * @param {boolean} [admin=false] - Whether user has admin privileges.
+ */
 function setAuth(user, admin = false) {
   console.log("setAuth called with user:", user);
   isAuthenticated.set(true);
@@ -107,7 +130,9 @@ function setAuth(user, admin = false) {
     isAdmin: admin,
   });
 }
-
+/**
+ * Internal helper: reset all auth-related stores to unauthenticated state.
+ */
 function clearAuth() {
   console.log("clearAuth called");
   isAuthenticated.set(false);

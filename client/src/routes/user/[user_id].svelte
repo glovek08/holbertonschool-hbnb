@@ -8,16 +8,16 @@
   import UserReviews from "../../components/UserReviews.svelte";
   import UserPlaces from "../../components/UserPlaces.svelte";
 
-  let userReviews = [];
-  let userPlaces = [];
-  let currentUser;
-  let loading = false;
-  let selectedItem = "reserves";
-  let tokenExpired = false;
-  let errorMsg = "";
-  let reviewsFetched = false;
-  let placesFetched = false;
-  let previousUserId = null;
+  let userReviews = []; // Array of reviews authored by the dashboard user
+  let userPlaces = []; // Array of places owned by the dashboard user
+  let currentUser; // Fetched user object (profile data)
+  let loading = false; // Global loading flag for fetch operations
+  let selectedItem = "reserves"; // Currently selected dashboard panel: 'reserves' | 'reviews' | 'places'
+  let tokenExpired = false; // JWT expired state flag
+  let errorMsg = ""; // Last error message to surface in UI
+  let reviewsFetched = false; // Has reviews already been fetched this session
+  let placesFetched = false; // Has places already been fetched this session
+  let previousUserId = null; // Previously loaded user_id from route (to detect route user changes)
 
   console.clear();
 
