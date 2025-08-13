@@ -10,7 +10,14 @@
   export let disabled = false; // disables interaction when true.
 </script>
 
-<button class="button-2" {title} aria-label={title} {disabled} on:click>
+<button
+  class="button-2"
+  class:remove={btnType === "remove"}
+  {title}
+  aria-label={title}
+  {disabled}
+  on:click
+>
   {#if btnType === "refresh"}
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,6 +85,17 @@
       color: var(--red);
     }
   }
+  .button-2.remove:hover:not(:disabled) {
+    background: var(--red);
+    color: var(--font-primary);
+  }
+  .button-2.remove .label,
+  .button-2.remove .icon {
+    transition: color 0.25s;
+  }
+  .button-2.remove:hover:not(:disabled) .icon {
+    color: var(--font-primary);
+  }
   .button-2:hover:not(:disabled) .svg-icon-refresh {
     animation: spin 2s linear infinite;
   }
@@ -130,7 +148,7 @@
       font-size: 0.9rem;
       position: relative;
       left: 1.6px;
-      top: .3px;
+      top: 0.3px;
     }
   }
 </style>
