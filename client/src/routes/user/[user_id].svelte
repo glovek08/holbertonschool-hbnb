@@ -204,7 +204,7 @@
     --selected: rgb(72, 73, 75);
   }
   :root.light {
-    --selected: rgb(164, 172, 183);
+    --selected: rgb(182, 206, 238);
   }
   #user-dashboard {
     /* outline: 1px solid red; */

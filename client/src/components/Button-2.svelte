@@ -35,6 +35,8 @@
     </svg>
   {:else if btnType === "add"}
     <i class="fa-solid fa-plus icon svg-icon-add" aria-hidden="true"></i>
+  {:else if btnType === "remove"}
+    <i class="fa-solid fa-trash icon svg-icon-remove" aria-hidden="true"></i>
   {/if}
   <span class="label">{text}</span>
 </button>
@@ -72,6 +74,9 @@
   }
   .button-2:hover:not(:disabled) {
     background: var(--accent);
+    .svg-icon-remove {
+      color: var(--red);
+    }
   }
   .button-2:hover:not(:disabled) .svg-icon-refresh {
     animation: spin 2s linear infinite;
@@ -82,6 +87,50 @@
   @keyframes spin {
     to {
       transform: rotate(-360deg);
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .button-2 {
+      padding: 5px 8px;
+      font-size: 14px;
+      gap: 6px;
+      height: 30px;
+    }
+    .label {
+      font-size: 13px;
+    }
+    .icon,
+    .svg-icon-add,
+    .svg-icon-remove,
+    .svg-icon-refresh {
+      width: 18px;
+      height: 18px;
+      font-size: 1rem;
+    }
+  }
+  @media screen and (max-width: 400px) {
+    .button-2 {
+      width: fit-content;
+      min-width: 0;
+      padding: 4px 6px;
+      font-size: 13px;
+      gap: 4px;
+      height: 28px;
+    }
+    .label {
+      font-size: 12px;
+      display: none;
+    }
+    .icon,
+    .svg-icon-add,
+    .svg-icon-remove,
+    .svg-icon-refresh {
+      width: 16px;
+      height: 16px;
+      font-size: 0.9rem;
+      position: relative;
+      left: 1.6px;
+      top: .3px;
     }
   }
 </style>

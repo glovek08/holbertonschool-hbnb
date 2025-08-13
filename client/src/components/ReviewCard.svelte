@@ -60,12 +60,13 @@
   @media screen and (max-width: 800px) {
     .review-container {
       font-size: 1.5dvw;
-      padding: 1dvw 3dvw;
+      width: fit-content;
+      padding: 2dvw 3dvw 1dvw 3dvw;
     }
   }
   @media screen and (max-width: 400px) {
     .review-container {
-      width: clamp(50px, 70%, 800px);
+      padding: 2dvw 5dvw 1dvw 5dvw;
     }
   }
 </style>

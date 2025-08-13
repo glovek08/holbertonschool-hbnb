@@ -8,7 +8,7 @@
 
 <div id="user-placer-header">
   <h2>My Places</h2>
-  <Button_2 text="Add Place" btnType="add" on:click />
+  <Button_2 text="Add Place" title="Add Place" btnType="add"/>
 </div>
 {#if userPlaces.length > 0}
   {#each userPlaces as place}
