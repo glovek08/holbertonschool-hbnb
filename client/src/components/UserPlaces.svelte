@@ -2,7 +2,7 @@
   import PlaceCardSmall from "./PlaceCardSmall.svelte";
 
   export let userPlaces = [];
-  console.log(`Receiving: ${userPlaces}`)
+  // console.log(`Receiving: ${userPlaces}`)
 </script>
 
 <h2>My Places</h2>
@@ -13,5 +13,3 @@
 {:else}
   <p>No places found.</p>
 {/if}
-
-

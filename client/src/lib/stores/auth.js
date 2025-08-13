@@ -95,19 +95,24 @@ export async function checkAuth() {
   }
 }
 
-
 function setAuth(user, admin = false) {
+  console.log("setAuth called with user:", user);
   isAuthenticated.set(true);
   isAdmin.set(admin);
-  currentUserId.set(user?.id ?? null);
-  userName.set(user?.first_name ?? "n/a");
+  currentUserId.set(user?.id || null);
+  userName.set(user?.first_name || "n/a");
+  console.log("Auth state updated:", {
+    userId: user?.id,
+    userName: user?.first_name,
+    isAdmin: admin,
+  });
 }
 
 function clearAuth() {
+  console.log("clearAuth called");
   isAuthenticated.set(false);
   isAdmin.set(false);
   currentUserId.set(null);
   userName.set("n/a");
+  console.log("Auth state cleared");
 }
-
-// Will move authentification, trust me bro

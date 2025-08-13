@@ -1,28 +1,51 @@
 <script>
   import { onMount } from "svelte";
   import api from "../../lib/api";
-  import { userName } from "../../lib/stores/auth";
+  import { userName, currentUserId } from "../../lib/stores/auth";
   import { params } from "@roxi/routify";
   import AuthBox from "../../components/AuthBox.svelte";
   import UserReserves from "../../components/UserReserves.svelte";
   import UserReviews from "../../components/UserReviews.svelte";
   import UserPlaces from "../../components/UserPlaces.svelte";
 
+  let userReviews = [];
+  let userPlaces = [];
   let currentUser;
   let loading = false;
   let selectedItem = "reserves";
   let tokenExpired = false;
   let errorMsg = "";
-  let userReviews = ["empty"];
-  let userPlaces = ["empty"];
+  let reviewsFetched = false;
+  let placesFetched = false;
+  let previousUserId = null;
 
   console.clear();
+
+  $: if ($params.user_id && $params.user_id !== previousUserId) {
+    clearUserData();
+    getCurrentUser($params.user_id);
+    previousUserId = $params.user_id;
+  }
+  $: if ($currentUserId && $currentUserId !== $params.user_id) {
+    window.location.href = `/user/${$currentUserId}`;
+  }
+
+  function clearUserData() {
+    userReviews = [];
+    userPlaces = [];
+    reviewsFetched = false;
+    placesFetched = false;
+    currentUser = null;
+    tokenExpired = false;
+    errorMsg = "";
+    selectedItem = "reserves";
+  }
 
   async function fetchUserReviews(userId) {
     // FUTURE: Store review list in cache, only fetch if: review_list not in cache OR review_author not current user id.
     // Although if we need to check if the local storage has already a review list by another author, it's broken.
     // remember to clear local storage. Or find better way to do it.
-    if (!userReviews.includes("empty")) {
+    if (reviewsFetched) {
       console.log("userReviews already fetched, Aborting...");
       return;
     }
@@ -44,11 +67,12 @@
       }
       console.warn(error);
     }
+    reviewsFetched = true;
     loading = false;
   }
 
   async function fetchUserPlaces(userId) {
-    if (!userPlaces.includes("empty")) {
+    if (placesFetched) {
       console.log("userPlaces already fetched, Aborting...");
       return;
     }
@@ -68,6 +92,7 @@
       }
       console.warn(error);
     }
+    placesFetched = true;
     loading = false;
   }
 
@@ -80,9 +105,6 @@
       console.warn("Couldn't fetch user: " + currentUser);
     }
     loading = false;
-  }
-  $: if ($params.user_id) {
-    getCurrentUser($params.user_id);
   }
 </script>
 
@@ -122,7 +144,7 @@
                 title="My Reviews"
                 on:click={() => {
                   selectedItem = "reviews";
-                  fetchUserReviews($params.user_id);
+                  fetchUserReviews($currentUserId);
                 }}>My Reviews</button
               >
             </li>
@@ -136,7 +158,7 @@
                 title="My Places"
                 on:click={() => {
                   selectedItem = "places";
-                  fetchUserPlaces($params.user_id);
+                  fetchUserPlaces($currentUserId);
                 }}>My Places</button
               >
             </li>
