@@ -36,7 +36,6 @@
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
-    margin: auto;
     min-height: 120px;
     border-radius: 20px;
     width: clamp(300px, 70%, 800px);

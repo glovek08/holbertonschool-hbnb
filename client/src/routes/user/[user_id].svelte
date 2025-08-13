@@ -64,7 +64,7 @@
         errorMsg = "Your session has expired. Please log in again.";
         userPlaces = [];
       } else {
-        errorMsg = error.message || "An error occurred while fetching places."; // ✅ Correct message
+        errorMsg = error.message || "An error occurred while fetching places.";
       }
       console.warn(error);
     }
@@ -142,8 +142,11 @@
             </li>
           </ul>
         </aside>
-
         <div id="user-menu-deployer" class="user-menu-item">
+          <!-- RESERVES -->
+          {#if selectedItem === "reserves"}
+            <h2>FEATURE NOT IMPLEMENTED</h2>
+          {/if}
           <!-- REVIEWS -->
           {#if selectedItem === "reviews"}
             {#if tokenExpired}
@@ -210,8 +213,10 @@
   #user-menu-deployer {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    row-gap: 1.5dvw;
     flex-direction: column;
+    overflow-y: auto;
   }
   #user-dashboard-title {
     font-size: 2rem;

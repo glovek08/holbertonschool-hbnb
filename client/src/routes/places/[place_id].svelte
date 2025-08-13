@@ -101,12 +101,7 @@
       <h2>Check out these reviews!</h2>
       {#if place_reviews}
         {#each place_reviews as review}
-          <ReviewCard
-            authorFirstName={review.author_first_name}
-            authorLastName={review.author_last_name}
-            rating={review.rating}
-            comment={review.comment}
-          />
+          <ReviewCard review={review}/>
         {/each}
       {/if}
     </section>
