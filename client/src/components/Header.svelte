@@ -174,4 +174,129 @@
   #header-logo-anchor img:hover {
     filter: brightness(1.2);
   }
+  @media (max-width: 1024px) {
+    header {
+      padding: 12px 1.5rem;
+    }
+    #header-ul {
+      gap: 16px;
+    }
+    .header-li {
+      font-size: 1.9rem;
+    }
+    .header-button {
+      font-size: 1.3rem;
+      padding: 8px;
+    }
+  }
+
+  @media (max-width: 820px) {
+    header {
+      padding: 12px 1.2rem;
+    }
+    #header-ul {
+      gap: 14px;
+    }
+    .header-li {
+      font-size: 1.75rem;
+    }
+    .header-button {
+      font-size: 1.25rem;
+      padding: 8px 6px;
+    }
+  }
+
+  @media (max-width: 680px) {
+    header {
+      padding: 10px 1rem;
+      max-height: 78px;
+    }
+    #header-ul {
+      gap: 12px;
+    }
+    .header-li {
+      font-size: 1.6rem;
+    }
+    .header-button {
+      font-size: 1.15rem;
+      padding: 7px 6px;
+    }
+    #header-logo-anchor img {
+      height: 34px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    header {
+      padding: 10px 0.85rem;
+    }
+    #header-ul {
+      gap: 10px;
+    }
+    .header-li {
+      font-size: 1.5rem;
+    }
+    .header-button {
+      font-size: 1.05rem;
+      padding: 6px 5px;
+    }
+    header.scrolled {
+      backdrop-filter: blur(6px);
+    }
+  }
+
+  @media (max-width: 460px) {
+    header {
+      padding: 8px 0.7rem;
+      max-height: 72px;
+    }
+    #header-ul {
+      gap: 9px;
+    }
+    .header-li {
+      font-size: 1.4rem;
+    }
+    .header-button {
+      padding: 5px;
+      font-size: 1rem;
+    }
+    #header-logo-anchor img {
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 390px) {
+    header {
+      padding: 8px 0.55rem;
+    }
+    #header-ul {
+      gap: 8px;
+    }
+    .header-li {
+      font-size: 1.3rem;
+    }
+    .header-button {
+      padding: 4px;
+      font-size: 0.95rem;
+    }
+    #header-logo-anchor img {
+      height: 28px;
+    }
+  }
+
+  @media (max-width: 340px) {
+    header {
+      padding: 6px 0.5rem;
+    }
+    #header-ul {
+      gap: 6px;
+    }
+    .header-li {
+      font-size: 1.2rem;
+    }
+    .header-button {
+      padding: 4px 4px;
+      font-size: 0.9rem;
+    }
+  }
 </style>
