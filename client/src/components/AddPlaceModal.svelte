@@ -1,0 +1,217 @@
+<script>
+  import { onMount, onDestroy } from "svelte";
+  import { showAddPlaceModal } from "../lib/stores/add_place_modal";
+
+  let dialogEl;
+
+  function closeModal() {
+    showAddPlaceModal.set(false);
+  }
+</script>
+
+<div
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="add-place-title"
+  tabindex="-1"
+>
+  <div class="modal-container">
+    <header class="modal-container-header">
+      <h1 class="modal-container-title">Add Place</h1>
+      <button
+        class="icon-button"
+        aria-label="Close"
+        on:click={() => {
+          showAddPlaceModal.set(false);
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            fill="currentColor"
+            d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"
+          />
+        </svg>
+      </button>
+    </header>
+    <section class="modal-container-body rtf">
+      <h2>
+        Quarum ambarum rerum cum medicinam pollicetur, luxuriae licentiam
+        pollicetur.
+      </h2>
+    </section>
+    <footer class="modal-container-footer">
+      <button class="button is-ghost" on:click={closeModal}>Cancel</button>
+      <button class="button is-primary">Submit</button>
+    </footer>
+  </div>
+</div>
+
+<style>
+  button {
+    font: inherit;
+  }
+
+  * {
+    scrollbar-width: 0;
+  }
+
+  *::-webkit-scrollbar {
+    background-color: transparent;
+    width: 12px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border-radius: 99px;
+    background-color: #ddd;
+    border: 4px solid #fff;
+  }
+
+  .modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.39);
+    backdrop-filter: blur(5px);
+  }
+
+  .modal-container {
+    max-height: 90vh;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--background-secondary);
+    color: var(--font-secondary);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 30px 0 var(--shadow-primary);
+    @media (max-width: 600px) {
+      width: 90%;
+    }
+  }
+
+  .modal-container-header {
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-container-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+    font-weight: 700;
+    font-size: 2rem;
+  }
+
+  .modal-container-body {
+    padding: 24px 32px 51px;
+    overflow-y: auto;
+  }
+
+  .rtf {
+    h2 {
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.25;
+    }
+  }
+
+  .modal-container-footer {
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: 1px solid var(--font-primary);
+    gap: 12px;
+    position: relative;
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: -51px;
+      left: 24px;
+      right: 24px;
+      height: 50px;
+      flex-shrink: 0;
+      background-image: linear-gradient(
+        to top,
+        rgba(236, 77, 77, 0.07),
+        transparent
+      );
+      pointer-events: none;
+    }
+  }
+
+  .button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: transparent;
+    border: 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s ease;
+    color: var(--font-secondary);
+
+    &.is-ghost {
+      &:hover,
+      &:focus {
+        color: white;
+        background-color: var(--red);
+      }
+    }
+
+    &.is-primary {
+      background-color: var(--background-secondary);
+      color: var(--font-secondary);
+      &:hover,
+      &:focus {
+        color: white;
+        background-color: var(--green);
+      }
+    }
+  }
+
+  .icon-button {
+    color: var(--font-secondary);
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.15s ease;
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--accent);
+    }
+  }
+</style>
