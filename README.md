@@ -184,12 +184,20 @@ Database storage and retrieval with comprehensive relationship management and da
 
 ###
 
-## **ER Diagram**
+## **ER Diagram && Class Diagram**
 <p align="center">
   <picture>
     <source srcset="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" media="(prefers-color-scheme: light)">
     <source srcset="https://i.ibb.co/JTq6sXY/ERDiagram-white.png" media="(prefers-color-scheme: dark)">
     <img src="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" alt="ER Diagram">
+  </picture>
+</p>
+
+<p align="center">
+  <picture>
+    <source srcset="https://i.ibb.co/gbyXPGBc/class-diagram-light.png" media="(prefers-color-scheme: light)">
+    <source srcset="https://i.ibb.co/hT8Znjs/class-diagram-dark.png" media="(prefers-color-scheme: dark)">
+    <img src="https://i.ibb.co/hT8Znjs/class-diagram-dark.png" alt="ER Diagram">
   </picture>
 </p>
 
