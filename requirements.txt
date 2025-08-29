@@ -7,3 +7,5 @@ sqlalchemy
 flask-sqlalchemy
 PyMySQL
 flask-cors
+requests
+cryptography
