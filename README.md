@@ -184,7 +184,7 @@ Database storage and retrieval with comprehensive relationship management and da
 
 ###
 
-## **ER Diagram && Class Diagram**
+## **ER Diagram**
 <p align="center">
   <picture>
     <source srcset="https://i.ibb.co/mV12DYwM/ERDiagram-dark.png" media="(prefers-color-scheme: light)">
