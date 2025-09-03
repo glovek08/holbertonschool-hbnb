@@ -372,9 +372,13 @@ instructions for Windows will not be provided (figure it out yourself >:V)):
 python3 -m venv <environment_name>
 source <environment_name>/bin/activate
 ```
-2. Export your credentials:
+2. Export your credentials using this script (place it inside your venv directory so it's included in gitignore) and run it with ```source venv/db_credentials.sh``` <br>
+<i><strong>*Double check that git ignores the script</strong></i><br>
+If you're running MySQL inside a docker container, you can export the environment variables directly when creating the container. Make sure to specify `host.docker.internal` as the `DB_PORT`.
+
 ```bash
 #!/usr/bin/env bash
+# I've named this script db_credentials.sh
 export DB_USER=<your_MySQL_username>
 export DB_PASSWORD=<your_password>
 export DB_HOST=localhost
