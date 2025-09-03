@@ -24,7 +24,7 @@
   <div id="amenities-svgs-container">
     {#each amenitiesDetail as amenity}
       <img
-        src={amenity.icon || "/src/assets/svgs/no_data.svg"}
+        src={"/src/assets/svgs/"+amenity.icon || "/src/assets/svgs/no_data.svg"}
         class="place-amentiy-svg"
         alt={amenity.name}
         width="30"

@@ -363,6 +363,9 @@ Process:
 
 ### Local Development
 
+* Swagger UI at: ```localhost:5000/swag/```<br>
+* Vite Client at: ```localhost:5173```
+
 To run the Flask Server and connect it to the database you must export the MySQL credentials.
 I use this script to run it from inside a python virtual environment (I'm assuming you're on linux (Ubuntu 22.04 LTS),
 instructions for Windows will not be provided (figure it out yourself >:V)):

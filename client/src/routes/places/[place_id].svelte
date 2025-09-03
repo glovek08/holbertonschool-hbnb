@@ -58,7 +58,7 @@
   {#if place}
     <section
       id="place-details-section"
-      style="background-image: url({place.image || '/template-bnb.jpg'});"
+      style="background-image: url({`${place.image}` || '/template-bnb.jpg'});"
     >
       <div id="image-credit">
         Photo by {place.image_author} on
