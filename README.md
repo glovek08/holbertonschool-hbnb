@@ -67,6 +67,7 @@ Holberton BnB is a comprehensive web application that enables users to discover,
 - [Architecture](#high-level-architecture)
 - [Database Design](#er-diagram)
 - [API Workflows](#sequence-diagrams)
+- [Run Local Development](#local-development)
 - [Contributors](#contributors)
 
 ## **High-Level Architecture:**
@@ -280,7 +281,7 @@ Relational Many-To-Many table between places and amenities.
 
 ### **API Interaction Flow**
 
-#### 
+####
 
 #### Overview:
 
@@ -359,3 +360,67 @@ Process:
 2. API receives requests and calls get\_places() from Business Logic.  
 3. Business Logic queries database for listing.  
 4. Results returned with HTTP 200 OK Response. If no matches are found, an empty list is returned. Front-end is then refreshed with returned listings.
+
+### Local Development
+
+To run the Flask Server and connect it to the database you must export the MySQL credentials.
+I use this script to run it from inside a python virtual environment (I'm assuming you're on linux (Ubuntu 22.04 LTS),
+instructions for Windows will not be provided (figure it out yourself >:V)):
+
+1. Create and activate virtual environment:
+```bash
+python3 -m venv <environment_name>
+source <environment_name>/bin/activate
+```
+2. Export your credentials:
+```bash
+#!/usr/bin/env bash
+export DB_USER=<your_MySQL_username>
+export DB_PASSWORD=<your_password>
+export DB_HOST=localhost
+export DB_PORT=<Pick_a_port_not_5000_cause_its_flask>
+export DB_NAME=hbnb_v1
+export SECRET_KEY=unset
+echo "Env Vars loaded"
+```
+3. Run the Flask server:
+```bash
+# from the project root
+python3 app.py
+```
+You should see this:
+```bash
+$ python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+CREATED DB!
+ * Debugger is active!
+ * Debugger PIN: 839-298-012
+```
+4. Run the Vite server.<br>
+- Open a new terminal.
+- Navigate to ```holbertonschool-hbnb/client```
+- Run the Vite server:
+```bash
+npm run dev
+```
+You should see this:
+```
+npm run dev
+
+> hbnb_v1@0.0.0 dev
+> vite
+
+[Routify 3] build completed (34 ms)
+
+  VITE v6.3.5  ready in 258 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.90:5173/
+  ➜  press h + enter to show help
+```
+<i>*Ignore any warning about svelte packages with no exports conditions.<i>
